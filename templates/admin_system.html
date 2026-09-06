@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Database & System | Admin</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+
+body{
+min-height:100vh;color:#fff;
+background:
+radial-gradient(circle at top left,rgba(97,44,175,.20),transparent 35%),
+radial-gradient(circle at bottom right,rgba(212,175,55,.12),transparent 35%),
+#07070b
+}
+
+.container{width:min(1400px,95%);margin:auto;padding:30px 0 50px}
+
+.topbar{
+display:flex;justify-content:space-between;align-items:center;
+padding:20px 24px;margin-bottom:30px;border-radius:20px;
+background:rgba(16,16,24,.92);
+border:1px solid rgba(212,175,55,.22);
+box-shadow:0 20px 50px rgba(0,0,0,.35)
+}
+
+.brand{display:flex;align-items:center;gap:14px}
+
+.brand-icon{
+width:56px;height:56px;display:grid;place-items:center;
+border-radius:16px;font-size:28px;
+background:linear-gradient(145deg,#d4af37,#7e5f12);
+color:#111
+}
+
+.brand h1{font-size:24px;margin-bottom:4px}
+.brand p{color:#8f8f9d;font-size:13px}
+
+.back-link{
+text-decoration:none;color:#d4af37;
+font-weight:700;font-size:14px
+}
+
+.hero{margin-bottom:24px}
+
+.hero-badge{
+display:inline-block;margin-bottom:10px;padding:7px 12px;
+border-radius:999px;font-size:12px;font-weight:800;
+letter-spacing:1px;color:#e8cf7a;
+background:rgba(212,175,55,.08);
+border:1px solid rgba(212,175,55,.20)
+}
+
+.hero h2{font-size:34px;margin-bottom:8px}
+.hero p{color:#8e8e9b;max-width:760px;line-height:1.6}
+
+.message{
+padding:13px 15px;margin-bottom:18px;border-radius:12px;
+background:rgba(73,183,126,.09);
+border:1px solid rgba(73,183,126,.24);
+color:#9ce7bf
+}
+
+.error{
+padding:13px 15px;margin-bottom:18px;border-radius:12px;
+background:rgba(255,74,74,.08);
+border:1px solid rgba(255,74,74,.25);
+color:#ffaaaa
+}
+
+.control-card{
+padding:20px;margin-bottom:22px;border-radius:20px;
+background:rgba(18,18,26,.94);
+border:1px solid #292936
+}
+
+.title{font-size:21px;font-weight:800;margin-bottom:6px}
+.subtitle{font-size:12px;color:#777784;margin-bottom:18px}
+
+.actions{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:14px
+}
+
+.action{
+padding:18px;border-radius:16px;
+background:#101018;
+border:1px solid #30303d
+}
+
+.action h3{font-size:16px;margin-bottom:7px}
+.action p{font-size:12px;color:#777784;line-height:1.5;margin-bottom:14px}
+
+.button{
+border:none;cursor:pointer;text-decoration:none;
+padding:12px 15px;border-radius:12px;
+font-weight:800;display:inline-flex;
+align-items:center;justify-content:center;gap:7px
+}
+
+.button-gold{
+color:#111;
+background:linear-gradient(145deg,#e3c45f,#a8811e)
+}
+
+.button-dark{
+color:#ddd;
+background:#1a1a25;
+border:1px solid #343444
+}
+
+.table-card{
+overflow-x:auto;border-radius:20px;
+background:#111119;border:1px solid #292936
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+min-width:650px
+}
+
+th,td{
+padding:16px 15px;
+border-bottom:1px solid #292936;
+text-align:left
+}
+
+th{font-size:12px;color:#d4af37}
+td{font-size:14px;color:#ddd}
+
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.015)}
+
+.badge{
+display:inline-block;
+padding:5px 9px;
+border-radius:999px;
+font-size:11px;
+font-weight:800;
+background:#222230;
+border:1px solid #363647
+}
+
+.status{
+color:#79e3aa;
+font-weight:800
+}
+
+@media(max-width:800px){
+.actions{grid-template-columns:1fr}
+}
+
+@media(max-width:650px){
+.topbar{flex-direction:column;align-items:flex-start}
+.hero h2{font-size:28px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="topbar">
+
+<div class="brand">
+
+<div class="brand-icon">⚙️</div>
+
+<div>
+<h1>Database & System Control Room</h1>
+<p>Owner Arena Administration</p>
+</div>
+
+</div>
+
+<a href="{{ url_for('admin_dashboard') }}" class="back-link">
+← Admin Dashboard
+</a>
+
+</div>
+
+<div class="hero">
+
+<div class="hero-badge">
+ARENA MASTER CONTROL
+</div>
+
+<h2>Database / System Command Center</h2>
+
+<p>
+Monitor PostgreSQL, synchronize the quiz engine,
+verify database structures and maintain system data.
+</p>
+
+</div>
+
+{% if message %}
+<div class="message">
+{{ message }}
+</div>
+{% endif %}
+
+{% if error %}
+<div class="error">
+{{ error }}
+</div>
+{% endif %}
+
+
+<div class="control-card">
+
+<div class="title">
+🛠️ System Operations
+</div>
+
+<div class="subtitle">
+Owner-only maintenance controls
+</div>
+
+<div class="actions">
+
+<div class="action">
+
+<h3>🔄 Quiz Engine Sync</h3>
+
+<p>
+Synchronize the live quiz engine with the PostgreSQL question bank.
+</p>
+
+<form method="POST" action="{{ url_for('admin_system') }}">
+
+<input type="hidden" name="action" value="sync_quizzes">
+
+<button type="submit" class="button button-gold">
+🔄 Synchronize
+</button>
+
+</form>
+
+</div>
+
+
+<div class="action">
+
+<h3>🗄️ Database Check</h3>
+
+<p>
+Verify required tables and database fields are available.
+</p>
+
+<form method="POST" action="{{ url_for('admin_system') }}">
+
+<input type="hidden" name="action" value="ensure_tables">
+
+<button type="submit" class="button button-dark">
+✓ Verify Database
+</button>
+
+</form>
+
+</div>
+
+
+<div class="action">
+
+<h3>🧹 Token Cleanup</h3>
+
+<p>
+Remove expired Remember Me authentication tokens.
+</p>
+
+<form method="POST" action="{{ url_for('admin_system') }}">
+
+<input
+type="hidden"
+name="action"
+value="cleanup_expired_tokens"
+>
+
+<button type="submit" class="button button-dark">
+🧹 Clean Tokens
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="control-card">
+
+<div class="title">
+🗄️ Database Tables
+</div>
+
+<div class="subtitle">
+Live records currently stored in PostgreSQL
+</div>
+
+<div class="table-card">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Table</th>
+<th>Purpose</th>
+<th>Records / Status</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+<td><span class="badge">users</span></td>
+<td>Registered student accounts</td>
+<td class="status">{{ stats.students }}</td>
+</tr>
+
+<tr>
+<td><span class="badge">questions</span></td>
+<td>Quiz question bank</td>
+<td class="status">{{ stats.questions }}</td>
+</tr>
+
+<tr>
+<td><span class="badge">quiz_results</span></td>
+<td>Completed quiz attempts</td>
+<td class="status">{{ stats.attempts }}</td>
+</tr>
+
+<tr>
+<td><span class="badge">achievements</span></td>
+<td>Student achievement records</td>
+<td class="status">{{ stats.achievements }}</td>
+</tr>
+
+<tr>
+<td><span class="badge">certificates</span></td>
+<td>Issued certificates</td>
+<td class="status">{{ stats.certificates }}</td>
+</tr>
+
+<tr>
+<td><span class="badge">bookmarks</span></td>
+<td>Saved student questions</td>
+<td class="status">{{ stats.bookmarks }}</td>
+</tr>
+
+<tr>
+<td><span class="badge">house_point_events</span></td>
+<td>House Power point history</td>
+<td class="status">{{ stats.point_events }}</td>
+</tr>
+
+<tr>
+<td><span class="badge">remember_tokens</span></td>
+<td>Remember Me authentication</td>
+<td class="status">System Managed</td>
+</tr>
+
+<tr>
+<td><span class="badge">admins</span></td>
+<td>Owner/Admin authentication</td>
+<td class="status">System Managed</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<div class="control-card">
+
+<div class="title">
+🟢 PostgreSQL Status
+</div>
+
+<div class="subtitle">
+Current database connection information
+</div>
+
+<div class="table-card">
+
+<table>
+
+<tr>
+<th>Database Engine</th>
+<td>PostgreSQL</td>
+</tr>
+
+<tr>
+<th>Question Records</th>
+<td>{{ stats.questions }}</td>
+</tr>
+
+<tr>
+<th>Student Records</th>
+<td>{{ stats.students }}</td>
+</tr>
+
+<tr>
+<th>Quiz Attempts</th>
+<td>{{ stats.attempts }}</td>
+</tr>
+
+<tr>
+<th>Database Version</th>
+<td>{{ stats.postgresql_version }}</td>
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

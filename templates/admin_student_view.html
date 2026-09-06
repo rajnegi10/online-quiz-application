@@ -1,0 +1,610 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Student Details | Admin Command Center{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>👨‍🎓 Student Details</h1>
+        <p>Complete profile, quiz activity, achievements, certificates, bookmarks and House points.</p>
+    </div>
+
+    <a href="{{ url_for('admin_students') }}" class="btn secondary">
+        ← Back to Students
+    </a>
+</div>
+
+<div class="profile-card">
+
+    <div class="profile-top">
+        <div class="avatar">👨‍🎓</div>
+
+        <div>
+            <h2>{{ student.name }}</h2>
+            <p>{{ student.email }}</p>
+
+            <div class="badges">
+                <span class="badge">
+                    🏠 {{ student.house if student.house else "No House" }}
+                </span>
+
+                <span class="badge">
+                    {% if student.is_active %}
+                        🟢 Active
+                    {% else %}
+                        🔴 Inactive
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+        <a href="{{ url_for('admin_student_edit', user_id=student.id) }}"
+           class="btn primary">
+            ✏️ Edit Student
+        </a>
+    </div>
+
+</div>
+
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <span>📊 Quiz Attempts</span>
+        <strong>{{ quizzes|length }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>🏆 Achievements</span>
+        <strong>{{ achievements|length }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>📜 Certificates</span>
+        <strong>{{ certificates|length }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>🔖 Bookmarks</span>
+        <strong>{{ bookmarks|length }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>⚡ All-Time Points</span>
+        <strong>{{ student.all_time_points or 0 }}</strong>
+    </div>
+
+</div>
+
+
+<div class="content-grid">
+
+    <!-- Quiz History -->
+    <section class="panel">
+
+        <div class="panel-header">
+            <div>
+                <h2>📊 Quiz History</h2>
+                <p>Student's quiz attempts</p>
+            </div>
+        </div>
+
+        {% if quizzes %}
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Difficulty</th>
+                        <th>Score</th>
+                        <th>Percentage</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for quiz in quizzes %}
+                    <tr>
+                        <td>{{ quiz.subject }}</td>
+                        <td>{{ quiz.difficulty }}</td>
+                        <td>
+                            {{ quiz.score }}/{{ quiz.total_questions }}
+                        </td>
+                        <td>{{ quiz.percentage }}%</td>
+                        <td>{{ quiz.completed_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+            No quiz attempts found.
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- Achievements -->
+    <section class="panel">
+
+        <div class="panel-header">
+            <div>
+                <h2>🏆 Achievements</h2>
+                <p>Earned achievements</p>
+            </div>
+        </div>
+
+        {% if achievements %}
+
+        <div class="list">
+
+            {% for achievement in achievements %}
+
+            <div class="list-item">
+
+                <div class="icon">🏆</div>
+
+                <div>
+                    <strong>{{ achievement.achievement_name }}</strong>
+
+                    {% if achievement.description %}
+                    <p>{{ achievement.description }}</p>
+                    {% endif %}
+
+                    <small>{{ achievement.earned_at }}</small>
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+            No achievements found.
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- Certificates -->
+    <section class="panel">
+
+        <div class="panel-header">
+            <div>
+                <h2>📜 Certificates</h2>
+                <p>Certificates earned by this student</p>
+            </div>
+        </div>
+
+        {% if certificates %}
+
+        <div class="list">
+
+            {% for certificate in certificates %}
+
+            <div class="list-item">
+
+                <div class="icon">📜</div>
+
+                <div>
+                    <strong>{{ certificate.title }}</strong>
+                    <p>ID: {{ certificate.certificate_id }}</p>
+
+                    {% if certificate.house_name %}
+                    <p>🏠 {{ certificate.house_name }}</p>
+                    {% endif %}
+
+                    <small>{{ certificate.issued_at }}</small>
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+            No certificates found.
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- Bookmarks -->
+    <section class="panel">
+
+        <div class="panel-header">
+            <div>
+                <h2>🔖 Bookmarks</h2>
+                <p>Questions saved by this student</p>
+            </div>
+        </div>
+
+        {% if bookmarks %}
+
+        <div class="list">
+
+            {% for bookmark in bookmarks %}
+
+            <div class="list-item">
+
+                <div class="icon">🔖</div>
+
+                <div>
+                    <strong>
+                        Question #{{ bookmark.question_id }}
+                    </strong>
+
+                    <small>
+                        Saved: {{ bookmark.created_at }}
+                    </small>
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+            No bookmarked questions.
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- House Points History -->
+    <section class="panel full">
+
+        <div class="panel-header">
+            <div>
+                <h2>⚡ House Points History</h2>
+                <p>Points earned by this student</p>
+            </div>
+        </div>
+
+        {% if points_history %}
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>House</th>
+                        <th>Points</th>
+                        <th>Subject</th>
+                        <th>Difficulty</th>
+                        <th>Score</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for event in points_history %}
+
+                    <tr>
+
+                        <td>
+                            🏠 {{ event.house_name }}
+                        </td>
+
+                        <td>
+                            <strong>+{{ event.points }}</strong>
+                        </td>
+
+                        <td>
+                            {{ event.subject or "—" }}
+                        </td>
+
+                        <td>
+                            {{ event.difficulty or "—" }}
+                        </td>
+
+                        <td>
+                            {% if event.score is not none %}
+                                {{ event.score }}/{{ event.total_questions or "—" }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ event.created_at }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+            No House point history found.
+        </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+
+<style>
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.page-header h1 {
+    margin: 0 0 7px;
+}
+
+.page-header p {
+    margin: 0;
+    opacity: .7;
+}
+
+.profile-card {
+    padding: 28px;
+    border-radius: 22px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.10);
+    margin-bottom: 22px;
+}
+
+.profile-top {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    background: rgba(124,92,255,.15);
+}
+
+.profile-top h2 {
+    margin: 0 0 5px;
+}
+
+.profile-top p {
+    margin: 4px 0;
+    opacity: .7;
+}
+
+.profile-top .btn {
+    margin-left: auto;
+}
+
+.badges {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.08);
+    font-size: 13px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.stat-card {
+    padding: 20px;
+    border-radius: 18px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.09);
+}
+
+.stat-card span {
+    display: block;
+    font-size: 13px;
+    opacity: .65;
+    margin-bottom: 9px;
+}
+
+.stat-card strong {
+    font-size: 25px;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 20px;
+}
+
+.panel {
+    padding: 24px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.035);
+    border: 1px solid rgba(255,255,255,.09);
+}
+
+.panel.full {
+    grid-column: 1 / -1;
+}
+
+.panel-header {
+    margin-bottom: 18px;
+}
+
+.panel-header h2 {
+    margin: 0 0 5px;
+}
+
+.panel-header p {
+    margin: 0;
+    opacity: .6;
+    font-size: 13px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 13px 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    white-space: nowrap;
+}
+
+th {
+    font-size: 12px;
+    opacity: .6;
+    text-transform: uppercase;
+}
+
+td {
+    font-size: 13px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.list-item {
+    display: flex;
+    gap: 13px;
+    align-items: flex-start;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.035);
+}
+
+.list-item .icon {
+    font-size: 22px;
+}
+
+.list-item strong {
+    display: block;
+}
+
+.list-item p {
+    margin: 4px 0;
+    opacity: .65;
+    font-size: 13px;
+}
+
+.list-item small {
+    opacity: .5;
+    font-size: 11px;
+}
+
+.empty {
+    padding: 25px;
+    text-align: center;
+    opacity: .55;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 17px;
+    border-radius: 11px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.btn.primary {
+    background: #7c5cff;
+    color: white;
+}
+
+.btn.secondary {
+    background: rgba(255,255,255,.08);
+    color: inherit;
+}
+
+@media (max-width: 900px) {
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .panel.full {
+        grid-column: auto;
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .page-header,
+    .profile-top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .profile-top .btn {
+        margin-left: 0;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+
+{% endblock %}

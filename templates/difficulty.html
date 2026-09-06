@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Choose Difficulty</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🎯 Choose Difficulty</h1>
+
+        <p style="text-align: center; margin-bottom: 30px;">
+            Subject: <strong>{{ subject }}</strong>
+        </p>
+
+        <div class="subject-grid">
+
+            <div class="subject-card">
+                <div class="subject-icon">🟢</div>
+
+                <h2>Easy</h2>
+
+                <p>
+                    Basic questions to test your fundamentals.
+                </p>
+
+                <a href="/quiz/{{ subject }}/Easy">
+                    <button type="button">
+                        Start Easy Quiz
+                    </button>
+                </a>
+            </div>
+
+
+            <div class="subject-card">
+                <div class="subject-icon">🟡</div>
+
+                <h2>Medium</h2>
+
+                <p>
+                    Moderate questions to challenge your knowledge.
+                </p>
+
+                <a href="/quiz/{{ subject }}/Medium">
+                    <button type="button">
+                        Start Medium Quiz
+                    </button>
+                </a>
+            </div>
+
+
+            <div class="subject-card">
+                <div class="subject-icon">🔴</div>
+
+                <h2>Hard</h2>
+
+                <p>
+                    Challenging questions for advanced practice.
+                </p>
+
+                <a href="/quiz/{{ subject }}/Hard">
+                    <button type="button">
+                        Start Hard Quiz
+                    </button>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

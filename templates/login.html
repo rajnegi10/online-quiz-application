@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Online Quiz Application</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+
+            background:
+                radial-gradient(
+                    circle at 15% 15%,
+                    rgba(99, 102, 241, 0.20),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    circle at 85% 85%,
+                    rgba(168, 85, 247, 0.18),
+                    transparent 32%
+                ),
+                linear-gradient(
+                    135deg,
+                    #070a13 0%,
+                    #0d1222 50%,
+                    #080b16 100%
+                );
+
+            color: white;
+        }
+
+        /* MAIN CONTAINER */
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 1050px;
+
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+
+            background: rgba(15, 20, 37, 0.92);
+
+            border: 1px solid rgba(255, 255, 255, 0.10);
+
+            border-radius: 28px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 30px 90px rgba(0, 0, 0, 0.60),
+                0 0 70px rgba(99, 102, 241, 0.08);
+
+            backdrop-filter: blur(20px);
+        }
+
+        /* LEFT BRAND SECTION */
+
+        .brand-section {
+            position: relative;
+
+            padding: 58px;
+
+            display: flex;
+            align-items: center;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(99, 102, 241, 0.18),
+                    rgba(139, 92, 246, 0.06)
+                );
+        }
+
+        .brand-section::before {
+            content: "";
+
+            position: absolute;
+
+            width: 280px;
+            height: 280px;
+
+            border-radius: 50%;
+
+            top: -130px;
+            left: -130px;
+
+            background: rgba(99, 102, 241, 0.12);
+
+            filter: blur(12px);
+        }
+
+        .brand-section::after {
+            content: "";
+
+            position: absolute;
+
+            width: 240px;
+            height: 240px;
+
+            border-radius: 50%;
+
+            right: -120px;
+            bottom: -120px;
+
+            background: rgba(168, 85, 247, 0.10);
+
+            filter: blur(12px);
+        }
+
+        .brand-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* LOGO */
+
+        .logo {
+            width: 86px;
+            height: 86px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #667eea,
+                    #8b5cf6
+                );
+
+            font-size: 43px;
+
+            margin-bottom: 28px;
+
+            box-shadow:
+                0 18px 40px rgba(99, 102, 241, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
+
+        /* BRAND TITLE */
+
+        .brand-section h1 {
+            font-size: 42px;
+
+            line-height: 1.10;
+
+            margin-bottom: 18px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #c7d2fe,
+                    #e9d5ff
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-description {
+            max-width: 470px;
+
+            color: #aab3cc;
+
+            font-size: 16px;
+
+            line-height: 1.75;
+        }
+
+        /* FEATURES */
+
+        .feature-list {
+            margin-top: 34px;
+
+            display: grid;
+
+            gap: 14px;
+        }
+
+        .feature {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            color: #d9def0;
+
+            font-size: 14px;
+        }
+
+        .feature-icon {
+            width: 36px;
+            height: 36px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 11px;
+
+            background: rgba(255, 255, 255, 0.055);
+
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* RIGHT LOGIN SECTION */
+
+        .login-section {
+            padding: 55px 50px;
+
+            background:
+                rgba(7, 11, 22, 0.76);
+        }
+
+        .login-header {
+            margin-bottom: 30px;
+        }
+
+        .small-title {
+            color: #818cf8;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 10px;
+        }
+
+        .login-header h2 {
+            font-size: 30px;
+
+            margin-bottom: 8px;
+
+            color: #ffffff;
+        }
+
+        .login-header p {
+            color: #8993ac;
+
+            font-size: 14px;
+        }
+
+        /* ERROR */
+
+        .error {
+            background: rgba(239, 68, 68, 0.12);
+
+            border: 1px solid rgba(239, 68, 68, 0.28);
+
+            color: #fca5a5;
+
+            padding: 13px 15px;
+
+            border-radius: 12px;
+
+            margin-bottom: 20px;
+
+            font-size: 14px;
+
+            text-align: center;
+        }
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #dce2f2;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+
+            padding: 14px 15px;
+
+            background: rgba(255, 255, 255, 0.045);
+
+            border: 1px solid rgba(255, 255, 255, 0.10);
+
+            border-radius: 12px;
+
+            color: #ffffff;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: 0.25s ease;
+        }
+
+        input::placeholder {
+            color: #626c84;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #818cf8;
+
+            box-shadow:
+                0 0 0 3px rgba(129, 140, 248, 0.12),
+                0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        /* REMEMBER ME */
+
+        .remember-row {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin: 4px 0 22px;
+
+            color: #9da7bf;
+
+            font-size: 13px;
+
+            cursor: pointer;
+        }
+
+        .remember-row input {
+            width: 17px;
+            height: 17px;
+
+            margin: 0;
+
+            accent-color: #7c83f5;
+
+            cursor: pointer;
+        }
+
+        /* STUDENT LOGIN BUTTON */
+
+        .login-button {
+            width: 100%;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #667eea,
+                    #8b5cf6
+                );
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 12px 30px rgba(99, 102, 241, 0.25);
+
+            transition: 0.25s ease;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 17px 38px rgba(99, 102, 241, 0.36);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        /* DIVIDER */
+
+        .divider {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin: 28px 0 18px;
+
+            color: #59647c;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            letter-spacing: 2px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+
+            flex: 1;
+
+            height: 1px;
+
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* ADMIN BUTTON */
+
+        .admin-button {
+            width: 100%;
+
+            padding: 14px 15px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 9px;
+
+            border-radius: 12px;
+
+            color: #f5d98a;
+
+            text-decoration: none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(212, 175, 55, 0.10),
+                    rgba(255, 255, 255, 0.035)
+                );
+
+            border: 1px solid rgba(212, 175, 55, 0.25);
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            transition: 0.25s ease;
+        }
+
+        .admin-button:hover {
+            transform: translateY(-2px);
+
+            border-color: rgba(212, 175, 55, 0.50);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(212, 175, 55, 0.17),
+                    rgba(255, 255, 255, 0.05)
+                );
+
+            box-shadow:
+                0 12px 28px rgba(212, 175, 55, 0.10);
+        }
+
+        .admin-note {
+            text-align: center;
+
+            color: #606b82;
+
+            font-size: 11px;
+
+            margin-top: 9px;
+        }
+
+        /* CREATE ACCOUNT */
+
+        .bottom-text {
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #778198;
+
+            font-size: 13px;
+        }
+
+        .bottom-text a {
+            color: #a5b4fc;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        .bottom-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* SECURITY */
+
+        .security {
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #59647a;
+
+            font-size: 11px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 850px) {
+
+            .login-wrapper {
+                grid-template-columns: 1fr;
+
+                max-width: 520px;
+            }
+
+            .brand-section {
+                padding: 38px 35px;
+            }
+
+            .brand-section h1 {
+                font-size: 34px;
+            }
+
+            .feature-list {
+                display: none;
+            }
+
+            .login-section {
+                padding: 40px 35px;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            body {
+                padding: 14px;
+            }
+
+            .brand-section {
+                padding: 30px 24px;
+            }
+
+            .login-section {
+                padding: 30px 22px;
+            }
+
+            .logo {
+                width: 65px;
+                height: 65px;
+
+                font-size: 32px;
+            }
+
+            .brand-section h1 {
+                font-size: 29px;
+            }
+
+            .brand-description {
+                font-size: 14px;
+            }
+
+            .login-header h2 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-wrapper">
+
+        <!-- ========================= -->
+        <!-- LEFT BRANDING SECTION -->
+        <!-- ========================= -->
+
+        <section class="brand-section">
+
+            <div class="brand-content">
+
+                <div class="logo">
+                    🧠
+                </div>
+
+                <h1>
+                    Online Quiz<br>
+                    Application
+                </h1>
+
+                <p class="brand-description">
+                    Challenge your knowledge, earn House points,
+                    climb the rankings and build your academic legacy.
+                </p>
+
+                <div class="feature-list">
+
+                    <div class="feature">
+                        <div class="feature-icon">🏛️</div>
+                        <span>Four Houses. One Champion.</span>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">🏆</div>
+                        <span>Competitive House & Student Rankings</span>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">📜</div>
+                        <span>Earn Premium Certificates & Achievements</span>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">🔐</div>
+                        <span>Secure PostgreSQL-powered platform</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- RIGHT LOGIN SECTION -->
+        <!-- ========================= -->
+
+        <section class="login-section">
+
+            <div class="login-header">
+
+                <div class="small-title">
+                    Student Portal
+                </div>
+
+                <h2>
+                    Welcome Back 👋
+                </h2>
+
+                <p>
+                    Login to continue your quiz journey.
+                </p>
+
+            </div>
+
+
+            {% if error %}
+
+                <div class="error">
+                    {{ error }}
+                </div>
+
+            {% endif %}
+
+
+            <!-- STUDENT LOGIN -->
+
+            <form method="POST" action="/login">
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        maxlength="150"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <label class="remember-row">
+
+                    <input
+                        type="checkbox"
+                        name="remember_me"
+                        id="remember_me"
+                    >
+
+                    <span>
+                        Remember Me / Stay Logged In
+                    </span>
+
+                </label>
+
+
+                <button
+                    type="submit"
+                    class="login-button"
+                >
+                    Login as Student
+                </button>
+
+            </form>
+
+
+            <!-- DIVIDER -->
+
+            <div class="divider">
+                OR
+            </div>
+
+
+            <!-- ADMIN LOGIN -->
+
+            <a
+                href="{{ url_for('admin_login') }}"
+                class="admin-button"
+            >
+                🛡️ Admin Login
+            </a>
+
+            <div class="admin-note">
+                Restricted administrative access
+            </div>
+
+
+            <!-- REGISTER -->
+
+            <div class="bottom-text">
+
+                Don't have a student account?
+
+                <a href="/register">
+                    Create Account
+                </a>
+
+            </div>
+
+
+            <!-- SECURITY -->
+
+            <div class="security">
+                🔒 Secure authentication • PostgreSQL • Password verification
+            </div>
+
+        </section>
+
+    </div>
+
+</body>
+</html>

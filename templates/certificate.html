@@ -1,0 +1,1081 @@
+{% if house == "Dravaryn" %}
+    {% set theme = "dravaryn" %}
+    {% set house_label = "HOUSE OF VALOR" %}
+{% elif house == "Aetherion" %}
+    {% set theme = "aetherion" %}
+    {% set house_label = "HOUSE OF VISION" %}
+{% elif house == "Valthera" %}
+    {% set theme = "valthera" %}
+    {% set house_label = "HOUSE OF RESOLVE" %}
+{% elif house == "Arcanis" %}
+    {% set theme = "arcanis" %}
+    {% set house_label = "HOUSE OF MASTERY" %}
+{% else %}
+    {% set theme = "default" %}
+    {% set house_label = "ONLINE QUIZ CHAMPIONSHIP" %}
+{% endif %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{{ student_name }} — Certificate of Excellence</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary: #d7ad45;
+    --bright: #ffe7a0;
+    --dark: #090a0f;
+    --panel: #11141c;
+    --text: #f7f1df;
+    --muted: #9da2ae;
+    --line: rgba(215,173,69,.45);
+    --glow: rgba(215,173,69,.18);
+}
+
+body {
+    min-height: 100vh;
+    padding: 25px;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,.06), transparent 35%),
+        #050609;
+    color: var(--text);
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.page {
+    width: 100%;
+    max-width: 1320px;
+    margin: auto;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.btn {
+    border: 1px solid var(--primary);
+    background: rgba(8,9,13,.9);
+    color: var(--bright);
+    padding: 11px 19px;
+    border-radius: 9px;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.btn:hover {
+    background: var(--primary);
+    color: #090a0e;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px var(--glow);
+}
+
+/* =========================
+   CERTIFICATE
+========================= */
+
+.certificate {
+    position: relative;
+    min-height: 790px;
+    padding: 11px;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 30%,
+            var(--glow),
+            transparent 38%
+        ),
+        linear-gradient(
+            125deg,
+            var(--bg1),
+            var(--bg2) 52%,
+            var(--bg3)
+        );
+
+    border: 2px solid var(--primary);
+
+    box-shadow:
+        0 35px 100px rgba(0,0,0,.7),
+        inset 0 0 100px rgba(255,255,255,.025);
+}
+
+/* =========================
+   INNER FRAME
+========================= */
+
+.frame {
+    position: relative;
+    min-height: 765px;
+    border: 1px solid var(--line);
+    padding: 45px 65px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Secondary frame */
+
+.frame::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+
+    border: 1px solid rgba(255,255,255,.055);
+
+    pointer-events: none;
+}
+
+/* =========================
+   ORNAMENT CORNERS
+========================= */
+
+.ornament {
+    position: absolute;
+    width: 85px;
+    height: 85px;
+}
+
+.ornament::before,
+.ornament::after {
+    content: "";
+    position: absolute;
+    background: var(--primary);
+}
+
+.ornament::before {
+    width: 55px;
+    height: 2px;
+}
+
+.ornament::after {
+    width: 2px;
+    height: 55px;
+}
+
+.top-left {
+    top: 19px;
+    left: 19px;
+}
+
+.top-left::before {
+    top: 0;
+    left: 0;
+}
+
+.top-left::after {
+    top: 0;
+    left: 0;
+}
+
+.top-right {
+    top: 19px;
+    right: 19px;
+    transform: rotate(90deg);
+}
+
+.top-right::before {
+    top: 0;
+    left: 0;
+}
+
+.top-right::after {
+    top: 0;
+    left: 0;
+}
+
+.bottom-left {
+    bottom: 19px;
+    left: 19px;
+    transform: rotate(-90deg);
+}
+
+.bottom-left::before {
+    top: 0;
+    left: 0;
+}
+
+.bottom-left::after {
+    top: 0;
+    left: 0;
+}
+
+.bottom-right {
+    bottom: 19px;
+    right: 19px;
+    transform: rotate(180deg);
+}
+
+.bottom-right::before {
+    top: 0;
+    left: 0;
+}
+
+.bottom-right::after {
+    top: 0;
+    left: 0;
+}
+
+/* =========================
+   TOP BRAND
+========================= */
+
+.brand {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--bright);
+
+    margin-bottom: 12px;
+}
+
+.micro-line {
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+}
+
+/* =========================
+   MAIN TITLE
+========================= */
+
+.title {
+    margin-top: 17px;
+
+    font-size: clamp(32px, 5vw, 58px);
+    font-weight: 600;
+    letter-spacing: 7px;
+
+    color: var(--title);
+
+    text-transform: uppercase;
+
+    text-shadow:
+        0 0 35px var(--glow);
+}
+
+.title-line {
+    width: 340px;
+    max-width: 75%;
+    height: 1px;
+
+    margin: 18px auto 15px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--primary),
+            transparent
+        );
+}
+
+.award-name {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--primary);
+    text-transform: uppercase;
+}
+
+/* =========================
+   HOUSE CREST
+========================= */
+
+.crest {
+    width: 125px;
+    height: 125px;
+
+    margin: 20px 0 18px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 62px;
+
+    background:
+        radial-gradient(
+            circle,
+            var(--glow),
+            rgba(3,4,8,.96) 68%
+        );
+
+    border: 2px solid var(--primary);
+
+    box-shadow:
+        0 0 0 7px rgba(255,255,255,.025),
+        0 0 0 12px rgba(255,255,255,.012),
+        0 0 45px var(--glow);
+}
+
+.crest-ring {
+    position: absolute;
+    width: 145px;
+    height: 145px;
+
+    border-radius: 50%;
+    border: 1px dashed var(--line);
+}
+
+/* =========================
+   PRESENTED TO
+========================= */
+
+.presented {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+
+    color: var(--muted);
+
+    text-transform: uppercase;
+}
+
+.student-name {
+    margin: 10px 0 8px;
+
+    font-size: clamp(35px, 6vw, 64px);
+    font-weight: 600;
+
+    color: var(--title);
+
+    letter-spacing: 2px;
+
+    text-shadow:
+        0 0 30px var(--glow);
+}
+
+.description {
+    max-width: 780px;
+
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.7;
+
+    color: var(--text);
+}
+
+/* =========================
+   HOUSE IDENTITY
+========================= */
+
+.house-name {
+    margin-top: 20px;
+
+    font-size: 27px;
+    letter-spacing: 5px;
+
+    color: var(--primary);
+
+    text-transform: uppercase;
+}
+
+.house-label {
+    margin-top: 5px;
+
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+
+    color: var(--muted);
+}
+
+.motto {
+    margin-top: 11px;
+
+    font-size: 16px;
+    font-style: italic;
+
+    color: var(--bright);
+}
+
+.identity {
+    max-width: 670px;
+    margin-top: 8px;
+
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    line-height: 1.5;
+
+    color: var(--muted);
+}
+
+/* =========================
+   ACHIEVEMENT DATA
+========================= */
+
+.stats {
+    width: 100%;
+    max-width: 900px;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 10px;
+
+    margin-top: 23px;
+}
+
+.stat {
+    min-height: 65px;
+
+    padding: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.035),
+            rgba(255,255,255,.01)
+        );
+
+    border: 1px solid var(--line);
+
+    border-radius: 6px;
+}
+
+.stat-label {
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+
+    letter-spacing: 1.7px;
+
+    color: var(--muted);
+
+    text-transform: uppercase;
+}
+
+.stat-value {
+    margin-top: 7px;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    color: var(--bright);
+}
+
+/* =========================
+   LOWER SECTION
+========================= */
+
+.lower {
+    width: 100%;
+    max-width: 950px;
+
+    display: grid;
+    grid-template-columns: 1fr 180px 1fr;
+
+    align-items: center;
+
+    gap: 25px;
+
+    margin-top: 25px;
+}
+
+.signature,
+.issue {
+    text-align: center;
+}
+
+.signature-line {
+    width: 175px;
+    height: 1px;
+
+    margin: auto auto 8px;
+
+    background: var(--primary);
+}
+
+.signature-name {
+    font-size: 17px;
+    color: var(--title);
+}
+
+.signature-role {
+    margin-top: 4px;
+
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+
+    letter-spacing: 1.5px;
+
+    color: var(--muted);
+
+    text-transform: uppercase;
+}
+
+.issue-label {
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+
+    color: var(--muted);
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+}
+
+.issue-date {
+    margin-top: 7px;
+
+    font-size: 15px;
+
+    color: var(--title);
+}
+
+/* =========================
+   PREMIUM SEAL
+========================= */
+
+.seal {
+    width: 125px;
+    height: 125px;
+
+    margin: auto;
+
+    border-radius: 50%;
+
+    border: 2px solid var(--primary);
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle,
+            var(--glow),
+            rgba(3,4,8,.98) 70%
+        );
+
+    box-shadow:
+        0 0 35px var(--glow);
+}
+
+.seal::before {
+    content: "";
+
+    position: absolute;
+
+    width: 105px;
+    height: 105px;
+
+    border-radius: 50%;
+
+    border: 1px dashed var(--line);
+}
+
+.seal-star {
+    font-size: 28px;
+    color: var(--bright);
+
+    position: relative;
+}
+
+.seal-main {
+    font-family: Arial, sans-serif;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+    color: var(--bright);
+
+    text-transform: uppercase;
+
+    position: relative;
+}
+
+.seal-small {
+    margin-top: 4px;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 7px;
+
+    letter-spacing: 1.5px;
+
+    color: var(--muted);
+
+    text-transform: uppercase;
+
+    position: relative;
+}
+
+/* =========================
+   CERTIFICATE ID
+========================= */
+
+.certificate-id {
+    margin-top: 18px;
+
+    padding: 7px 16px;
+
+    border: 1px solid rgba(255,255,255,.10);
+
+    background: rgba(0,0,0,.18);
+
+    border-radius: 5px;
+
+    font-family: monospace;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+    color: #8e8a78;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+    margin-top: auto;
+    padding-top: 17px;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+    color: var(--muted);
+
+    text-transform: uppercase;
+}
+
+/* =========================================================
+   DRAVARYN — ROYAL VALOR
+========================================================= */
+
+.dravaryn {
+    --bg1: #170709;
+    --bg2: #301017;
+    --bg3: #08090c;
+
+    --primary: #d6a83f;
+    --bright: #ffe39a;
+    --title: #fff3d1;
+
+    --muted: #a49789;
+    --text: #ddd1ba;
+
+    --line: rgba(214,168,63,.48);
+    --glow: rgba(214,168,63,.18);
+}
+
+/* =========================================================
+   AETHERION — CELESTIAL VISION
+========================================================= */
+
+.aetherion {
+    --bg1: #061126;
+    --bg2: #0c2345;
+    --bg3: #04070e;
+
+    --primary: #9dc7ee;
+    --bright: #e2f2ff;
+    --title: #f3f9ff;
+
+    --muted: #91a8c2;
+    --text: #cad9e9;
+
+    --line: rgba(157,199,238,.48);
+    --glow: rgba(100,167,230,.19);
+}
+
+/* =========================================================
+   VALTHERA — SHADOW RESOLVE
+========================================================= */
+
+.valthera {
+    --bg1: #090d11;
+    --bg2: #1b222a;
+    --bg3: #05070a;
+
+    --primary: #b9c6d1;
+    --bright: #edf5fa;
+    --title: #f7fafc;
+
+    --muted: #8e9aa5;
+    --text: #cbd2d8;
+
+    --line: rgba(185,198,209,.45);
+    --glow: rgba(185,198,209,.13);
+}
+
+/* =========================================================
+   ARCANIS — ARCANE MASTERY
+========================================================= */
+
+.arcanis {
+    --bg1: #10071e;
+    --bg2: #28133e;
+    --bg3: #07040d;
+
+    --primary: #c08be9;
+    --bright: #ead2ff;
+    --title: #faf1ff;
+
+    --muted: #a08eaf;
+    --text: #d8cae2;
+
+    --line: rgba(192,139,233,.48);
+    --glow: rgba(164,91,222,.19);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 850px) {
+
+    body {
+        padding: 10px;
+    }
+
+    .actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn {
+        text-align: center;
+    }
+
+    .frame {
+        padding: 40px 18px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .lower {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+
+    .certificate {
+        min-height: auto;
+    }
+
+    .frame {
+        min-height: auto;
+    }
+
+    .footer {
+        margin-top: 25px;
+    }
+}
+
+/* =========================
+   PRINT
+========================= */
+
+@media print {
+
+    @page {
+        size: A4 landscape;
+        margin: 0;
+    }
+
+    body {
+        padding: 0;
+        background: white;
+    }
+
+    .actions {
+        display: none;
+    }
+
+    .certificate {
+        width: 100%;
+        min-height: 100vh;
+
+        box-shadow: none;
+    }
+
+    .frame {
+        min-height: calc(100vh - 24px);
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="actions">
+
+        <a href="{{ url_for('dashboard') }}" class="btn">
+            ← Back to Dashboard
+        </a>
+
+        <button onclick="window.print()" class="btn">
+            🖨 Print Certificate
+        </button>
+
+    </div>
+
+
+    <div class="certificate {{ theme }}">
+
+        <div class="frame">
+
+            <!-- Ornamental corners -->
+
+            <div class="ornament top-left"></div>
+            <div class="ornament top-right"></div>
+            <div class="ornament bottom-left"></div>
+            <div class="ornament bottom-right"></div>
+
+
+            <!-- Brand -->
+
+            <div class="brand">
+                ONLINE QUIZ APPLICATION
+            </div>
+
+            <div class="micro-line">
+                Academic Excellence • House Championship
+            </div>
+
+
+            <!-- Title -->
+
+            <div class="title">
+                Certificate
+            </div>
+
+            <div class="title-line"></div>
+
+            <div class="award-name">
+                Certificate of Excellence
+            </div>
+
+
+            <!-- Crest -->
+
+            <div style="position:relative;">
+
+                <div class="crest-ring"></div>
+
+                <div class="crest">
+                    {{ house_info.symbol }}
+                </div>
+
+            </div>
+
+
+            <!-- Recipient -->
+
+            <div class="presented">
+                This certificate is proudly presented to
+            </div>
+
+            <div class="student-name">
+                {{ student_name }}
+            </div>
+
+            <div class="description">
+                In recognition of dedication, knowledge, competitive spirit
+                and outstanding participation in the Online Quiz Championship.
+            </div>
+
+
+            <!-- House -->
+
+            <div class="house-name">
+                {{ house }}
+            </div>
+
+            <div class="house-label">
+                {{ house_label }}
+            </div>
+
+            <div class="motto">
+                “{{ house_info.motto }}”
+            </div>
+
+            <div class="identity">
+                {{ house_info.identity }}
+            </div>
+
+
+            <!-- Achievement stats -->
+
+            <div class="stats">
+
+                <div class="stat">
+                    <div class="stat-label">
+                        Current House Points
+                    </div>
+
+                    <div class="stat-value">
+                        {{ points }}
+                    </div>
+                </div>
+
+
+                <div class="stat">
+                    <div class="stat-label">
+                        House Standing
+                    </div>
+
+                    <div class="stat-value">
+
+                        {% if house_rank %}
+                            #{{ house_rank }}
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </div>
+                </div>
+
+
+                <div class="stat">
+                    <div class="stat-label">
+                        Lifetime Points
+                    </div>
+
+                    <div class="stat-value">
+                        {{ all_time_points }}
+                    </div>
+                </div>
+
+
+                <div class="stat">
+                    <div class="stat-label">
+                        All-Time Rank
+                    </div>
+
+                    <div class="stat-value">
+
+                        {% if all_time_rank %}
+                            #{{ all_time_rank }}
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Bottom -->
+
+            <div class="lower">
+
+
+                <!-- Signature -->
+
+                <div class="signature">
+
+                    <div class="signature-line"></div>
+
+                    <div class="signature-name">
+                        Raj Negi
+                    </div>
+
+                    <div class="signature-role">
+                        Founder & Quiz Master
+                    </div>
+
+                </div>
+
+
+                <!-- Seal -->
+
+                <div class="seal">
+
+                    <div class="seal-star">
+                        ★
+                    </div>
+
+                    <div class="seal-main">
+                        Excellence
+                    </div>
+
+                    <div class="seal-small">
+                        House Certified
+                    </div>
+
+                </div>
+
+
+                <!-- Date -->
+
+                <div class="issue">
+
+                    <div class="issue-label">
+                        Date of Issue
+                    </div>
+
+                    <div class="issue-date">
+                        {{ issued_at }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Certificate ID -->
+
+            <div class="certificate-id">
+
+                CERTIFICATE ID:
+                {{ house_info.short }}-CERT-{{ "%06d"|format(session["user_id"]) }}
+
+            </div>
+
+
+            <!-- Footer -->
+
+            <div class="footer">
+                {{ house_info.motto }} • Online Quiz Championship
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

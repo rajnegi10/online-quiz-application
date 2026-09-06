@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Control Room | Admin</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            color: #ffffff;
+
+            background:
+
+                radial-gradient(
+                    circle at top left,
+                    rgba(97, 44, 175, 0.20),
+                    transparent 35%
+                ),
+
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(212, 175, 55, 0.12),
+                    transparent 35%
+                ),
+
+                #07070b;
+        }
+
+        .container {
+
+            width: min(1400px, 95%);
+
+            margin: auto;
+
+            padding: 30px 0 50px;
+        }
+
+        .topbar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 20px;
+
+            margin-bottom: 30px;
+
+            padding: 20px 24px;
+
+            border-radius: 20px;
+
+            background: rgba(16, 16, 24, 0.92);
+
+            border: 1px solid rgba(212, 175, 55, 0.22);
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.35);
+
+            backdrop-filter: blur(12px);
+        }
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+        }
+
+        .brand-icon {
+
+            width: 56px;
+
+            height: 56px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 16px;
+
+            font-size: 28px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #d4af37,
+                    #7e5f12
+                );
+
+            color: #111111;
+
+            box-shadow:
+                0 10px 25px rgba(212, 175, 55, 0.18);
+        }
+
+        .brand h1 {
+
+            font-size: 24px;
+
+            margin-bottom: 4px;
+        }
+
+        .brand p {
+
+            color: #8f8f9d;
+
+            font-size: 13px;
+        }
+
+        .back-link {
+
+            text-decoration: none;
+
+            color: #d4af37;
+
+            font-weight: 700;
+
+            font-size: 14px;
+        }
+
+        .hero {
+
+            margin-bottom: 24px;
+        }
+
+        .hero-badge {
+
+            display: inline-block;
+
+            margin-bottom: 10px;
+
+            padding: 7px 12px;
+
+            border-radius: 999px;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            color: #e8cf7a;
+
+            background:
+                rgba(212, 175, 55, 0.08);
+
+            border:
+                1px solid rgba(212, 175, 55, 0.20);
+        }
+
+        .hero h2 {
+
+            font-size: 34px;
+
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+
+            color: #8e8e9b;
+
+            max-width: 760px;
+
+            line-height: 1.6;
+        }
+
+        .control-card {
+
+            padding: 20px;
+
+            margin-bottom: 22px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(18, 18, 26, 0.94);
+
+            border:
+                1px solid #292936;
+        }
+
+        .controls {
+
+            display: grid;
+
+            grid-template-columns:
+                2fr 1fr 1fr auto;
+
+            gap: 12px;
+
+            align-items: end;
+        }
+
+        .field label {
+
+            display: block;
+
+            color: #a4a4af;
+
+            font-size: 12px;
+
+            margin-bottom: 7px;
+
+            font-weight: 700;
+        }
+
+        .field input,
+        .field select {
+
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border:
+                1px solid #343444;
+
+            border-radius: 12px;
+
+            outline: none;
+
+            color: #ffffff;
+
+            background: #101018;
+        }
+
+        .field input:focus,
+        .field select:focus {
+
+            border-color:
+                rgba(212, 175, 55, 0.55);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(212, 175, 55, 0.08);
+        }
+
+        .button {
+
+            border: none;
+
+            cursor: pointer;
+
+            text-decoration: none;
+
+            padding: 13px 17px;
+
+            border-radius: 12px;
+
+            font-weight: 800;
+
+            transition: 0.2s;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 7px;
+        }
+
+        .button:hover {
+
+            transform: translateY(-2px);
+        }
+
+        .button-gold {
+
+            color: #111111;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #e3c45f,
+                    #a8811e
+                );
+        }
+
+        .button-dark {
+
+            color: #dddddf;
+
+            background: #1a1a25;
+
+            border:
+                1px solid #343444;
+        }
+
+        .button-edit {
+
+            color: #cbb6ff;
+
+            background:
+                rgba(121, 77, 255, 0.10);
+
+            border:
+                1px solid rgba(121, 77, 255, 0.28);
+        }
+
+        .button-delete {
+
+            color: #ff9a9a;
+
+            background:
+                rgba(255, 74, 74, 0.08);
+
+            border:
+                1px solid rgba(255, 74, 74, 0.25);
+        }
+
+        .toolbar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 14px;
+        }
+
+        .toolbar h3 {
+
+            font-size: 21px;
+        }
+
+        .student-count {
+
+            color: #9a9aa6;
+
+            font-size: 13px;
+        }
+
+        .table-card {
+
+            overflow-x: auto;
+
+            border-radius: 20px;
+
+            background:
+                rgba(18, 18, 26, 0.94);
+
+            border:
+                1px solid #292936;
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 1200px;
+        }
+
+        th,
+        td {
+
+            padding: 16px 15px;
+
+            border-bottom:
+                1px solid #292936;
+
+            vertical-align: top;
+
+            text-align: left;
+        }
+
+        th {
+
+            font-size: 12px;
+
+            letter-spacing: 0.5px;
+
+            color: #d4af37;
+
+            background:
+                rgba(212, 175, 55, 0.03);
+        }
+
+        td {
+
+            font-size: 14px;
+
+            color: #dddddf;
+        }
+
+        tr:last-child td {
+
+            border-bottom: none;
+        }
+
+        tr:hover td {
+
+            background:
+                rgba(255, 255, 255, 0.015);
+        }
+
+        .student-name {
+
+            font-weight: 800;
+
+            color: #ffffff;
+        }
+
+        .student-email {
+
+            margin-top: 5px;
+
+            color: #777786;
+
+            font-size: 12px;
+        }
+
+        .id-cell {
+
+            color: #777786;
+        }
+
+        .badge {
+
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            border-radius: 999px;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            background: #222230;
+
+            border:
+                1px solid #363647;
+        }
+
+        .active {
+
+            color: #79e3aa;
+
+            font-weight: 800;
+        }
+
+        .inactive {
+
+            color: #ff9a9a;
+
+            font-weight: 800;
+        }
+
+        .points {
+
+            color: #e8cf7a;
+
+            font-weight: 800;
+        }
+
+        .actions {
+
+            display: flex;
+
+            gap: 8px;
+
+            flex-wrap: wrap;
+        }
+
+        .actions form {
+
+            margin: 0;
+        }
+
+        .empty {
+
+            padding: 40px;
+
+            text-align: center;
+
+            color: #777786;
+        }
+
+        @media (max-width: 950px) {
+
+            .controls {
+
+                grid-template-columns: 1fr 1fr;
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .topbar {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .controls {
+
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .hero h2 {
+
+                font-size: 28px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                👑
+            </div>
+
+            <div>
+
+                <h1>
+                    Student Control Room
+                </h1>
+
+                <p>
+                    Owner Arena Administration
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('admin_dashboard') }}"
+            class="back-link"
+        >
+            ← Admin Dashboard
+        </a>
+
+    </div>
+
+
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+        <div class="hero-badge">
+            ARENA MASTER CONTROL
+        </div>
+
+        <h2>
+            Student Management Command Center
+        </h2>
+
+        <p>
+            Search, filter and manage registered students,
+            Houses, quiz performance and activity.
+        </p>
+
+    </div>
+
+
+
+    <!-- FILTER CARD -->
+
+    <div class="control-card">
+
+        <form
+            method="GET"
+            action="{{ url_for('admin_students') }}"
+        >
+
+            <div class="controls">
+
+
+                <div class="field">
+
+                    <label>
+                        Search Student
+                    </label>
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search|default('') }}"
+                        placeholder="Search student name or email..."
+                    >
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        House
+                    </label>
+
+                    <select name="house">
+
+                        <option value="All">
+                            All Houses
+                        </option>
+
+                        {% for house in houses %}
+
+                        <option
+                            value="{{ house }}"
+                            {% if selected_house == house %}
+                            selected
+                            {% endif %}
+                        >
+                            {{ house }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Status
+                    </label>
+
+                    <select name="status">
+
+                        <option
+                            value="All"
+                            {% if status == "All" %}
+                            selected
+                            {% endif %}
+                        >
+                            All Status
+                        </option>
+
+                        <option
+                            value="Active"
+                            {% if status == "Active" %}
+                            selected
+                            {% endif %}
+                        >
+                            Active
+                        </option>
+
+                        <option
+                            value="Inactive"
+                            {% if status == "Inactive" %}
+                            selected
+                            {% endif %}
+                        >
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <button
+                    type="submit"
+                    class="button button-dark"
+                >
+                    🔍 Filter
+                </button>
+
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+
+    <!-- TOOLBAR -->
+
+    <div class="toolbar">
+
+        <div>
+
+            <h3>
+                👨‍🎓 Student Records
+            </h3>
+
+            <div class="student-count">
+
+                {{ students|length }}
+                student(s) shown
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- TABLE -->
+
+    <div class="table-card">
+
+        {% if students %}
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        ID
+                    </th>
+
+                    <th>
+                        Student
+                    </th>
+
+                    <th>
+                        House
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Attempts
+                    </th>
+
+                    <th>
+                        Average
+                    </th>
+
+                    <th>
+                        Points
+                    </th>
+
+                    <th>
+                        Achievements
+                    </th>
+
+                    <th>
+                        Certificates
+                    </th>
+
+                    <th>
+                        Bookmarks
+                    </th>
+
+                    <th>
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for student in students %}
+
+                <tr>
+
+
+                    <td class="id-cell">
+
+                        #{{ student.id }}
+
+                    </td>
+
+
+
+                    <td>
+
+                        <div class="student-name">
+
+                            {{ student.name }}
+
+                        </div>
+
+                        <div class="student-email">
+
+                            {{ student.email }}
+
+                        </div>
+
+                    </td>
+
+
+
+                    <td>
+
+                        {% if student.house %}
+
+                        <span class="badge">
+
+                            {{ student.house }}
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge">
+
+                            Unassigned
+
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+
+                    <td>
+
+                        {% if student.is_active %}
+
+                        <span class="active">
+
+                            ● Active
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="inactive">
+
+                            ● Inactive
+
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+
+                    <td>
+
+                        {{ student.attempts }}
+
+                    </td>
+
+
+
+                    <td>
+
+                        {{ student.avg_percentage }}%
+
+                    </td>
+
+
+
+                    <td class="points">
+
+                        {{ student.points }}
+
+                    </td>
+
+
+
+                    <td>
+
+                        {{ student.achievements }}
+
+                    </td>
+
+
+
+                    <td>
+
+                        {{ student.certificates }}
+
+                    </td>
+
+
+
+                    <td>
+
+                        {{ student.bookmarks }}
+
+                    </td>
+
+
+
+                    <td>
+
+                        <div class="actions">
+
+
+                            <a
+                                href="{{ url_for(
+                                    'admin_student_view',
+                                    user_id=student.id
+                                ) }}"
+                                class="button button-dark"
+                            >
+                                👁️ View
+                            </a>
+
+
+
+                            <a
+                                href="{{ url_for(
+                                    'admin_edit_student',
+                                    user_id=student.id
+                                ) }}"
+                                class="button button-edit"
+                            >
+                                ✏️ Edit
+                            </a>
+
+
+
+                            <form
+                                method="POST"
+                                action="{{ url_for(
+                                    'admin_toggle_student',
+                                    user_id=student.id
+                                ) }}"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="button button-dark"
+                                >
+
+                                    {% if student.is_active %}
+
+                                        Deactivate
+
+                                    {% else %}
+
+                                        Activate
+
+                                    {% endif %}
+
+                                </button>
+
+                            </form>
+
+
+
+                            <form
+                                method="POST"
+                                action="{{ url_for(
+                                    'admin_delete_student',
+                                    user_id=student.id
+                                ) }}"
+                                onsubmit="return confirm(
+                                    'Remove this student permanently?'
+                                );"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="button button-delete"
+                                >
+                                    🗑️ Remove
+                                </button>
+
+                            </form>
+
+
+                        </div>
+
+                    </td>
+
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+        {% else %}
+
+        <div class="empty">
+
+            No students matched your search or filters.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

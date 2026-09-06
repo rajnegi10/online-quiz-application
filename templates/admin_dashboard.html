@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Command Center | Online Quiz Application</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        :root {
+            --gold: #d4af37;
+            --gold-light: #f0d77a;
+            --purple: #8b5cf6;
+            --bg: #06060a;
+            --card: rgba(17, 17, 25, 0.94);
+            --border: rgba(255, 255, 255, 0.08);
+            --muted: #92929f;
+        }
+
+        body {
+            min-height: 100vh;
+            color: #ffffff;
+
+            background:
+                radial-gradient(
+                    circle at 10% 5%,
+                    rgba(139, 92, 246, 0.18),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 90% 10%,
+                    rgba(212, 175, 55, 0.13),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 50% 100%,
+                    rgba(70, 40, 120, 0.12),
+                    transparent 35%
+                ),
+                #06060a;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,0.015) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.015) 1px,
+                    transparent 1px
+                );
+
+            background-size: 40px 40px;
+
+            mask-image: linear-gradient(
+                to bottom,
+                black,
+                transparent
+            );
+        }
+
+        .container {
+            width: min(1400px, 94%);
+            margin: auto;
+            padding: 30px 0 60px;
+        }
+
+        /* TOP BAR */
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+
+            padding: 20px 24px;
+            margin-bottom: 34px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(25, 25, 35, 0.96),
+                    rgba(10, 10, 15, 0.96)
+                );
+
+            border: 1px solid rgba(212, 175, 55, 0.20);
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.42),
+                inset 0 1px rgba(255,255,255,0.04);
+
+            backdrop-filter: blur(15px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand-icon {
+            width: 58px;
+            height: 58px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 17px;
+
+            font-size: 29px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #f0d77a,
+                    #b38b22
+                );
+
+            color: #101010;
+
+            box-shadow:
+                0 10px 30px rgba(212, 175, 55, 0.18);
+        }
+
+        .brand h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .brand p {
+            color: var(--muted);
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-info {
+            text-align: right;
+        }
+
+        .owner-badge {
+            display: inline-block;
+
+            margin-bottom: 7px;
+            padding: 5px 9px;
+
+            border-radius: 999px;
+
+            color: #ead37d;
+
+            background: rgba(212,175,55,0.08);
+
+            border: 1px solid rgba(212,175,55,0.18);
+
+            font-size: 10px;
+            font-weight: 800;
+
+            letter-spacing: 1px;
+        }
+
+        .admin-name {
+            color: var(--gold-light);
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .logout {
+            color: #888894;
+            text-decoration: none;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .logout:hover {
+            color: #ffffff;
+        }
+
+        /* WELCOME */
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome-badge {
+            display: inline-block;
+
+            margin-bottom: 10px;
+
+            padding: 7px 12px;
+
+            border-radius: 999px;
+
+            color: #d7c4ff;
+
+            background: rgba(139,92,246,0.08);
+
+            border: 1px solid rgba(139,92,246,0.22);
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+        }
+
+        .welcome h2 {
+            font-size: 38px;
+            margin-bottom: 9px;
+        }
+
+        .welcome h2 span {
+            color: var(--gold-light);
+        }
+
+        .welcome p {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* STATISTICS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+
+            padding: 24px;
+            min-height: 145px;
+
+            border-radius: 19px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(25,25,35,0.96),
+                    rgba(12,12,17,0.96)
+                );
+
+            border: 1px solid var(--border);
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,0.20);
+
+            transition: 0.25s;
+        }
+
+        .stat-card::after {
+            content: "";
+
+            position: absolute;
+
+            width: 100px;
+            height: 100px;
+
+            right: -35px;
+            bottom: -45px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(212,175,55,0.12),
+                    transparent 70%
+                );
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+
+            border-color:
+                rgba(212,175,55,0.28);
+
+            box-shadow:
+                0 20px 45px rgba(0,0,0,0.35);
+        }
+
+        .stat-icon {
+            font-size: 26px;
+            margin-bottom: 15px;
+        }
+
+        .stat-title {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 8px;
+            letter-spacing: 0.4px;
+        }
+
+        .stat-value {
+            font-size: 31px;
+            font-weight: 900;
+        }
+
+        /* SECTIONS */
+
+        .section {
+            margin-top: 32px;
+        }
+
+        .section-header {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .section-subtitle {
+            color: #777784;
+            font-size: 12px;
+        }
+
+        /* HOUSES */
+
+        .houses {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .house-card {
+            position: relative;
+            overflow: hidden;
+
+            padding: 25px;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(20,20,29,0.96),
+                    rgba(10,10,15,0.96)
+                );
+
+            border: 1px solid var(--border);
+
+            transition: 0.25s;
+        }
+
+        .house-card:hover {
+            transform: translateY(-5px);
+
+            border-color:
+                rgba(212,175,55,0.25);
+
+            box-shadow:
+                0 20px 50px rgba(0,0,0,0.32);
+        }
+
+        .house-symbol {
+            font-size: 40px;
+            margin-bottom: 13px;
+        }
+
+        .house-name {
+            font-size: 19px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .house-points {
+            color: var(--gold-light);
+
+            font-size: 28px;
+
+            font-weight: 900;
+
+            margin-top: 12px;
+        }
+
+        .house-label {
+            color: #777784;
+            font-size: 11px;
+            margin-top: 3px;
+            letter-spacing: 0.7px;
+        }
+
+        /* TABLE */
+
+        .table-card {
+            overflow-x: auto;
+
+            border-radius: 20px;
+
+            background:
+                rgba(16,16,23,0.95);
+
+            border: 1px solid var(--border);
+
+            box-shadow:
+                0 18px 50px rgba(0,0,0,0.20);
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 16px 18px;
+
+            text-align: left;
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.06);
+        }
+
+        th {
+            color: var(--gold-light);
+
+            font-size: 11px;
+
+            letter-spacing: 0.7px;
+
+            text-transform: uppercase;
+        }
+
+        td {
+            color: #ddddE4;
+
+            font-size: 13px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background:
+                rgba(255,255,255,0.015);
+        }
+
+        .difficulty {
+            display: inline-block;
+
+            padding: 5px 10px;
+
+            border-radius: 999px;
+
+            background: #1d1d27;
+
+            border: 1px solid #30303d;
+
+            font-size: 11px;
+        }
+
+        .score {
+            color: #9ce7bf;
+            font-weight: 800;
+        }
+
+        .empty {
+            padding: 35px;
+            text-align: center;
+            color: #777784;
+        }
+
+        /* ARENA CONTROL CENTER */
+
+        .control-banner {
+            position: relative;
+            overflow: hidden;
+
+            padding: 25px;
+            margin-bottom: 18px;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    120deg,
+                    rgba(139,92,246,0.10),
+                    rgba(212,175,55,0.06),
+                    rgba(20,20,28,0.94)
+                );
+
+            border: 1px solid
+                rgba(139,92,246,0.18);
+        }
+
+        .control-banner h3 {
+            font-size: 22px;
+            margin-bottom: 7px;
+        }
+
+        .control-banner p {
+            color: #888894;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .control-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 17px;
+        }
+
+        /* ALL CONTROL CARDS */
+
+        .control-card {
+            position: relative;
+
+            display: block;
+
+            min-height: 175px;
+
+            padding: 22px;
+
+            border-radius: 20px;
+
+            text-decoration: none;
+
+            color: #ffffff;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(38,31,17,0.95),
+                    rgba(15,14,12,0.97)
+                );
+
+            border: 1px solid
+                rgba(212,175,55,0.22);
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,0.18);
+
+            transition:
+                transform 0.25s,
+                border-color 0.25s,
+                box-shadow 0.25s;
+        }
+
+        .control-card:hover {
+            transform: translateY(-6px);
+
+            border-color:
+                rgba(212,175,55,0.42);
+
+            box-shadow:
+                0 25px 55px rgba(0,0,0,0.35),
+                0 0 25px rgba(212,175,55,0.06);
+        }
+
+        /* GOLDEN PREMIUM CARD */
+
+        .control-card.primary {
+            border-color:
+                rgba(212,175,55,0.22);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(38,31,17,0.95),
+                    rgba(15,14,12,0.97)
+                );
+        }
+
+        .control-icon {
+            width: 48px;
+            height: 48px;
+
+            display: grid;
+            place-items: center;
+
+            margin-bottom: 15px;
+
+            border-radius: 14px;
+
+            font-size: 24px;
+
+            background:
+                rgba(255,255,255,0.045);
+
+            border:
+                1px solid rgba(255,255,255,0.07);
+        }
+
+        .control-title {
+            font-size: 16px;
+
+            font-weight: 800;
+
+            margin-bottom: 7px;
+        }
+
+        .control-description {
+            color: #7f7f8b;
+
+            font-size: 12px;
+
+            line-height: 1.55;
+        }
+
+        .control-arrow {
+            position: absolute;
+
+            right: 19px;
+            top: 20px;
+
+            color: #d4af37;
+
+            font-size: 17px;
+
+            transition: 0.2s;
+        }
+
+        .control-card:hover .control-arrow {
+            color: var(--gold-light);
+
+            transform: translateX(3px);
+        }
+
+        /* FOOTER */
+
+        .footer {
+            margin-top: 45px;
+
+            padding-top: 20px;
+
+            text-align: center;
+
+            color: #555560;
+
+            font-size: 11px;
+
+            border-top:
+                1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer span {
+            color: #a88a32;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1100px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .houses {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .control-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .container {
+                width: 92%;
+                padding-top: 18px;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .admin-info {
+                text-align: left;
+            }
+
+            .welcome h2 {
+                font-size: 29px;
+            }
+
+            .stats,
+            .houses,
+            .control-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                👑
+            </div>
+
+            <div>
+
+                <h1>
+                    Admin Command Center
+                </h1>
+
+                <p>
+                    Online Quiz Application • Owner Control
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="admin-info">
+
+            <div class="owner-badge">
+                OWNER ACCESS
+            </div>
+
+            <div class="admin-name">
+                👑 {{ admin_name }}
+            </div>
+
+            <a
+                href="{{ url_for('admin_logout') }}"
+                class="logout"
+            >
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- WELCOME -->
+
+    <div class="welcome">
+
+        <div class="welcome-badge">
+            ARENA MASTER CONTROL
+        </div>
+
+        <h2>
+            Welcome back,
+            <span>{{ admin_name }}</span>
+        </h2>
+
+        <p>
+            This is your private Arena control center.
+            Manage questions, students, quizzes, Houses,
+            achievements, certificates and more from one place.
+        </p>
+
+    </div>
+
+    <!-- STATISTICS -->
+
+    <div class="stats">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                👨‍🎓
+            </div>
+
+            <div class="stat-title">
+                Total Students
+            </div>
+
+            <div class="stat-value">
+                {{ total_students }}
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📝
+            </div>
+
+            <div class="stat-title">
+                Total Quiz Attempts
+            </div>
+
+            <div class="stat-value">
+                {{ total_quizzes }}
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📜
+            </div>
+
+            <div class="stat-title">
+                Certificates
+            </div>
+
+            <div class="stat-value">
+                {{ total_certificates }}
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🏆
+            </div>
+
+            <div class="stat-title">
+                Achievements
+            </div>
+
+            <div class="stat-value">
+                {{ total_achievements }}
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- HOUSE STANDINGS -->
+
+    <div class="section">
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-title">
+                    🏠 House Standings
+                </div>
+
+                <div class="section-subtitle">
+                    Current Arena House Power
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="houses">
+
+            {% for house in house_totals %}
+
+            <div class="house-card">
+
+                <div class="house-symbol">
+
+                    {% if house.house == "Dravaryn" %}
+                        🦁
+                    {% elif house.house == "Aetherion" %}
+                        🦅
+                    {% elif house.house == "Valthera" %}
+                        🐺
+                    {% elif house.house == "Arcanis" %}
+                        🐉
+                    {% else %}
+                        🏠
+                    {% endif %}
+
+                </div>
+
+                <div class="house-name">
+                    {{ house.house }}
+                </div>
+
+                <div class="house-points">
+                    {{ house.points }}
+                </div>
+
+                <div class="house-label">
+                    HOUSE POWER
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    <!-- RECENT QUIZ ACTIVITY -->
+
+    <div class="section">
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-title">
+                    📋 Recent Quiz Activity
+                </div>
+
+                <div class="section-subtitle">
+                    Latest activity recorded in PostgreSQL
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="table-card">
+
+            {% if recent_quizzes %}
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Student</th>
+                        <th>Subject</th>
+                        <th>Difficulty</th>
+                        <th>Score</th>
+                        <th>Percentage</th>
+                        <th>Completed</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for quiz in recent_quizzes %}
+
+                    <tr>
+
+                        <td>
+                            {{ quiz.student_name }}
+                        </td>
+
+                        <td>
+                            {{ quiz.subject }}
+                        </td>
+
+                        <td>
+
+                            <span class="difficulty">
+                                {{ quiz.difficulty }}
+                            </span>
+
+                        </td>
+
+                        <td class="score">
+                            {{ quiz.score }}/{{ quiz.total_questions }}
+                        </td>
+
+                        <td>
+                            {{ quiz.percentage }}%
+                        </td>
+
+                        <td>
+                            {{ quiz.completed_at }}
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+            <div class="empty">
+                No quiz activity available yet.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <!-- ARENA CONTROL CENTER -->
+
+    <div class="section">
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-title">
+                    👑 Arena Control Center
+                </div>
+
+                <div class="section-subtitle">
+                    Your complete administration workspace
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="control-banner">
+
+            <h3>
+                ⚔️ Master Your Arena
+            </h3>
+
+            <p>
+                Every control section is connected with your
+                Online Quiz Application and PostgreSQL database.
+                Use these controls to manage your Arena.
+            </p>
+
+        </div>
+
+        <div class="control-grid">
+
+            <!-- QUESTION BANK -->
+
+            <a
+                href="{{ url_for('admin_questions') }}"
+                class="control-card primary"
+            >
+
+                <span class="control-arrow">
+                    →
+                </span>
+
+                <div class="control-icon">
+                    📝
+                </div>
+
+                <div class="control-title">
+                    Question Bank
+                </div>
+
+                <div class="control-description">
+                    Add, edit, delete, search and filter
+                    all quiz questions and answers.
+                </div>
+
+            </a>
+
+            <!-- STUDENT MANAGEMENT -->
+
+            <a
+                href="{{ url_for('admin_students') }}"
+                class="control-card primary"
+            >
+
+                <span class="control-arrow">
+                    →
+                </span>
+
+                <div class="control-icon">
+                    👨‍🎓
+                </div>
+
+                <div class="control-title">
+                    Student Management
+                </div>
+
+                <div class="control-description">
+                    View students, edit profiles,
+                    manage Houses and inspect activity.
+                </div>
+
+            </a>
+
+            <!-- QUIZ HISTORY -->
+
+            <a
+                href="{{ url_for('admin_quiz_history') }}"
+                class="control-card primary"
+            >
+
+                <span class="control-arrow">
+                    →
+                </span>
+
+                <div class="control-icon">
+                    📊
+                </div>
+
+                <div class="control-title">
+                    Quiz History
+                </div>
+
+                <div class="control-description">
+                    View complete quiz attempts,
+                    scores, percentages and dates.
+                </div>
+
+            </a>
+
+            <!-- HOUSES -->
+
+            <a
+                href="{{ url_for('admin_houses') }}"
+                class="control-card primary"
+            >
+
+                <span class="control-arrow">
+                    →
+                </span>
+
+                <div class="control-icon">
+                    🏠
+                </div>
+
+                <div class="control-title">
+                    Houses & Power
+                </div>
+
+                <div class="control-description">
+                    Manage House members, rankings,
+                    current power and all-time legacy.
+                </div>
+
+            </a>
+
+            <!-- ACHIEVEMENTS -->
+
+            <a
+                href="{{ url_for('admin_achievements') }}"
+                class="control-card primary"
+            >
+
+                <span class="control-arrow">
+                    →
+                </span>
+
+                <div class="control-icon">
+                    🏆
+                </div>
+
+                <div class="control-title">
+                    Achievements
+                </div>
+
+                <div class="control-description">
+                    View and manage student achievement
+                    records stored in the Arena database.
+                </div>
+
+            </a>
+
+            <!-- CERTIFICATES -->
+
+            <a
+                href="{{ url_for('admin_certificates') }}"
+                class="control-card primary"
+            >
+
+                <span class="control-arrow">
+                    →
+                </span>
+
+                <div class="control-icon">
+                    📜
+                </div>
+
+                <div class="control-title">
+                    Certificates
+                </div>
+
+                <div class="control-description">
+                    Manage House, Champion and
+                    Student Ranking certificates.
+                </div>
+
+            </a>
+
+            <!-- BOOKMARKS -->
+
+            <a
+                href="{{ url_for('admin_bookmarks') }}"
+                class="control-card primary"
+            >
+
+                <span class="control-arrow">
+                    →
+                </span>
+
+                <div class="control-icon">
+                    🔖
+                </div>
+
+                <div class="control-title">
+                    Bookmarks
+                </div>
+
+                <div class="control-description">
+                    View student saved questions
+                    and bookmark records.
+                </div>
+
+            </a>
+
+            <!-- ANALYTICS -->
+
+            <a
+                href="{{ url_for('admin_analytics') }}"
+                class="control-card primary"
+            >
+
+                <span class="control-arrow">
+                    →
+                </span>
+
+                <div class="control-icon">
+                    📈
+                </div>
+
+                <div class="control-title">
+                    Arena Analytics
+                </div>
+
+                <div class="control-description">
+                    Explore performance, participation,
+                    Houses and overall Arena statistics.
+                </div>
+
+            </a>
+
+            <!-- DATABASE / SYSTEM -->
+
+            <a
+                href="{{ url_for('admin_system') }}"
+                class="control-card primary"
+            >
+
+                <span class="control-arrow">
+                    →
+                </span>
+
+                <div class="control-icon">
+                    ⚙️
+                </div>
+
+                <div class="control-title">
+                    Database / System
+                </div>
+
+                <div class="control-description">
+                    Check database status, synchronize
+                    the quiz engine and maintain system data.
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        👑 Private Arena Control Center
+        • <span>Owner Access</span>
+        • Online Quiz Application
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

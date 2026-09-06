@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Quiz Arena | Online Quiz Application</title>
+
+    <style>
+
+        :root {
+            --bg: #05060d;
+            --card: #101221;
+            --text: #f8fafc;
+            --muted: #98a1ba;
+            --gold: #f5c76b;
+            --gold2: #fff0b5;
+            --purple: #8b5cf6;
+            --border: rgba(255, 255, 255, .1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 8% 5%,
+                    rgba(139, 92, 246, .15),
+                    transparent 27%
+                ),
+                radial-gradient(
+                    circle at 92% 8%,
+                    rgba(245, 199, 107, .1),
+                    transparent 25%
+                ),
+                var(--bg);
+
+            padding: 28px 15px 60px;
+        }
+
+        .container {
+            width: min(1050px, 92%);
+            margin: auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 22px 0 32px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 13px;
+
+            border: 1px solid rgba(245, 199, 107, .22);
+            border-radius: 999px;
+
+            color: var(--gold2);
+
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+
+            margin-bottom: 17px;
+        }
+
+        .header h1 {
+            font-size: clamp(34px, 5vw, 55px);
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 span {
+            background: linear-gradient(
+                90deg,
+                var(--gold2),
+                var(--gold),
+                #c4b5fd
+            );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .header p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .box,
+        .info {
+            border: 1px solid var(--border);
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255, 255, 255, .055),
+                    rgba(255, 255, 255, .018)
+                );
+
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, .35);
+        }
+
+        .box {
+            padding: 34px;
+        }
+
+        .section {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .section h2 {
+            font-size: 22px;
+            margin-bottom: 7px;
+        }
+
+        .section p {
+            color: #7f879f;
+            font-size: 12px;
+        }
+
+        .grid2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 38px;
+        }
+
+        .grid3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 13px;
+            margin-bottom: 30px;
+        }
+
+        .card input {
+            display: none;
+        }
+
+        .card label {
+            display: block;
+            text-align: center;
+            cursor: pointer;
+
+            border: 1px solid rgba(255, 255, 255, .09);
+
+            background: rgba(255, 255, 255, .025);
+
+            transition: .28s;
+        }
+
+        .subject label {
+            padding: 25px 18px;
+            border-radius: 18px;
+
+            color: #c8cddc;
+            font-size: 15px;
+            font-weight: 900;
+        }
+
+        .card label:hover {
+            transform: translateY(-3px);
+            border-color: rgba(245, 199, 107, .3);
+        }
+
+        .card input:checked + label {
+            color: #fff7dc;
+
+            border-color: rgba(245, 199, 107, .48);
+
+            background: rgba(245, 199, 107, .06);
+
+            box-shadow:
+                0 14px 38px rgba(0, 0, 0, .24);
+        }
+
+        .icon {
+            display: block;
+            font-size: 37px;
+            margin-bottom: 10px;
+        }
+
+        .difficulty label {
+            padding: 20px 10px;
+            border-radius: 15px;
+
+            color: #c7ccdb;
+            font-size: 14px;
+            font-weight: 900;
+        }
+
+        .difficulty input:checked + label {
+            color: #fff;
+
+            border-color: rgba(139, 92, 246, .5);
+
+            background: rgba(139, 92, 246, .1);
+        }
+
+        .desc {
+            display: block;
+            margin-top: 6px;
+
+            color: #7e879f;
+            font-size: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+
+            border: 0;
+            border-radius: 13px;
+
+            color: #0a0b12;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--gold2),
+                    var(--gold)
+                );
+
+            font-size: 15px;
+            font-weight: 900;
+
+            cursor: pointer;
+            transition: .28s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+        }
+
+        .info {
+            padding: 27px;
+            margin-bottom: 17px;
+        }
+
+        .info:before {
+            content: "QUIZ ARENA";
+
+            display: block;
+
+            color: var(--gold);
+
+            font-size: 9px;
+            letter-spacing: 2px;
+            font-weight: 900;
+
+            margin-bottom: 9px;
+        }
+
+        .info h1 {
+            font-size: 29px;
+            margin-bottom: 9px;
+        }
+
+        .info p {
+            display: inline-block;
+            margin-right: 16px;
+
+            color: #858da6;
+            font-size: 11px;
+        }
+
+        .info strong {
+            color: #dfe3ed;
+        }
+
+        .tools {
+            position: sticky;
+            top: 12px;
+            z-index: 50;
+
+            margin-bottom: 18px;
+            padding: 20px;
+
+            border: 1px solid rgba(245, 199, 107, .15);
+            border-radius: 20px;
+
+            background: rgba(10, 11, 21, .93);
+
+            backdrop-filter: blur(22px);
+
+            box-shadow:
+                0 18px 50px rgba(0, 0, 0, .38);
+        }
+
+        .timerrow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 15px;
+        }
+
+        .timerlabel {
+            color: #dce0ea;
+
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+        }
+
+        .timer {
+            min-width: 120px;
+            padding: 10px 17px;
+
+            text-align: center;
+
+            border-radius: 11px;
+
+            color: var(--gold2);
+
+            background: rgba(245, 199, 107, .075);
+
+            border: 1px solid rgba(245, 199, 107, .2);
+
+            font-size: 20px;
+            font-weight: 950;
+        }
+
+        .warning {
+            color: #fff;
+
+            background: rgba(239, 68, 68, .13);
+
+            border-color: rgba(239, 68, 68, .38);
+
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+
+            50% {
+                transform: scale(1.035);
+            }
+
+        }
+
+        .progress {
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 8px;
+
+            color: #858ea7;
+
+            font-size: 10px;
+            font-weight: 900;
+        }
+
+        .track {
+            height: 8px;
+            overflow: hidden;
+
+            border-radius: 99px;
+
+            background: rgba(255, 255, 255, .075);
+        }
+
+        .bar {
+            width: 0;
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--purple),
+                    var(--gold)
+                );
+
+            transition: width .3s;
+        }
+
+        .question {
+            position: relative;
+            overflow: hidden;
+
+            margin-bottom: 16px;
+            padding: 25px;
+
+            border: 1px solid var(--border);
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255, 255, 255, .045),
+                    rgba(255, 255, 255, .018)
+                );
+
+            box-shadow:
+                0 13px 35px rgba(0, 0, 0, .2);
+        }
+
+        .question:before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            width: 3px;
+
+            background:
+                linear-gradient(
+                    var(--purple),
+                    var(--gold)
+                );
+        }
+
+        .question h3 {
+            color: #f2f4f8;
+
+            line-height: 1.55;
+
+            font-size: 16px;
+
+            margin-bottom: 18px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            margin: 9px 0;
+            padding: 13px 14px;
+
+            color: #aeb5c7;
+
+            background: rgba(255, 255, 255, .027);
+
+            border: 1px solid rgba(255, 255, 255, .075);
+            border-radius: 12px;
+
+            cursor: pointer;
+
+            transition: .22s;
+
+            font-size: 13px;
+        }
+
+        .option:hover {
+            color: #fff;
+
+            background: rgba(255, 255, 255, .055);
+
+            border-color: rgba(139, 92, 246, .27);
+
+            transform: translateX(2px);
+        }
+
+        .option input {
+            display: block;
+            accent-color: var(--gold);
+        }
+
+        .option:has(input:checked) {
+            color: #fff4ce;
+
+            background: rgba(245, 199, 107, .075);
+
+            border-color: rgba(245, 199, 107, .38);
+        }
+
+        .footer {
+            margin-top: 22px;
+
+            text-align: center;
+
+            color: #687188;
+
+            font-size: 10px;
+        }
+
+        .footer span {
+            color: #9da5ba;
+        }
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 15px 8px 45px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .box {
+                padding: 22px;
+            }
+
+            .grid2,
+            .grid3 {
+                grid-template-columns: 1fr;
+            }
+
+            .timerrow {
+                align-items: stretch;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .timer {
+                width: 100%;
+            }
+
+            .tools {
+                position: relative;
+                top: 0;
+            }
+
+            .info {
+                padding: 22px;
+            }
+
+            .info p {
+                display: block;
+                margin: 7px 0;
+            }
+
+            .question {
+                padding: 21px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        {% if questions is not defined or not questions %}
+
+            <div class="header">
+
+                <div class="badge">
+                    ✦ Premium Quiz Arena
+                </div>
+
+                <h1>
+                    🧠
+                    <span>
+                        Choose Your Challenge
+                    </span>
+                </h1>
+
+                <p>
+                    Pick your subject, choose your difficulty and enter the Quiz Arena.
+                </p>
+
+            </div>
+
+
+            <div class="box">
+
+                <div class="section">
+
+                    <h2>
+                        Knowledge Arena
+                    </h2>
+
+                    <p>
+                        Select one subject to continue
+                    </p>
+
+                </div>
+
+
+                <form
+                    action="/quiz"
+                    method="POST"
+                >
+
+                    <div class="grid2">
+
+                        {% for item in subjects %}
+
+                            <div class="card subject">
+
+                                <input
+                                    type="radio"
+                                    id="subject{{ loop.index }}"
+                                    name="subject"
+                                    value="{{ item }}"
+                                    required
+                                >
+
+                                <label for="subject{{ loop.index }}">
+
+                                    {% if item == "Science" %}
+
+                                        <span class="icon">
+                                            🔬
+                                        </span>
+
+                                    {% elif item == "Mathematics" %}
+
+                                        <span class="icon">
+                                            📐
+                                        </span>
+
+                                    {% elif item == "Computer Science" %}
+
+                                        <span class="icon">
+                                            💻
+                                        </span>
+
+                                    {% elif item == "Entertainment" %}
+
+                                        <span class="icon">
+                                            🎬
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="icon">
+                                            📚
+                                        </span>
+
+                                    {% endif %}
+
+                                    {{ item }}
+
+                                </label>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <div class="section">
+
+                        <h2>
+                            Choose Difficulty
+                        </h2>
+
+                        <p>
+                            How challenging should your run be?
+                        </p>
+
+                    </div>
+
+
+                    <div class="grid3">
+
+                        {% for item in difficulties %}
+
+                            <div class="card difficulty">
+
+                                <input
+                                    type="radio"
+                                    id="difficulty{{ loop.index }}"
+                                    name="difficulty"
+                                    value="{{ item }}"
+                                    required
+                                >
+
+                                <label for="difficulty{{ loop.index }}">
+
+                                    {% if item == "Easy" %}
+
+                                        🟢 Easy
+
+                                        <span class="desc">
+                                            10 minute challenge
+                                        </span>
+
+                                    {% elif item == "Medium" %}
+
+                                        🟡 Medium
+
+                                        <span class="desc">
+                                            12 minute challenge
+                                        </span>
+
+                                    {% else %}
+
+                                        🔴 Hard
+
+                                        <span class="desc">
+                                            15 minute challenge
+                                        </span>
+
+                                    {% endif %}
+
+                                </label>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <button type="submit">
+                        🚀 Enter Quiz Arena
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <div class="footer">
+
+                <span>
+                    🏠 House Points
+                </span>
+
+                ·
+
+                <span>
+                    🏆 Leaderboards
+                </span>
+
+                ·
+
+                <span>
+                    📜 Certificates
+                </span>
+
+            </div>
+
+
+        {% else %}
+
+            <div
+                class="header"
+                style="padding-bottom:22px"
+            >
+
+                <div class="badge">
+                    ✦ Live Quiz Session
+                </div>
+
+                <h1>
+
+                    <span>
+                        {{ subject }}
+                    </span>
+
+                </h1>
+
+                <p>
+                    Stay focused. Every answer moves your House closer to victory.
+                </p>
+
+            </div>
+
+
+            <div class="info">
+
+                <h1>
+                    🧠 {{ subject }}
+                </h1>
+
+                <p>
+                    Difficulty:
+                    <strong>
+                        {{ difficulty }}
+                    </strong>
+                </p>
+
+                <p>
+                    Questions:
+                    <strong>
+                        {{ questions|length }}
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <div
+                class="tools"
+                id="quizTools"
+                data-difficulty="{{ difficulty }}"
+            >
+
+                <div class="timerrow">
+
+                    <div class="timerlabel">
+                        ⏱ Time Remaining
+                    </div>
+
+                    <div
+                        class="timer"
+                        id="timer"
+                    >
+                        00:00
+                    </div>
+
+                </div>
+
+
+                <div class="progress">
+
+                    <span>
+                        📊 Quiz Progress
+                    </span>
+
+                    <span id="progressText">
+                        0 / 0 Answered
+                    </span>
+
+                </div>
+
+
+                <div class="track">
+
+                    <div
+                        class="bar"
+                        id="progressBar"
+                    >
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <form
+                action="/submit"
+                method="POST"
+                id="quizForm"
+            >
+
+                <input
+                    type="hidden"
+                    name="subject"
+                    value="{{ subject }}"
+                >
+
+                <input
+                    type="hidden"
+                    name="difficulty"
+                    value="{{ difficulty }}"
+                >
+
+
+                {% for question in questions %}
+
+                    {% set qi = loop.index0 %}
+
+                    <div class="question">
+
+                        <h3>
+                            {{ loop.index }}.
+                            {{ question[0] }}
+                        </h3>
+
+
+                        {% for option in question[1] %}
+
+                            <label class="option">
+
+                                <input
+                                    type="radio"
+                                    name="q{{ qi }}"
+                                    value="{{ option }}"
+                                    required
+                                >
+
+                                <span>
+                                    {{ option }}
+                                </span>
+
+                            </label>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endfor %}
+
+
+                <button
+                    type="submit"
+                    id="submitButton"
+                >
+                    ✅ Submit Quiz
+                </button>
+
+            </form>
+
+
+            <div class="footer">
+
+                <span>
+                    ⚠️ Answer every question before submitting
+                </span>
+
+                ·
+
+                Your progress is saved when submitted.
+
+            </div>
+
+
+            <script>
+
+                document.addEventListener(
+                    "DOMContentLoaded",
+                    function () {
+
+                        const t =
+                            document.getElementById("quizTools");
+
+                        const timer =
+                            document.getElementById("timer");
+
+                        const bar =
+                            document.getElementById("progressBar");
+
+                        const pt =
+                            document.getElementById("progressText");
+
+                        const form =
+                            document.getElementById("quizForm");
+
+                        const btn =
+                            document.getElementById("submitButton");
+
+                        const cards =
+                            document.querySelectorAll(".question");
+
+                        const radios =
+                            document.querySelectorAll(
+                                '.question input[type="radio"]'
+                            );
+
+
+                        const total = cards.length;
+
+                        const d = t.dataset.difficulty;
+
+
+                        let left =
+                            d === "Easy"
+                                ? 600
+                                : d === "Medium"
+                                    ? 720
+                                    : 900;
+
+
+                        let done = false;
+
+                        let interval;
+
+
+                        function fmt(s) {
+
+                            return (
+                                String(
+                                    Math.floor(s / 60)
+                                ).padStart(2, "0")
+                                +
+                                ":"
+                                +
+                                String(
+                                    s % 60
+                                ).padStart(2, "0")
+                            );
+
+                        }
+
+
+                        function tick() {
+
+                            timer.textContent = fmt(left);
+
+
+                            if (left <= 60) {
+
+                                timer.classList.add("warning");
+
+                            }
+
+
+                            if (left <= 0) {
+
+                                clearInterval(interval);
+
+
+                                if (done) {
+                                    return;
+                                }
+
+
+                                done = true;
+
+
+                                btn.disabled = true;
+
+                                btn.textContent =
+                                    "⏳ Auto-submitting...";
+
+
+                                alert(
+                                    "⏰ Time is up!\n\n" +
+                                    "Your quiz will be submitted automatically."
+                                );
+
+
+                                form.submit();
+
+                                return;
+                            }
+
+
+                            left--;
+
+                        }
+
+
+                        function progress() {
+
+                            const n =
+                                document.querySelectorAll(
+                                    '.question input[type="radio"]:checked'
+                                ).length;
+
+
+                            bar.style.width =
+                                (
+                                    total
+                                        ? n / total * 100
+                                        : 0
+                                ) + "%";
+
+
+                            pt.textContent =
+                                n +
+                                " / " +
+                                total +
+                                " Answered";
+
+                        }
+
+
+                        radios.forEach(
+                            function (r) {
+
+                                r.addEventListener(
+                                    "change",
+                                    progress
+                                );
+
+                            }
+                        );
+
+
+                        form.addEventListener(
+                            "submit",
+                            function (e) {
+
+                                if (done) {
+                                    return;
+                                }
+
+
+                                if (!form.checkValidity()) {
+
+                                    e.preventDefault();
+
+
+                                    alert(
+                                        "⚠️ Please answer all questions " +
+                                        "before submitting the quiz."
+                                    );
+
+
+                                    return;
+                                }
+
+
+                                done = true;
+
+                                clearInterval(interval);
+
+
+                                btn.disabled = true;
+
+                                btn.textContent =
+                                    "⏳ Submitting...";
+
+                            }
+                        );
+
+
+                        tick();
+
+                        interval =
+                            setInterval(
+                                tick,
+                                1000
+                            );
+
+
+                        progress();
+
+                    }
+                );
+
+            </script>
+
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>

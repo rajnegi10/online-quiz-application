@@ -1,0 +1,2356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Question Bank | Online Quiz Application</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #f8fafc;
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(124, 58, 237, 0.20),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 90% 20%,
+                    rgba(37, 99, 235, 0.16),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 50% 100%,
+                    rgba(245, 158, 11, 0.08),
+                    transparent 30%
+                ),
+                #070b16;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(
+                    rgba(255, 255, 255, 0.018) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0.018) 1px,
+                    transparent 1px
+                );
+            background-size: 45px 45px;
+            mask-image: linear-gradient(
+                to bottom,
+                black,
+                transparent 85%
+            );
+            z-index: -1;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+            gap: 26px;
+
+            padding: 16px 5%;
+
+            background:
+                rgba(7, 11, 22, 0.84);
+
+            border-bottom:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 12px 35px rgba(0, 0, 0, 0.28);
+        }
+
+        .logo {
+            margin-right: auto;
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            color: #ffffff;
+
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: -0.4px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f59e0b,
+                    #f97316
+                );
+
+            box-shadow:
+                0 0 24px rgba(245, 158, 11, 0.28);
+
+            font-size: 20px;
+        }
+
+        .navbar a {
+            position: relative;
+
+            color: #cbd5e1;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            transition:
+                color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .navbar a::after {
+            content: "";
+
+            position: absolute;
+            left: 0;
+            bottom: -7px;
+
+            width: 0;
+            height: 2px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #f59e0b,
+                    #8b5cf6
+                );
+
+            transition: width 0.2s ease;
+        }
+
+        .navbar a:hover {
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .navbar a:hover::after {
+            width: 100%;
+        }
+
+        .saved-nav {
+            color: #fbbf24 !important;
+        }
+
+        /* =====================================================
+           MAIN CONTAINER
+        ===================================================== */
+
+        .container {
+            width: min(1200px, 92%);
+
+            margin:
+                34px auto 70px;
+        }
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+
+            padding: 42px;
+
+            border-radius: 28px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(30, 27, 75, 0.96),
+                    rgba(17, 24, 39, 0.97)
+                );
+
+            border:
+                1px solid rgba(255, 255, 255, 0.10);
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.32);
+
+            margin-bottom: 22px;
+        }
+
+        .hero::before {
+            content: "";
+
+            position: absolute;
+
+            width: 280px;
+            height: 280px;
+
+            right: -80px;
+            top: -100px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(139, 92, 246, 0.30),
+                    transparent 70%
+                );
+
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: "";
+
+            position: absolute;
+
+            width: 240px;
+            height: 240px;
+
+            left: -130px;
+            bottom: -150px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(245, 158, 11, 0.14),
+                    transparent 70%
+                );
+
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 7px 13px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(245, 158, 11, 0.10);
+
+            border:
+                1px solid rgba(245, 158, 11, 0.25);
+
+            color: #fbbf24;
+
+            font-size: 11px;
+            font-weight: 850;
+
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            margin: 16px 0 10px;
+
+            font-size: 40px;
+            line-height: 1.1;
+
+            letter-spacing: -1.2px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #f8d477,
+                    #c4b5fd
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+        .hero p {
+            max-width: 760px;
+
+            margin: 0;
+
+            color: #aab5ca;
+
+            font-size: 15px;
+            line-height: 1.75;
+        }
+
+        /* =====================================================
+           STATS
+        ===================================================== */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 14px;
+
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            position: relative;
+            overflow: hidden;
+
+            padding: 22px 18px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(18, 24, 40, 0.94),
+                    rgba(10, 14, 27, 0.96)
+                );
+
+            border:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.20);
+
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+        .stat:hover {
+            transform: translateY(-4px);
+
+            border-color:
+                rgba(245, 158, 11, 0.25);
+        }
+
+        .stat-icon {
+            margin-bottom: 8px;
+
+            font-size: 21px;
+        }
+
+        .stat strong {
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: #f8fafc;
+
+            font-size: 28px;
+            font-weight: 900;
+        }
+
+        .stat span {
+            color: #8994aa;
+
+            font-size: 12px;
+            font-weight: 650;
+
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        /* =====================================================
+           FILTER PANEL
+        ===================================================== */
+
+        .filter-panel {
+            padding: 20px;
+
+            border-radius: 22px;
+
+            background:
+                rgba(12, 17, 31, 0.92);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            box-shadow:
+                0 18px 45px rgba(0, 0, 0, 0.22);
+
+            margin-bottom: 16px;
+        }
+
+        .filter-heading {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            margin-bottom: 14px;
+
+            color: #e2e8f0;
+
+            font-size: 14px;
+            font-weight: 850;
+        }
+
+        .filters {
+            display: grid;
+
+            grid-template-columns:
+                1.1fr
+                1.1fr
+                2fr
+                auto;
+
+            gap: 10px;
+        }
+
+        select,
+        input {
+            width: 100%;
+
+            padding:
+                13px 14px;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.10);
+
+            border-radius: 13px;
+
+            outline: none;
+
+            background:
+                rgba(255, 255, 255, 0.045);
+
+            color: #f8fafc;
+
+            font-size: 13px;
+
+            transition:
+                border-color 0.2s ease,
+                background 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        select option {
+            background: #111827;
+            color: #ffffff;
+        }
+
+        select:focus,
+        input:focus {
+            border-color:
+                rgba(139, 92, 246, 0.70);
+
+            background:
+                rgba(139, 92, 246, 0.06);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(139, 92, 246, 0.10);
+        }
+
+        input::placeholder {
+            color: #64748b;
+        }
+
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
+
+        button {
+            border: 0;
+
+            border-radius: 13px;
+
+            padding:
+                12px 17px;
+
+            font-size: 13px;
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.18s ease,
+                box-shadow 0.18s ease,
+                opacity 0.18s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.55;
+
+            cursor: wait;
+
+            transform: none;
+        }
+
+        .primary {
+            color: #ffffff;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #4f46e5
+                );
+
+            box-shadow:
+                0 10px 25px
+                rgba(124, 58, 237, 0.22);
+        }
+
+        .primary:hover {
+            box-shadow:
+                0 14px 30px
+                rgba(124, 58, 237, 0.32);
+        }
+
+        /* =====================================================
+           TOOLS
+        ===================================================== */
+
+        .tools {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            flex-wrap: wrap;
+
+            margin:
+                16px 0 22px;
+        }
+
+        .tools button {
+            color: #cbd5e1;
+
+            background:
+                rgba(15, 23, 42, 0.82);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.09);
+        }
+
+        .tools button:hover {
+            color: #ffffff;
+
+            border-color:
+                rgba(139, 92, 246, 0.35);
+
+            background:
+                rgba(139, 92, 246, 0.10);
+        }
+
+        .tools .primary {
+            color: #ffffff;
+
+            border: 0;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #4f46e5
+                );
+        }
+
+        /* =====================================================
+           SECTION TITLE
+        ===================================================== */
+
+        .section-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin:
+                24px 0 14px;
+        }
+
+        .section-header h2 {
+            margin: 0;
+
+            color: #f8fafc;
+
+            font-size: 20px;
+            font-weight: 850;
+        }
+
+        .section-header p {
+            margin: 5px 0 0;
+
+            color: #77839a;
+
+            font-size: 12px;
+        }
+
+        /* =====================================================
+           QUESTION GRID
+        ===================================================== */
+
+        .question-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 18px;
+        }
+
+        .question-card {
+            position: relative;
+
+            padding: 22px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(17, 24, 39, 0.96),
+                    rgba(9, 14, 27, 0.97)
+                );
+
+            border:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            box-shadow:
+                0 15px 40px
+                rgba(0, 0, 0, 0.24);
+
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-4px);
+
+            border-color:
+                rgba(139, 92, 246, 0.30);
+
+            box-shadow:
+                0 22px 50px
+                rgba(0, 0, 0, 0.32);
+        }
+
+        .question-card.saved-card {
+            border:
+                1px solid rgba(245, 158, 11, 0.52);
+
+            box-shadow:
+                0 15px 40px
+                rgba(245, 158, 11, 0.09);
+        }
+
+        .question-card.saved-card::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 20px;
+            right: 20px;
+
+            height: 2px;
+
+            border-radius: 0 0 10px 10px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #f59e0b,
+                    transparent
+                );
+        }
+
+        /* =====================================================
+           QUESTION META
+        ===================================================== */
+
+        .meta {
+            display: flex;
+            align-items: center;
+
+            gap: 8px;
+
+            flex-wrap: wrap;
+
+            margin-bottom: 15px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+
+            padding:
+                6px 10px;
+
+            border-radius: 999px;
+
+            color: #c4b5fd;
+
+            background:
+                rgba(124, 58, 237, 0.12);
+
+            border:
+                1px solid rgba(139, 92, 246, 0.20);
+
+            font-size: 10px;
+            font-weight: 850;
+
+            letter-spacing: 0.5px;
+
+            text-transform: uppercase;
+        }
+
+        .saved-badge {
+            color: #fbbf24;
+
+            background:
+                rgba(245, 158, 11, 0.10);
+
+            border-color:
+                rgba(245, 158, 11, 0.24);
+        }
+
+        /* =====================================================
+           QUESTION TEXT
+        ===================================================== */
+
+        .question-text {
+            margin-bottom: 16px;
+
+            color: #f8fafc;
+
+            font-size: 17px;
+            font-weight: 800;
+
+            line-height: 1.55;
+        }
+
+        .question-number {
+            color: #fbbf24;
+        }
+
+        /* =====================================================
+           OPTIONS
+        ===================================================== */
+
+        .options {
+            margin:
+                14px 0 17px;
+        }
+
+        .option {
+            position: relative;
+
+            padding:
+                11px 13px;
+
+            margin:
+                8px 0;
+
+            border-radius: 11px;
+
+            color: #b9c3d5;
+
+            background:
+                rgba(255, 255, 255, 0.035);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.06);
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        .option:hover {
+            background:
+                rgba(139, 92, 246, 0.07);
+
+            border-color:
+                rgba(139, 92, 246, 0.18);
+
+            color: #e2e8f0;
+        }
+
+        /* =====================================================
+           ANSWER
+        ===================================================== */
+
+        .answer {
+            padding:
+                12px 13px;
+
+            border-radius: 12px;
+
+            color: #6ee7b7;
+
+            background:
+                rgba(16, 185, 129, 0.07);
+
+            border:
+                1px solid rgba(16, 185, 129, 0.15);
+
+            font-size: 12px;
+
+            line-height: 1.55;
+        }
+
+        .answer strong {
+            color: #a7f3d0;
+        }
+
+        /* =====================================================
+           EXPLANATION
+        ===================================================== */
+
+        .explanation {
+            margin-top: 10px;
+
+            padding:
+                12px 13px;
+
+            border-radius: 12px;
+
+            color: #aeb8c9;
+
+            background:
+                rgba(255, 255, 255, 0.035);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.06);
+
+            font-size: 12px;
+
+            line-height: 1.6;
+        }
+
+        .explanation strong {
+            color: #c4b5fd;
+        }
+
+        /* =====================================================
+           ACTIONS
+        ===================================================== */
+
+        .actions {
+            display: flex;
+
+            gap: 9px;
+
+            margin-top: 17px;
+        }
+
+        .save-btn,
+        .focus-btn {
+            flex: 1;
+
+            padding:
+                11px 13px;
+
+            font-size: 12px;
+        }
+
+        .save-btn {
+            color: #fbbf24;
+
+            background:
+                rgba(245, 158, 11, 0.08);
+
+            border:
+                1px solid rgba(245, 158, 11, 0.16);
+        }
+
+        .save-btn:hover {
+            background:
+                rgba(245, 158, 11, 0.14);
+
+            border-color:
+                rgba(245, 158, 11, 0.30);
+        }
+
+        .focus-btn {
+            color: #c4b5fd;
+
+            background:
+                rgba(124, 58, 237, 0.08);
+
+            border:
+                1px solid rgba(139, 92, 246, 0.16);
+        }
+
+        .focus-btn:hover {
+            background:
+                rgba(124, 58, 237, 0.14);
+
+            border-color:
+                rgba(139, 92, 246, 0.30);
+        }
+
+        /* =====================================================
+           EMPTY STATE
+        ===================================================== */
+
+        .empty {
+            padding:
+                55px 25px;
+
+            text-align: center;
+
+            border-radius: 22px;
+
+            background:
+                rgba(12, 17, 31, 0.92);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            box-shadow:
+                0 18px 45px
+                rgba(0, 0, 0, 0.22);
+        }
+
+        .empty-icon {
+            font-size: 42px;
+
+            margin-bottom: 10px;
+        }
+
+        .empty h3 {
+            margin:
+                0 0 8px;
+
+            color: #f1f5f9;
+
+            font-size: 20px;
+        }
+
+        .empty p {
+            margin: 0;
+
+            color: #77839a;
+
+            font-size: 13px;
+        }
+
+        /* =====================================================
+           TOAST
+        ===================================================== */
+
+        .toast {
+            position: fixed;
+
+            right: 22px;
+            bottom: 22px;
+
+            z-index: 2000;
+
+            min-width: 240px;
+
+            padding:
+                14px 17px;
+
+            border-radius: 14px;
+
+            display: none;
+
+            color: #ffffff;
+
+            background:
+                rgba(15, 23, 42, 0.96);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.10);
+
+            box-shadow:
+                0 18px 45px
+                rgba(0, 0, 0, 0.38);
+
+            font-size: 13px;
+            font-weight: 700;
+
+            backdrop-filter: blur(16px);
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 950px) {
+
+            .navbar {
+                gap: 18px;
+            }
+
+            .navbar a {
+                font-size: 12px;
+            }
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .filters {
+                grid-template-columns:
+                    1fr 1fr;
+            }
+
+            .filters input {
+                grid-column:
+                    1 / -1;
+            }
+
+            .filters button {
+                grid-column:
+                    1 / -1;
+            }
+
+            .question-grid {
+                grid-template-columns:
+                    1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                flex-wrap: wrap;
+
+                padding:
+                    13px 4%;
+            }
+
+            .logo {
+                width: 100%;
+
+                margin-right: 0;
+            }
+
+            .navbar a {
+                font-size: 11px;
+            }
+
+            .container {
+                width: 94%;
+
+                margin-top: 22px;
+            }
+
+            .hero {
+                padding: 29px 23px;
+            }
+
+            .hero h1 {
+                font-size: 31px;
+            }
+
+            .hero p {
+                font-size: 13px;
+            }
+
+            .filters {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .filters input,
+            .filters button {
+                grid-column:
+                    auto;
+            }
+
+            .section-header {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 520px) {
+
+            .stats {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .hero h1 {
+                font-size: 27px;
+            }
+
+            .tools {
+                display: grid;
+
+                grid-template-columns:
+                    1fr;
+            }
+
+            .tools button {
+                width: 100%;
+            }
+
+            .question-card {
+                padding: 18px;
+            }
+
+            .question-text {
+                font-size: 15px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .toast {
+                left: 15px;
+                right: 15px;
+                bottom: 15px;
+
+                min-width: auto;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                🧠
+            </div>
+
+            Online Quiz
+
+        </div>
+
+
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
+
+
+        <a href="{{ url_for('dashboard') }}">
+            Dashboard
+        </a>
+
+
+        <a href="{{ url_for('start_quiz') }}">
+            Start Quiz
+        </a>
+
+
+        <a href="{{ url_for('question_bank') }}">
+            Question Bank
+        </a>
+
+
+        <a
+            href="{{ url_for('saved_questions') }}"
+            class="saved-nav"
+        >
+            🔖 Saved
+        </a>
+
+
+        <a href="{{ url_for('logout') }}">
+            Logout
+        </a>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="container">
+
+
+        <!-- =================================================
+             HERO
+        ================================================== -->
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <div class="hero-badge">
+                    ✦ Knowledge Vault
+                </div>
+
+
+                <h1>
+                    📚 Question Bank
+                </h1>
+
+
+                <p>
+                    Explore, search, revise and save
+                    questions from every subject and
+                    difficulty level. Build your personal
+                    knowledge vault and keep your most
+                    important questions ready anytime.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STATS
+        ================================================== -->
+
+        <section class="stats">
+
+
+            <div class="stat">
+
+                <div class="stat-icon">
+                    🧠
+                </div>
+
+                <strong>
+                    120+
+                </strong>
+
+                <span>
+                    Total Questions
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon">
+                    📚
+                </div>
+
+                <strong>
+                    4
+                </strong>
+
+                <span>
+                    Subjects
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon">
+                    ⚔️
+                </div>
+
+                <strong>
+                    3
+                </strong>
+
+                <span>
+                    Difficulty Levels
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon">
+                    🔖
+                </div>
+
+                <strong id="savedCount">
+                    {{ saved_count|default(0) }}
+                </strong>
+
+                <span>
+                    Saved Questions
+                </span>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             FILTER PANEL
+        ================================================== -->
+
+        <section class="filter-panel">
+
+            <div class="filter-heading">
+                🔎 Find Your Question
+            </div>
+
+
+            <form
+                class="filters"
+                method="GET"
+                action="{{ url_for('question_bank') }}"
+            >
+
+
+                <select name="subject">
+
+                    <option
+                        value="All"
+                        {% if selected_subject == 'All' %}
+                            selected
+                        {% endif %}
+                    >
+                        All Subjects
+                    </option>
+
+
+                    {% for subject in subjects %}
+
+                    <option
+                        value="{{ subject }}"
+                        {% if selected_subject == subject %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ subject }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+
+                <select name="difficulty">
+
+                    <option
+                        value="All"
+                        {% if selected_difficulty == 'All' %}
+                            selected
+                        {% endif %}
+                    >
+                        All Difficulties
+                    </option>
+
+
+                    {% for difficulty in difficulties %}
+
+                    <option
+                        value="{{ difficulty }}"
+                        {% if selected_difficulty == difficulty %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ difficulty }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search_query }}"
+                    placeholder="Search questions, options or answers..."
+                >
+
+
+
+                <button
+                    type="submit"
+                    class="primary"
+                >
+                    🔎 Search
+                </button>
+
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =================================================
+             TOOLS
+        ================================================== -->
+
+        <div class="tools">
+
+
+            <button
+                type="button"
+                class="primary"
+                onclick="surpriseMe()"
+            >
+                🎲 Surprise Me
+            </button>
+
+
+            <button
+                type="button"
+                onclick="showSaved()"
+            >
+                🔖 Show Saved
+            </button>
+
+
+            <button
+                type="button"
+                onclick="showAll()"
+            >
+                📚 Show All
+            </button>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             QUESTION SECTION
+        ================================================== -->
+
+        {% if questions %}
+
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    Question Collection
+                </h2>
+
+                <p>
+                    Explore the questions matching
+                    your selected filters.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="question-grid">
+
+
+            {% for q in questions %}
+
+
+            <article
+                class="question-card{% if q.bookmarked %} saved-card{% endif %}"
+                data-id="{{ q.question_id }}"
+                data-saved="{% if q.bookmarked %}true{% else %}false{% endif %}"
+            >
+
+
+                <!-- =========================================
+                     META
+                ========================================== -->
+
+                <div class="meta">
+
+
+                    <span class="badge">
+                        {{ q.subject }}
+                    </span>
+
+
+                    <span class="badge">
+                        {{ q.difficulty }}
+                    </span>
+
+
+                    {% if q.bookmarked %}
+
+                    <span class="badge saved-badge">
+
+                        🔖 Saved
+
+                    </span>
+
+                    {% endif %}
+
+
+                </div>
+
+
+
+                <!-- =========================================
+                     QUESTION
+                ========================================== -->
+
+                <div class="question-text">
+
+                    <span class="question-number">
+                        {{ q.number }}.
+                    </span>
+
+                    {{ q.question }}
+
+                </div>
+
+
+
+                <!-- =========================================
+                     OPTIONS
+                ========================================== -->
+
+                <div class="options">
+
+
+                    {% for option in q.options %}
+
+                    <div class="option">
+                        {{ option }}
+                    </div>
+
+                    {% endfor %}
+
+
+                </div>
+
+
+
+                <!-- =========================================
+                     CORRECT ANSWER
+                ========================================== -->
+
+                <div class="answer">
+
+                    <strong>
+                        Correct Answer:
+                    </strong>
+
+                    {{ q.correct_answer }}
+
+                </div>
+
+
+
+                <!-- =========================================
+                     EXPLANATION
+                ========================================== -->
+
+                {% if q.explanation %}
+
+                <div class="explanation">
+
+                    <strong>
+                        💡 Explanation:
+                    </strong>
+
+                    {{ q.explanation }}
+
+                </div>
+
+                {% endif %}
+
+
+
+                <!-- =========================================
+                     ACTIONS
+                ========================================== -->
+
+                <div class="actions">
+
+
+                    <!--
+                        Question ID is stored inside
+                        data-question-id so JavaScript
+                        can safely access it.
+                    -->
+
+                    <button
+                        type="button"
+                        class="save-btn"
+                        data-question-id="{{ q.question_id }}"
+                        onclick="toggleBookmark(this)"
+                    >
+
+                        {% if q.bookmarked %}
+
+                            🔖 Saved
+
+                        {% else %}
+
+                            🔖 Save
+
+                        {% endif %}
+
+                    </button>
+
+
+
+                    <button
+                        type="button"
+                        class="focus-btn"
+                        onclick="focusQuestion(this)"
+                    >
+                        🎯 Focus
+                    </button>
+
+
+                </div>
+
+
+            </article>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- =================================================
+             EMPTY STATE
+        ================================================== -->
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                🔍
+            </div>
+
+            <h3>
+                No Questions Found
+            </h3>
+
+            <p>
+                Try another subject, difficulty level
+                or search keyword.
+            </p>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         TOAST
+    ====================================================== -->
+
+    <div
+        id="toast"
+        class="toast"
+    >
+    </div>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+
+        /* =================================================
+           TOAST
+        ================================================= */
+
+        function showToast(message) {
+
+            const toast =
+                document.getElementById("toast");
+
+
+            toast.textContent =
+                message;
+
+
+            toast.style.display =
+                "block";
+
+
+            clearTimeout(
+                window.toastTimer
+            );
+
+
+            window.toastTimer =
+                setTimeout(
+                    function () {
+
+                        toast.style.display =
+                            "none";
+
+                    },
+                    2200
+                );
+
+        }
+
+
+
+        /* =================================================
+           UPDATE QUESTION CARD
+        ================================================= */
+
+        function updateCard(
+            card,
+            isSaved
+        ) {
+
+            if (!card) {
+                return;
+            }
+
+
+            card.dataset.saved =
+                isSaved
+                    ? "true"
+                    : "false";
+
+
+            card.classList.toggle(
+                "saved-card",
+                isSaved
+            );
+
+
+
+            const button =
+                card.querySelector(
+                    ".save-btn"
+                );
+
+
+            if (button) {
+
+                button.textContent =
+                    isSaved
+                        ? "🔖 Saved"
+                        : "🔖 Save";
+
+            }
+
+
+
+            const meta =
+                card.querySelector(
+                    ".meta"
+                );
+
+
+            if (!meta) {
+                return;
+            }
+
+
+
+            let badge =
+                meta.querySelector(
+                    ".saved-badge"
+                );
+
+
+
+            if (
+                isSaved &&
+                !badge
+            ) {
+
+                badge =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                badge.className =
+                    "badge saved-badge";
+
+
+                badge.textContent =
+                    "🔖 Saved";
+
+
+                meta.appendChild(
+                    badge
+                );
+
+            }
+
+
+
+            if (
+                !isSaved &&
+                badge
+            ) {
+
+                badge.remove();
+
+            }
+
+        }
+
+
+
+        /* =================================================
+           LOAD BOOKMARKS
+        ================================================= */
+
+        async function loadBookmarks() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "{{ url_for('get_bookmarks') }}"
+                    );
+
+
+                if (!response.ok) {
+                    return;
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                if (!data.success) {
+                    return;
+                }
+
+
+
+                const countElement =
+                    document.getElementById(
+                        "savedCount"
+                    );
+
+
+                if (countElement) {
+
+                    countElement.textContent =
+                        data.count;
+
+                }
+
+
+
+                const savedIds =
+                    new Set(
+                        data.bookmarks.map(
+                            String
+                        )
+                    );
+
+
+
+                document
+                    .querySelectorAll(
+                        ".question-card"
+                    )
+                    .forEach(
+                        function (card) {
+
+                            const id =
+                                String(
+                                    card.dataset.id
+                                );
+
+
+                            updateCard(
+                                card,
+                                savedIds.has(id)
+                            );
+
+                        }
+                    );
+
+
+            } catch (error) {
+
+                console.log(
+                    "Bookmark loading error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+
+        /* =================================================
+           TOGGLE BOOKMARK
+        ================================================= */
+
+        async function toggleBookmark(
+            button
+        ) {
+
+
+            const questionId =
+                button.dataset.questionId;
+
+
+            if (!questionId) {
+
+                showToast(
+                    "Invalid question ID"
+                );
+
+                return;
+
+            }
+
+
+            button.disabled =
+                true;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/bookmark/" +
+                        questionId,
+                        {
+                            method:
+                                "POST",
+
+                            headers: {
+                                "X-Requested-With":
+                                    "XMLHttpRequest"
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Bookmark operation failed"
+                    );
+
+                }
+
+
+
+                const card =
+                    button.closest(
+                        ".question-card"
+                    );
+
+
+                const isSaved =
+                    data.action ===
+                    "saved";
+
+
+                updateCard(
+                    card,
+                    isSaved
+                );
+
+
+
+                const countElement =
+                    document.getElementById(
+                        "savedCount"
+                    );
+
+
+                if (countElement) {
+
+                    countElement.textContent =
+                        data.count;
+
+                }
+
+
+
+                if (isSaved) {
+
+                    showToast(
+                        "Question saved 🔖"
+                    );
+
+                } else {
+
+                    showToast(
+                        "Removed from saved questions"
+                    );
+
+                }
+
+
+            } catch (error) {
+
+                console.log(error);
+
+
+                showToast(
+                    "Could not update saved question"
+                );
+
+
+            } finally {
+
+                button.disabled =
+                    false;
+
+            }
+
+        }
+
+
+
+        /* =================================================
+           SHOW SAVED
+        ================================================= */
+
+        function showSaved() {
+
+            const cards =
+                document.querySelectorAll(
+                    ".question-card"
+                );
+
+
+            let count = 0;
+
+
+            cards.forEach(
+                function (card) {
+
+                    if (
+                        card.dataset.saved ===
+                        "true"
+                    ) {
+
+                        card.style.display =
+                            "";
+
+                        count++;
+
+                    } else {
+
+                        card.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+
+            if (count === 0) {
+
+                showToast(
+                    "No saved questions yet 🔖"
+                );
+
+            } else {
+
+                showToast(
+                    "Showing " +
+                    count +
+                    " saved questions"
+                );
+
+            }
+
+        }
+
+
+
+        /* =================================================
+           SHOW ALL
+        ================================================= */
+
+        function showAll() {
+
+            document
+                .querySelectorAll(
+                    ".question-card"
+                )
+                .forEach(
+                    function (card) {
+
+                        card.style.display =
+                            "";
+
+                    }
+                );
+
+        }
+
+
+
+        /* =================================================
+           SURPRISE ME
+        ================================================= */
+
+        function surpriseMe() {
+
+
+            const cards =
+                [
+                    ...document.querySelectorAll(
+                        ".question-card"
+                    )
+                ];
+
+
+            if (
+                cards.length === 0
+            ) {
+
+                showToast(
+                    "No questions available"
+                );
+
+                return;
+
+            }
+
+
+
+            cards.forEach(
+                function (card) {
+
+                    card.style.display =
+                        "";
+
+                }
+            );
+
+
+
+            const randomCard =
+                cards[
+                    Math.floor(
+                        Math.random() *
+                        cards.length
+                    )
+                ];
+
+
+
+            randomCard.scrollIntoView(
+                {
+                    behavior:
+                        "smooth",
+
+                    block:
+                        "center"
+                }
+            );
+
+
+
+            randomCard.style.outline =
+                "2px solid #f59e0b";
+
+
+            randomCard.style.boxShadow =
+                "0 0 35px rgba(245, 158, 11, 0.25)";
+
+
+
+            setTimeout(
+                function () {
+
+                    randomCard.style.outline =
+                        "";
+
+                    randomCard.style.boxShadow =
+                        "";
+
+                },
+                1800
+            );
+
+
+
+            showToast(
+                "🎲 Random question selected"
+            );
+
+        }
+
+
+
+        /* =================================================
+           FOCUS QUESTION
+        ================================================= */
+
+        function focusQuestion(
+            button
+        ) {
+
+
+            const card =
+                button.closest(
+                    ".question-card"
+                );
+
+
+            if (!card) {
+                return;
+            }
+
+
+
+            card.scrollIntoView(
+                {
+                    behavior:
+                        "smooth",
+
+                    block:
+                        "center"
+                }
+            );
+
+
+
+            card.style.outline =
+                "2px solid #8b5cf6";
+
+
+            card.style.boxShadow =
+                "0 0 35px rgba(139, 92, 246, 0.25)";
+
+
+
+            setTimeout(
+                function () {
+
+                    card.style.outline =
+                        "";
+
+                    card.style.boxShadow =
+                        "";
+
+                },
+                1800
+            );
+
+        }
+
+
+
+        /* =================================================
+           INITIAL LOAD
+        ================================================= */
+
+        loadBookmarks();
+
+
+    </script>
+
+
+</body>
+
+</html>

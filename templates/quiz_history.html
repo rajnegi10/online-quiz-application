@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz History | Online Quiz Application</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            min-height: 100vh;
+            color: #f5f7ff;
+            background:
+                radial-gradient(circle at 15% 15%, rgba(110, 75, 255, 0.22), transparent 30%),
+                radial-gradient(circle at 85% 85%, rgba(0, 190, 255, 0.15), transparent 30%),
+                linear-gradient(135deg, #080b16, #10162b 50%, #080b16);
+            padding: 35px 18px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .brand h1 {
+            font-size: clamp(28px, 5vw, 42px);
+            letter-spacing: 1px;
+        }
+
+        .brand p {
+            color: #9fa9c7;
+            margin-top: 7px;
+            font-size: 15px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: white;
+            padding: 12px 18px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.06);
+            transition: 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            background: rgba(255,255,255,0.11);
+        }
+
+        .history-card {
+            background: rgba(15, 20, 40, 0.82);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.35);
+            backdrop-filter: blur(14px);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat {
+            padding: 18px;
+            border-radius: 17px;
+            background: rgba(255,255,255,0.055);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .stat span {
+            display: block;
+            color: #929dbb;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .stat strong {
+            font-size: 25px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 65px 20px;
+            color: #aab3cc;
+        }
+
+        .empty-icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .empty h2 {
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: 17px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 760px;
+        }
+
+        th {
+            text-align: left;
+            padding: 17px;
+            background: rgba(255,255,255,0.07);
+            color: #b8c2df;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        td {
+            padding: 17px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            color: #e9edfa;
+        }
+
+        tbody tr:hover {
+            background: rgba(255,255,255,0.045);
+        }
+
+        .subject {
+            font-weight: 700;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            background: rgba(120, 105, 255, 0.16);
+            color: #c9c2ff;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .score {
+            font-weight: 700;
+        }
+
+        .percentage {
+            font-weight: 800;
+        }
+
+        .date {
+            color: #aab4cf;
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 22px 12px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .history-card {
+                padding: 15px;
+                border-radius: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="topbar">
+        <div class="brand">
+            <h1>📜 Quiz History</h1>
+            <p>Your complete record of completed quizzes</p>
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="back-btn">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    <div class="history-card">
+
+        {% if history %}
+
+            {% set total_quizzes = history|length %}
+            {% set total_score = history|sum(attribute='score') %}
+            {% set total_questions = history|sum(attribute='total_questions') %}
+
+            <div class="stats">
+                <div class="stat">
+                    <span>Total Quizzes</span>
+                    <strong>{{ total_quizzes }}</strong>
+                </div>
+
+                <div class="stat">
+                    <span>Total Correct Answers</span>
+                    <strong>{{ total_score }}</strong>
+                </div>
+
+                <div class="stat">
+                    <span>Total Questions Attempted</span>
+                    <strong>{{ total_questions }}</strong>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Subject</th>
+                        <th>Difficulty</th>
+                        <th>Score</th>
+                        <th>Percentage</th>
+                        <th>Completed On</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for quiz in history %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+
+                        <td class="subject">
+                            {{ quiz.subject }}
+                        </td>
+
+                        <td>
+                            <span class="difficulty">
+                                {{ quiz.difficulty }}
+                            </span>
+                        </td>
+
+                        <td class="score">
+                            {{ quiz.score }} / {{ quiz.total_questions }}
+                        </td>
+
+                        <td class="percentage">
+                            {{ quiz.percentage }}%
+                        </td>
+
+                        <td class="date">
+                            {{ quiz.completed_at.strftime('%d %b %Y, %I:%M %p') if quiz.completed_at else '—' }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        {% else %}
+
+            <div class="empty">
+                <div class="empty-icon">📝</div>
+                <h2>No Quiz Attempts Yet</h2>
+                <p>Complete your first quiz and your result will appear here.</p>
+            </div>
+
+        {% endif %}
+
+    </div>
+</div>
+</body>
+</html>

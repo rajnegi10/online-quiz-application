@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Result - Online Quiz Application</title>
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #070814;
+            --panel: rgba(18, 20, 38, 0.92);
+            --panel-2: rgba(25, 27, 49, 0.9);
+            --line: rgba(255, 255, 255, 0.10);
+            --gold: #f5c76b;
+            --gold-2: #fff0b0;
+            --purple: #8b5cf6;
+            --text: #f7f7fb;
+            --muted: #a7abc2;
+            --green: #4ade80;
+            --red: #fb7185;
+            --amber: #fbbf24;
+        }
+
+        body {
+            font-family: Inter, Arial, sans-serif;
+            min-height: 100vh;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 10% 10%, rgba(139,92,246,.18), transparent 28%),
+                radial-gradient(circle at 90% 15%, rgba(245,199,107,.12), transparent 25%),
+                radial-gradient(circle at 50% 90%, rgba(99,102,241,.10), transparent 30%),
+                var(--bg);
+            padding-bottom: 60px;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            padding: 15px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            background: rgba(7,8,20,.78);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: .2px;
+        }
+
+        .logo span {
+            background: linear-gradient(90deg, var(--gold-2), var(--gold), #ffffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links { display: flex; gap: 9px; flex-wrap: wrap; }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #dddff0;
+            padding: 9px 13px;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 13px;
+            transition: .2s ease;
+        }
+
+        .nav-links a:hover {
+            border-color: rgba(245,199,107,.25);
+            background: rgba(255,255,255,.05);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .container { width: 92%; max-width: 1100px; margin: 38px auto; }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            padding: 45px 28px 32px;
+            text-align: center;
+            border: 1px solid rgba(245,199,107,.22);
+            border-radius: 30px;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(245,199,107,.13), transparent 34%),
+                linear-gradient(145deg, rgba(20,21,42,.98), rgba(11,12,27,.98));
+            box-shadow: 0 30px 80px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.06);
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero::before { width: 220px; height: 220px; left: -130px; top: -120px; background: rgba(139,92,246,.16); filter: blur(20px); }
+        .hero::after { width: 180px; height: 180px; right: -100px; bottom: -100px; background: rgba(245,199,107,.10); filter: blur(20px); }
+
+        .trophy {
+            position: relative;
+            z-index: 1;
+            font-size: 64px;
+            filter: drop-shadow(0 8px 18px rgba(245,199,107,.22));
+            animation: trophyFloat 2.6s ease-in-out infinite;
+        }
+
+        @keyframes trophyFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-7px) rotate(1deg); }
+        }
+
+        .eyebrow {
+            margin-top: 13px;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: var(--gold);
+        }
+
+        h1 {
+            position: relative;
+            z-index: 1;
+            margin-top: 7px;
+            font-size: clamp(30px, 5vw, 48px);
+            line-height: 1.05;
+            background: linear-gradient(90deg, #fff, var(--gold-2), #fff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .subtitle { margin-top: 12px; color: var(--muted); line-height: 1.6; }
+
+        .quiz-info {
+            display: flex;
+            justify-content: center;
+            gap: 9px;
+            flex-wrap: wrap;
+            margin-top: 21px;
+        }
+
+        .pill {
+            padding: 9px 14px;
+            border-radius: 999px;
+            background: rgba(255,255,255,.055);
+            border: 1px solid rgba(255,255,255,.10);
+            color: #e9eaf4;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .pill.gold { color: var(--gold-2); border-color: rgba(245,199,107,.25); background: rgba(245,199,107,.07); }
+
+        .stats {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-top: 26px;
+        }
+
+        .stat {
+            padding: 21px 12px;
+            border-radius: 19px;
+            background: rgba(255,255,255,.045);
+            border: 1px solid var(--line);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+        }
+
+        .stat-value { font-size: 28px; font-weight: 950; color: #fff; }
+        .stat:nth-child(2) .stat-value { color: var(--gold); }
+        .stat:nth-child(3) .stat-value { color: var(--red); }
+        .stat:nth-child(4) .stat-value { color: var(--amber); }
+        .stat-label { margin-top: 6px; color: var(--muted); font-size: 12px; font-weight: 800; }
+
+        .message {
+            margin-top: 18px;
+            padding: 15px 17px;
+            border-radius: 15px;
+            color: #e8e9f3;
+            background: rgba(139,92,246,.08);
+            border: 1px solid rgba(139,92,246,.20);
+            font-weight: 800;
+        }
+
+        .achievement-unlocked {
+            position: relative;
+            z-index: 1;
+            margin-top: 25px;
+            padding: 24px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            text-align: left;
+            overflow: hidden;
+            border-radius: 23px;
+            border: 1px solid rgba(245,199,107,.42);
+            background:
+                radial-gradient(circle at top right, rgba(245,199,107,.18), transparent 35%),
+                linear-gradient(135deg, rgba(66,45,17,.72), rgba(32,27,20,.82));
+            box-shadow: 0 18px 45px rgba(245,199,107,.08), inset 0 1px 0 rgba(255,255,255,.06);
+            animation: achievementPop .65s ease-out;
+        }
+
+        .unlock-icon {
+            width: 82px;
+            height: 82px;
+            min-width: 82px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 41px;
+            background: radial-gradient(circle, #fff6c9, #d99a32 62%, #7b4c12);
+            box-shadow: 0 0 30px rgba(245,199,107,.20);
+            border: 2px solid #f8d98a;
+            animation: badgePulse 1.8s ease-in-out infinite;
+        }
+
+        .unlock-content { flex: 1; position: relative; z-index: 1; }
+        .unlock-label { color: var(--gold); font-size: 11px; font-weight: 950; letter-spacing: 2px; }
+        .unlock-content h2 { margin-top: 5px; font-size: 24px; color: #fff6d5; }
+        .unlock-content p { margin-top: 5px; color: #cfc5ad; font-size: 14px; line-height: 1.5; }
+
+        .unlocked-badges { display: grid; gap: 10px; margin-top: 17px; }
+
+        .unlocked-badge {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(255,255,255,.045);
+            border: 1px solid rgba(245,199,107,.16);
+        }
+
+        .badge-icon {
+            width: 43px;
+            height: 43px;
+            min-width: 43px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(245,199,107,.08);
+            border: 1px solid rgba(245,199,107,.18);
+            font-size: 25px;
+        }
+
+        .unlocked-badge strong { display: block; color: #fff; font-size: 15px; }
+        .unlocked-badge span { display: block; margin-top: 3px; color: #a9a8b4; font-size: 12px; line-height: 1.4; }
+
+        .view-achievements {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 11px 17px;
+            border-radius: 11px;
+            text-decoration: none;
+            color: #17110a;
+            background: linear-gradient(135deg, #fff0b0, #f5c76b);
+            font-size: 13px;
+            font-weight: 950;
+            box-shadow: 0 8px 24px rgba(245,199,107,.14);
+            transition: .2s ease;
+        }
+
+        .view-achievements:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(245,199,107,.22); }
+
+        @keyframes badgePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+        @keyframes achievementPop { 0% { opacity: 0; transform: translateY(15px) scale(.96); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+
+        .review-section { margin-top: 34px; }
+
+        .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 15px; margin-bottom: 16px; }
+        .section-title { font-size: 27px; }
+        .section-caption { color: var(--muted); font-size: 13px; }
+
+        .review-card {
+            margin-bottom: 15px;
+            padding: 22px;
+            border-radius: 21px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            box-shadow: 0 15px 40px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.035);
+        }
+
+        .review-head { display: flex; justify-content: space-between; gap: 15px; align-items: flex-start; }
+        .question-number { margin-bottom: 8px; color: var(--gold); font-size: 11px; font-weight: 950; letter-spacing: 1.5px; }
+        .question { font-size: 18px; line-height: 1.55; font-weight: 850; }
+
+        .badge {
+            flex-shrink: 0;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 900;
+            border: 1px solid transparent;
+        }
+
+        .correct { color: #9af7b7; background: rgba(74,222,128,.08); border-color: rgba(74,222,128,.20); }
+        .wrong { color: #ff9aaa; background: rgba(251,113,133,.08); border-color: rgba(251,113,133,.20); }
+        .unanswered { color: #fbd67b; background: rgba(251,191,36,.08); border-color: rgba(251,191,36,.20); }
+
+        .answers { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 19px; }
+
+        .answer-box {
+            padding: 15px;
+            border-radius: 14px;
+            background: rgba(255,255,255,.035);
+            border: 1px solid rgba(255,255,255,.08);
+        }
+
+        .answer-box:first-child { border-color: rgba(139,92,246,.18); }
+        .answer-label { color: var(--muted); font-size: 11px; font-weight: 950; letter-spacing: 1px; text-transform: uppercase; }
+        .answer-text { margin-top: 7px; color: #f1f1f7; font-weight: 750; line-height: 1.5; }
+
+        .explanation {
+            margin-top: 14px;
+            padding: 16px;
+            border-left: 4px solid var(--purple);
+            border-radius: 11px;
+            background: rgba(139,92,246,.07);
+            color: #cdd0df;
+            line-height: 1.6;
+        }
+
+        .explanation strong { color: #c4a7ff; }
+
+        .actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 31px; }
+
+        .button {
+            display: inline-block;
+            padding: 13px 20px;
+            border-radius: 13px;
+            text-decoration: none;
+            font-weight: 900;
+            transition: .2s ease;
+        }
+
+        .play-again {
+            color: #18120a;
+            background: linear-gradient(135deg, #fff0b0, #f5c76b);
+            box-shadow: 0 9px 25px rgba(245,199,107,.14);
+        }
+
+        .dashboard {
+            color: #ececf5;
+            background: rgba(255,255,255,.05);
+            border: 1px solid var(--line);
+        }
+
+        .button:hover { transform: translateY(-2px); }
+
+        @media print {
+            body { background: white; color: #111827; padding: 0; }
+            .navbar, .actions { display: none !important; }
+            .container { width: 100%; max-width: none; margin: 0; }
+            .hero, .review-card { color: #111827; background: white; box-shadow: none; border: 1px solid #ddd; }
+            .subtitle, .section-caption, .stat-label, .answer-label { color: #475569; }
+            .question, .answer-text, .section-title { color: #111827; }
+            .hero h1 { color: #111827; background: none; }
+        }
+
+        @media (max-width: 800px) {
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .answers { grid-template-columns: 1fr; }
+            .section-heading { align-items: flex-start; flex-direction: column; }
+        }
+
+        @media (max-width: 620px) {
+            .navbar { padding: 13px 4%; }
+            .logo { font-size: 15px; }
+            .nav-links a { padding: 8px 9px; font-size: 12px; }
+            .container { width: 94%; margin-top: 20px; }
+            .hero { padding: 34px 16px 22px; border-radius: 23px; }
+            .stats { gap: 9px; }
+            .stat { padding: 17px 7px; }
+            .stat-value { font-size: 23px; }
+            .achievement-unlocked { flex-direction: column; text-align: center; padding: 20px 16px; }
+            .unlock-icon { margin: 0 auto; }
+            .unlock-content { width: 100%; }
+            .unlocked-badge { text-align: left; }
+            .view-achievements { width: 100%; text-align: center; }
+            .review-card { padding: 17px; }
+            .review-head { flex-direction: column; }
+            .question { font-size: 16px; }
+            .section-title { font-size: 22px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">
+        🧠 <span>Online Quiz Application</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</nav>
+
+<main class="container">
+
+    <section class="hero">
+        <div class="trophy">🏆</div>
+        <div class="eyebrow">RESULTS • PERFORMANCE • ACHIEVEMENT</div>
+
+        <h1>Quiz Completed!</h1>
+
+        <p class="subtitle">
+            Great job! Here is your complete performance report.
+        </p>
+
+        <div class="quiz-info">
+            <span class="pill">📚 {{ subject }}</span>
+            <span class="pill gold">🎯 {{ difficulty }}</span>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">{{ score }}/{{ total }}</div>
+                <div class="stat-label">Score</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-value">{{ percentage }}%</div>
+                <div class="stat-label">Percentage</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-value">{{ wrong }}</div>
+                <div class="stat-label">Wrong</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-value">{{ unanswered }}</div>
+                <div class="stat-label">Unanswered</div>
+            </div>
+        </div>
+
+        <div class="message">
+            {% if percentage >= 90 %}
+                🌟 Outstanding! Excellent performance!
+            {% elif percentage >= 75 %}
+                🔥 Great work! Keep it up!
+            {% elif percentage >= 50 %}
+                👍 Good attempt! A little more practice will help.
+            {% else %}
+                💪 Keep practicing — you can improve your score!
+            {% endif %}
+        </div>
+
+        {% if newly_unlocked %}
+        <div class="achievement-unlocked">
+            <div class="unlock-icon">🏆</div>
+
+            <div class="unlock-content">
+                <div class="unlock-label">ACHIEVEMENT UNLOCKED</div>
+
+                <h2>🎉 New Badge Unlocked!</h2>
+
+                <p>
+                    Congratulations! You earned a new achievement.
+                </p>
+
+                <div class="unlocked-badges">
+                    {% for achievement in newly_unlocked %}
+                    <div class="unlocked-badge">
+                        <div class="badge-icon">
+                            {% if achievement.name == 'Initiate' %}
+                                🥉
+                            {% elif achievement.name == 'Knight' %}
+                                ⚔️
+                            {% elif achievement.name == 'Elite' %}
+                                💎
+                            {% elif achievement.name == 'Champion' %}
+                                👑
+                            {% elif achievement.name == 'Grandmaster' %}
+                                🌟
+                            {% elif achievement.name == 'Perfect Score' %}
+                                🎯
+                            {% elif achievement.name == 'Subject Expert' %}
+                                📚
+                            {% elif achievement.name == 'Quiz Explorer' %}
+                                🗺️
+                            {% else %}
+                                🏅
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <strong>{{ achievement.name }}</strong>
+                            <span>{{ achievement.description }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <a href="{{ url_for('achievements_page') }}" class="view-achievements">
+                    🏆 View All Achievements
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </section>
+
+    <section class="review-section">
+        <div class="section-heading">
+            <div>
+                <h2 class="section-title">📝 Answer Review & Explanations</h2>
+                <p class="section-caption">Review every response and learn from the explanations.</p>
+            </div>
+        </div>
+
+        {% for item in review %}
+        <article class="review-card">
+            <div class="review-head">
+                <div>
+                    <div class="question-number">QUESTION {{ item.number }}</div>
+                    <div class="question">{{ item.question }}</div>
+                </div>
+
+                {% if item.status == 'correct' %}
+                    <span class="badge correct">✓ Correct</span>
+                {% elif item.status == 'wrong' %}
+                    <span class="badge wrong">✗ Wrong</span>
+                {% else %}
+                    <span class="badge unanswered">• Unanswered</span>
+                {% endif %}
+            </div>
+
+            <div class="answers">
+                <div class="answer-box">
+                    <div class="answer-label">Your Answer</div>
+                    <div class="answer-text">
+                        {{ item.user_answer if item.user_answer else 'Not answered' }}
+                    </div>
+                </div>
+
+                <div class="answer-box">
+                    <div class="answer-label">Correct Answer</div>
+                    <div class="answer-text">{{ item.correct_answer }}</div>
+                </div>
+            </div>
+
+            <div class="explanation">
+                <strong>💡 Explanation:</strong>
+                <br>
+                {{ item.explanation }}
+            </div>
+        </article>
+        {% endfor %}
+    </section>
+
+    <div class="actions">
+        <a href="{{ url_for('start_quiz') }}" class="button play-again">
+            🔄 Play Again
+        </a>
+
+        <a href="{{ url_for('dashboard') }}" class="button dashboard">
+            📊 Dashboard
+        </a>
+    </div>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login | Online Quiz Application</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background:
+                radial-gradient(circle at top, #252525 0%, #111 45%, #050505 100%);
+            color: #fff;
+            padding: 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+            padding: 42px 35px;
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid rgba(255, 215, 120, 0.25);
+            border-radius: 22px;
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.65),
+                0 0 35px rgba(255, 193, 7, 0.08);
+        }
+
+        .admin-icon {
+            width: 76px;
+            height: 76px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #d4af37, #8c6b18);
+            font-size: 34px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.25);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 30px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ddd;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 15px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            outline: none;
+            background: #111;
+            color: white;
+            font-size: 15px;
+            transition: 0.25s;
+        }
+
+        input:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.08);
+        }
+
+        .login-btn {
+            width: 100%;
+            border: none;
+            padding: 14px;
+            margin-top: 8px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #d4af37, #a67c00);
+            color: #111;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 22px;
+            color: #aaa;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            color: #d4af37;
+        }
+
+        .error {
+            margin-bottom: 20px;
+            padding: 12px;
+            border-radius: 10px;
+            background: rgba(180, 40, 40, 0.15);
+            border: 1px solid rgba(255, 80, 80, 0.25);
+            color: #ff9b9b;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        @media (max-width: 500px) {
+            .login-card {
+                padding: 35px 25px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card">
+
+        <div class="admin-icon">🛡️</div>
+
+        <h1>Admin Login</h1>
+
+        <p class="subtitle">
+            Online Quiz Application · Administrator Access
+        </p>
+
+        {% if error %}
+            <div class="error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="POST">
+
+            <div class="field">
+                <label for="email">Admin Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter admin email"
+                    required
+                >
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter admin password"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="login-btn">
+                🔐 Sign In as Admin
+            </button>
+
+        </form>
+
+        <a href="{{ url_for('login') }}" class="back-link">
+            ← Back to Student Login
+        </a>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Achievements | Admin</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+
+body{
+min-height:100vh;color:#fff;
+background:
+radial-gradient(circle at top left,rgba(97,44,175,.20),transparent 35%),
+radial-gradient(circle at bottom right,rgba(212,175,55,.12),transparent 35%),
+#07070b;
+}
+
+.container{width:min(1400px,95%);margin:auto;padding:30px 0 50px}
+
+.topbar{
+display:flex;justify-content:space-between;align-items:center;
+padding:20px 24px;margin-bottom:30px;border-radius:20px;
+background:rgba(16,16,24,.92);
+border:1px solid rgba(212,175,55,.22);
+box-shadow:0 20px 50px rgba(0,0,0,.35)
+}
+
+.brand{display:flex;align-items:center;gap:14px}
+.brand-icon{
+width:56px;height:56px;display:grid;place-items:center;
+border-radius:16px;font-size:28px;
+background:linear-gradient(145deg,#d4af37,#7e5f12);color:#111
+}
+.brand h1{font-size:24px;margin-bottom:4px}
+.brand p{color:#8f8f9d;font-size:13px}
+.back-link{text-decoration:none;color:#d4af37;font-weight:700;font-size:14px}
+
+.hero{margin-bottom:24px}
+.hero-badge{
+display:inline-block;margin-bottom:10px;padding:7px 12px;border-radius:999px;
+font-size:12px;font-weight:800;letter-spacing:1px;
+color:#e8cf7a;background:rgba(212,175,55,.08);
+border:1px solid rgba(212,175,55,.20)
+}
+.hero h2{font-size:34px;margin-bottom:8px}
+.hero p{color:#8e8e9b;max-width:760px;line-height:1.6}
+
+.control-card{
+padding:20px;margin-bottom:22px;border-radius:20px;
+background:rgba(18,18,26,.94);border:1px solid #292936
+}
+
+.search{
+display:flex;gap:12px
+}
+
+.search input{
+flex:1;padding:13px 14px;border-radius:12px;
+border:1px solid #343444;outline:none;
+background:#101018;color:#fff
+}
+
+.button{
+border:none;cursor:pointer;text-decoration:none;
+padding:13px 17px;border-radius:12px;
+font-weight:800;display:inline-flex;align-items:center;
+justify-content:center;gap:7px
+}
+
+.button-dark{color:#ddd;background:#1a1a25;border:1px solid #343444}
+.button-delete{
+color:#ff9a9a;background:rgba(255,74,74,.08);
+border:1px solid rgba(255,74,74,.25)
+}
+
+.toolbar{margin-bottom:14px}
+.toolbar h3{font-size:21px}
+.count{color:#9a9aa6;font-size:13px;margin-top:5px}
+
+.table-card{
+overflow-x:auto;border-radius:20px;
+background:rgba(18,18,26,.94);border:1px solid #292936
+}
+
+table{width:100%;border-collapse:collapse;min-width:1000px}
+th,td{padding:16px 15px;border-bottom:1px solid #292936;text-align:left}
+th{font-size:12px;color:#d4af37}
+td{font-size:14px;color:#ddd}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.015)}
+
+.badge{
+display:inline-block;padding:5px 9px;border-radius:999px;
+font-size:11px;font-weight:800;background:#222230;border:1px solid #363647
+}
+
+.empty{padding:40px;text-align:center;color:#777786}
+
+@media(max-width:650px){
+.topbar{flex-direction:column;align-items:flex-start}
+.search{flex-direction:column}
+.hero h2{font-size:28px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon">🏆</div>
+<div>
+<h1>Achievement Control Room</h1>
+<p>Owner Arena Administration</p>
+</div>
+</div>
+
+<a href="{{ url_for('admin_dashboard') }}" class="back-link">
+← Admin Dashboard
+</a>
+</div>
+
+<div class="hero">
+<div class="hero-badge">ARENA MASTER CONTROL</div>
+
+<h2>Achievement Command Center</h2>
+
+<p>
+View student achievements and manage achievement records stored in PostgreSQL.
+</p>
+</div>
+
+<div class="control-card">
+
+<form method="GET" action="{{ url_for('admin_achievements') }}">
+
+<div class="search">
+
+<input
+type="text"
+name="search"
+value="{{ search|default('') }}"
+placeholder="Search student, email or achievement..."
+>
+
+<button type="submit" class="button button-dark">
+🔍 Search
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+<div class="toolbar">
+
+<h3>🏆 Achievement Records</h3>
+
+<div class="count">
+{{ rows|length }} achievement(s) shown
+</div>
+
+</div>
+
+<div class="table-card">
+
+{% if rows %}
+
+<table>
+
+<thead>
+<tr>
+<th>Student</th>
+<th>Email</th>
+<th>Achievement</th>
+<th>Description</th>
+<th>Earned At</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for row in rows %}
+
+<tr>
+
+<td>
+<strong>{{ row.name }}</strong>
+</td>
+
+<td>{{ row.email }}</td>
+
+<td>
+<span class="badge">
+{{ row.achievement }}
+</span>
+</td>
+
+<td>{{ row.description or '—' }}</td>
+
+<td>{{ row.earned_at }}</td>
+
+<td>
+
+<form
+method="POST"
+action="{{ url_for('admin_delete_achievement', achievement_id=row.id) }}"
+onsubmit="return confirm('Remove this achievement permanently?');"
+>
+
+<button type="submit" class="button button-delete">
+🗑 Remove
+</button>
+
+</form>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% else %}
+
+<div class="empty">
+No achievement records found.
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</body>
+</html>

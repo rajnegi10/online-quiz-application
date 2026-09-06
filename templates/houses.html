@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your House</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, #26345f 0%, transparent 35%),
+                radial-gradient(circle at bottom right, #4a1f4f 0%, transparent 35%),
+                #080b16;
+            color: white;
+            padding: 45px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 30px;
+            background: rgba(255,255,255,0.07);
+            color: #d9dfff;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            font-size: clamp(38px, 6vw, 68px);
+            letter-spacing: -2px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #aeb6ca;
+            font-size: 17px;
+            max-width: 650px;
+            margin: auto;
+            line-height: 1.6;
+        }
+
+        .houses {
+            margin-top: 50px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .house-card {
+            position: relative;
+            padding: 35px 28px;
+            min-height: 360px;
+            border-radius: 28px;
+            background: linear-gradient(
+                145deg,
+                rgba(255,255,255,0.10),
+                rgba(255,255,255,0.035)
+            );
+            border: 1px solid rgba(255,255,255,0.14);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+            backdrop-filter: blur(14px);
+            overflow: hidden;
+            transition: 0.35s ease;
+        }
+
+        .house-card::before {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            filter: blur(45px);
+            top: -70px;
+            right: -60px;
+        }
+
+        .house-card:hover {
+            transform: translateY(-10px) scale(1.015);
+            border-color: rgba(255,255,255,0.35);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+        }
+
+        .emblem {
+            width: 105px;
+            height: 105px;
+            margin: 0 auto 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.09);
+            border: 1px solid rgba(255,255,255,0.2);
+            font-size: 55px;
+            box-shadow: inset 0 0 30px rgba(255,255,255,0.05);
+        }
+
+        .house-name {
+            font-size: 30px;
+            margin-bottom: 7px;
+            letter-spacing: 1px;
+        }
+
+        .house-title {
+            color: #c5cbe0;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+        }
+
+        .motto {
+            font-size: 18px;
+            font-style: italic;
+            margin-bottom: 14px;
+            color: #ffffff;
+        }
+
+        .identity {
+            color: #aeb6ca;
+            line-height: 1.6;
+            font-size: 14px;
+            max-width: 420px;
+            margin: auto;
+        }
+
+        .select-btn {
+            margin-top: 25px;
+            width: 100%;
+            max-width: 260px;
+            padding: 13px 20px;
+            border: none;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.95);
+            color: #10131e;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        .select-btn:hover {
+            transform: translateY(-2px);
+            background: white;
+            box-shadow: 0 10px 30px rgba(255,255,255,0.15);
+        }
+
+        .footer {
+            margin-top: 45px;
+            color: #737b90;
+            font-size: 13px;
+        }
+
+        @media (max-width: 750px) {
+            .houses {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                padding: 30px 15px;
+            }
+
+            .house-card {
+                min-height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="badge">The Houses Await</div>
+
+    <h1>Choose Your House</h1>
+
+    <p class="subtitle">
+        Every House carries its own identity, philosophy and legacy.
+        Choose the House that represents who you are.
+    </p>
+
+    <div class="houses">
+
+        <!-- DRAVARYN -->
+        <div class="house-card">
+            <div class="emblem">🦁</div>
+
+            <h2 class="house-name">Dravaryn</h2>
+
+            <div class="house-title">
+                The House of Valor
+            </div>
+
+            <div class="motto">
+                “Courage writes the legacy.”
+            </div>
+
+            <p class="identity">
+                Bold minds who lead with courage, discipline and determination.
+            </p>
+
+            <form method="POST" action="{{ url_for('select_house') }}">
+                <input type="hidden" name="house" value="Dravaryn">
+                <button class="select-btn" type="submit">
+                    Choose Dravaryn
+                </button>
+            </form>
+        </div>
+
+
+        <!-- AETHERION -->
+        <div class="house-card">
+            <div class="emblem">🦅</div>
+
+            <h2 class="house-name">Aetherion</h2>
+
+            <div class="house-title">
+                The House of Vision
+            </div>
+
+            <div class="motto">
+                “Rise beyond the horizon.”
+            </div>
+
+            <p class="identity">
+                Visionaries who pursue knowledge, freedom and limitless possibility.
+            </p>
+
+            <form method="POST" action="{{ url_for('select_house') }}">
+                <input type="hidden" name="house" value="Aetherion">
+                <button class="select-btn" type="submit">
+                    Choose Aetherion
+                </button>
+            </form>
+        </div>
+
+
+        <!-- VALTHERA -->
+        <div class="house-card">
+            <div class="emblem">🐺</div>
+
+            <h2 class="house-name">Valthera</h2>
+
+            <div class="house-title">
+                The House of Resolve
+            </div>
+
+            <div class="motto">
+                “Stand together. Stand unbroken.”
+            </div>
+
+            <p class="identity">
+                Strategic minds who value loyalty, resilience and quiet strength.
+            </p>
+
+            <form method="POST" action="{{ url_for('select_house') }}">
+                <input type="hidden" name="house" value="Valthera">
+                <button class="select-btn" type="submit">
+                    Choose Valthera
+                </button>
+            </form>
+        </div>
+
+
+        <!-- ARCANIS -->
+        <div class="house-card">
+            <div class="emblem">🐉</div>
+
+            <h2 class="house-name">Arcanis</h2>
+
+            <div class="house-title">
+                The House of Mastery
+            </div>
+
+            <div class="motto">
+                “Knowledge becomes power.”
+            </div>
+
+            <p class="identity">
+                Curious minds who seek mastery, creativity and deeper understanding.
+            </p>
+
+            <form method="POST" action="{{ url_for('select_house') }}">
+                <input type="hidden" name="house" value="Arcanis">
+                <button class="select-btn" type="submit">
+                    Choose Arcanis
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Choose wisely. Your House becomes part of your quiz legacy.
+    </div>
+
+</div>
+
+</body>
+</html>

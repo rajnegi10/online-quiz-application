@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Select Subject</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>📚 Online Quiz Application</h1>
+
+        <p style="text-align: center; margin-bottom: 30px;">
+            Choose a subject to start your quiz
+        </p>
+
+        <div class="subject-grid">
+
+            <!-- Entertainment -->
+            <div class="subject-card">
+
+                <div class="subject-icon">🎬</div>
+
+                <h2>Entertainment</h2>
+
+                <p>
+                    Movies, music, sports and general entertainment.
+                </p>
+
+                <a href="/difficulty/Entertainment">
+                    <button type="button">
+                        Choose Difficulty
+                    </button>
+                </a>
+
+            </div>
+
+
+            <!-- Mathematics -->
+            <div class="subject-card">
+
+                <div class="subject-icon">➗</div>
+
+                <h2>Mathematics</h2>
+
+                <p>
+                    Numbers, calculations, logic and problem solving.
+                </p>
+
+                <a href="/difficulty/Mathematics">
+                    <button type="button">
+                        Choose Difficulty
+                    </button>
+                </a>
+
+            </div>
+
+
+            <!-- Science -->
+            <div class="subject-card">
+
+                <div class="subject-icon">🔬</div>
+
+                <h2>Science</h2>
+
+                <p>
+                    Physics, chemistry, biology and space science.
+                </p>
+
+                <a href="/difficulty/Science">
+                    <button type="button">
+                        Choose Difficulty
+                    </button>
+                </a>
+
+            </div>
+
+
+            <!-- Java Programming -->
+            <div class="subject-card">
+
+                <div class="subject-icon">☕</div>
+
+                <h2>Java Programming</h2>
+
+                <p>
+                    Java, OOP, loops, arrays and programming concepts.
+                </p>
+
+                <a href="/difficulty/Java%20Programming">
+                    <button type="button">
+                        Choose Difficulty
+                    </button>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

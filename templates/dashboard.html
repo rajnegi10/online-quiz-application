@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Online Quiz Application</title>
+
+    <style>
+        :root{
+            --bg:#05060d;
+            --bg2:#0a0b16;
+            --card:rgba(17,19,34,.78);
+            --card2:rgba(255,255,255,.035);
+            --text:#f8fafc;
+            --muted:#9ba3bb;
+            --gold:#f5c76b;
+            --gold2:#fff0b5;
+            --purple:#8b5cf6;
+            --purple2:#c4b5fd;
+            --border:rgba(255,255,255,.10);
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Inter,Arial,Helvetica,sans-serif;
+        }
+
+        body{
+            min-height:100vh;
+            color:var(--text);
+            background:
+                radial-gradient(circle at 8% 5%,rgba(139,92,246,.14),transparent 27%),
+                radial-gradient(circle at 92% 8%,rgba(245,199,107,.10),transparent 25%),
+                radial-gradient(circle at 50% 90%,rgba(79,70,229,.08),transparent 32%),
+                var(--bg);
+            overflow-x:hidden;
+        }
+
+        body:before{
+            content:"";
+            position:fixed;
+            inset:0;
+            pointer-events:none;
+            background-image:
+                linear-gradient(rgba(255,255,255,.016) 1px,transparent 1px),
+                linear-gradient(90deg,rgba(255,255,255,.016) 1px,transparent 1px);
+            background-size:52px 52px;
+            mask-image:linear-gradient(to bottom,black,transparent 90%);
+            z-index:-1;
+        }
+
+        a{
+            color:inherit;
+        }
+
+        /* NAVBAR */
+        .navbar{
+            position:sticky;
+            top:0;
+            z-index:1000;
+            min-height:74px;
+            padding:0 6%;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:20px;
+            background:rgba(5,6,13,.80);
+            border-bottom:1px solid var(--border);
+            backdrop-filter:blur(22px);
+            -webkit-backdrop-filter:blur(22px);
+        }
+
+        .logo{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            font-size:18px;
+            font-weight:900;
+            white-space:nowrap;
+        }
+
+        .logo-icon{
+            width:43px;
+            height:43px;
+            display:grid;
+            place-items:center;
+            border-radius:14px;
+            background:linear-gradient(135deg,#8b5cf6,#4f46e5);
+            box-shadow:0 10px 32px rgba(124,58,237,.25);
+            font-size:21px;
+        }
+
+        .logo-text span{
+            color:var(--gold);
+        }
+
+        .nav-links{
+            display:flex;
+            align-items:center;
+            gap:7px;
+        }
+
+        .nav-links a{
+            text-decoration:none;
+            color:#aeb5ca;
+            padding:10px 13px;
+            border-radius:10px;
+            font-size:12px;
+            font-weight:800;
+            transition:.25s ease;
+        }
+
+        .nav-links a:hover{
+            color:#fff;
+            background:rgba(255,255,255,.055);
+        }
+
+        .nav-links .logout{
+            color:#ffd5d5;
+            border:1px solid rgba(239,68,68,.18);
+            background:rgba(239,68,68,.055);
+            margin-left:5px;
+        }
+
+        .nav-links .logout:hover{
+            background:rgba(239,68,68,.11);
+            border-color:rgba(239,68,68,.30);
+        }
+
+        /* MAIN */
+        .container{
+            width:min(1220px,88%);
+            margin:0 auto;
+            padding:65px 0 85px;
+        }
+
+        /* WELCOME */
+        .welcome{
+            position:relative;
+            padding:35px 0 38px;
+        }
+
+        .welcome:before{
+            content:"STUDENT COMMAND CENTER";
+            display:inline-block;
+            margin-bottom:15px;
+            color:var(--gold);
+            font-size:10px;
+            font-weight:900;
+            letter-spacing:2px;
+        }
+
+        .welcome h1{
+            font-size:clamp(32px,4vw,52px);
+            line-height:1.08;
+            letter-spacing:-1.8px;
+            margin-bottom:12px;
+        }
+
+        .welcome h1 .name{
+            background:linear-gradient(90deg,var(--gold2),var(--gold));
+            -webkit-background-clip:text;
+            background-clip:text;
+            color:transparent;
+        }
+
+        .welcome p{
+            color:var(--muted);
+            font-size:15px;
+            line-height:1.7;
+        }
+
+        /* HOUSE */
+        .house-card{
+            position:relative;
+            overflow:hidden;
+            margin:10px 0 25px;
+            padding:1px;
+            border-radius:27px;
+            background:linear-gradient(135deg,rgba(245,199,107,.50),rgba(139,92,246,.35),rgba(255,255,255,.08));
+            box-shadow:0 28px 75px rgba(0,0,0,.35);
+        }
+
+        .house-card-inner{
+            border-radius:26px;
+            padding:32px;
+            background:
+                radial-gradient(circle at 100% 0,rgba(139,92,246,.13),transparent 35%),
+                radial-gradient(circle at 0 100%,rgba(245,199,107,.07),transparent 35%),
+                linear-gradient(145deg,#111326,#090a14);
+        }
+
+        .house-content{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:35px;
+        }
+
+        .house-left{
+            display:flex;
+            align-items:center;
+            gap:21px;
+        }
+
+        .house-emblem{
+            width:82px;
+            height:82px;
+            display:grid;
+            place-items:center;
+            flex-shrink:0;
+            border-radius:23px;
+            background:rgba(245,199,107,.075);
+            border:1px solid rgba(245,199,107,.24);
+            box-shadow:0 0 35px rgba(245,199,107,.08);
+            font-size:43px;
+        }
+
+        .house-label{
+            color:#78819b;
+            font-size:10px;
+            text-transform:uppercase;
+            letter-spacing:1.8px;
+            font-weight:900;
+            margin-bottom:6px;
+        }
+
+        .house-name{
+            font-size:31px;
+            letter-spacing:-1px;
+            margin-bottom:4px;
+        }
+
+        .house-title{
+            color:var(--gold);
+            font-size:11px;
+            text-transform:uppercase;
+            letter-spacing:1.4px;
+            font-weight:900;
+            margin-bottom:9px;
+        }
+
+        .house-motto{
+            color:#c9cedc;
+            font-size:12px;
+            font-style:italic;
+        }
+
+        .house-buttons{
+            display:flex;
+            flex-wrap:wrap;
+            gap:9px;
+            margin-top:24px;
+        }
+
+        .house-buttons a{
+            text-decoration:none;
+            padding:10px 13px;
+            border-radius:10px;
+            font-size:11px;
+            font-weight:900;
+            transition:.25s;
+        }
+
+        .change-house{
+            color:#cbd0df;
+            border:1px solid var(--border);
+            background:rgba(255,255,255,.035);
+        }
+
+        .certificate-button{
+            color:#fff1c7;
+            border:1px solid rgba(245,199,107,.22);
+            background:rgba(245,199,107,.055);
+        }
+
+        .house-buttons a:hover{
+            transform:translateY(-2px);
+            border-color:rgba(245,199,107,.42);
+        }
+
+        .house-stats{
+            min-width:260px;
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+        }
+
+        .house-stat{
+            padding:20px 15px;
+            text-align:center;
+            border-radius:17px;
+            border:1px solid rgba(255,255,255,.08);
+            background:rgba(255,255,255,.035);
+        }
+
+        .house-stat-number{
+            display:block;
+            color:var(--gold);
+            font-size:29px;
+            font-weight:950;
+            margin-bottom:6px;
+        }
+
+        .house-stat-label{
+            display:block;
+            color:#78819b;
+            font-size:9px;
+            line-height:1.4;
+            font-weight:800;
+            text-transform:uppercase;
+            letter-spacing:.6px;
+        }
+
+        /* STATS */
+        .stats{
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:15px;
+            margin-bottom:25px;
+        }
+
+        .stat-card{
+            position:relative;
+            overflow:hidden;
+            padding:25px;
+            border:1px solid var(--border);
+            border-radius:20px;
+            background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+            transition:.3s ease;
+        }
+
+        .stat-card:hover{
+            transform:translateY(-5px);
+            border-color:rgba(245,199,107,.22);
+            box-shadow:0 20px 45px rgba(0,0,0,.25);
+        }
+
+        .stat-card:after{
+            content:"";
+            position:absolute;
+            width:100px;
+            height:100px;
+            right:-45px;
+            bottom:-45px;
+            border-radius:50%;
+            background:rgba(139,92,246,.12);
+            filter:blur(12px);
+        }
+
+        .stat-icon{
+            width:43px;
+            height:43px;
+            display:grid;
+            place-items:center;
+            border-radius:13px;
+            background:rgba(139,92,246,.10);
+            border:1px solid rgba(139,92,246,.18);
+            font-size:20px;
+            margin-bottom:17px;
+        }
+
+        .stat-card h2{
+            color:var(--gold2);
+            font-size:32px;
+            margin-bottom:5px;
+        }
+
+        .stat-card p{
+            color:#7e879f;
+            font-size:11px;
+            font-weight:800;
+            text-transform:uppercase;
+            letter-spacing:.6px;
+        }
+
+        /* LEADERBOARD */
+        .leaderboard-card{
+            display:block;
+            text-decoration:none;
+            margin:5px 0 40px;
+            padding:26px;
+            border:1px solid rgba(245,199,107,.19);
+            border-radius:21px;
+            background:
+                radial-gradient(circle at 90% 50%,rgba(245,199,107,.10),transparent 30%),
+                linear-gradient(135deg,rgba(245,199,107,.06),rgba(139,92,246,.06));
+            transition:.3s ease;
+        }
+
+        .leaderboard-card:hover{
+            transform:translateY(-5px);
+            border-color:rgba(245,199,107,.38);
+            box-shadow:0 22px 55px rgba(0,0,0,.25);
+        }
+
+        .leaderboard-top{
+            display:flex;
+            align-items:center;
+            gap:18px;
+        }
+
+        .leaderboard-icon{
+            width:58px;
+            height:58px;
+            display:grid;
+            place-items:center;
+            flex-shrink:0;
+            border-radius:17px;
+            background:rgba(245,199,107,.09);
+            border:1px solid rgba(245,199,107,.20);
+            font-size:27px;
+        }
+
+        .leaderboard-card h2{
+            font-size:19px;
+            margin-bottom:7px;
+        }
+
+        .leaderboard-card p{
+            color:#8991aa;
+            font-size:12px;
+            line-height:1.65;
+        }
+
+        /* SECTION TITLE */
+        .section-title{
+            margin-bottom:18px;
+            font-size:23px;
+            letter-spacing:-.6px;
+        }
+
+        .section-title:after{
+            content:"";
+            display:block;
+            width:45px;
+            height:3px;
+            margin-top:9px;
+            border-radius:20px;
+            background:linear-gradient(90deg,var(--gold),var(--purple));
+        }
+
+        /* ACTIONS */
+        .actions{
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:15px;
+        }
+
+        .action-card{
+            position:relative;
+            overflow:hidden;
+            min-height:220px;
+            padding:25px;
+            text-decoration:none;
+            border:1px solid var(--border);
+            border-radius:20px;
+            background:rgba(255,255,255,.035);
+            transition:.3s ease;
+        }
+
+        .action-card:hover{
+            transform:translateY(-7px);
+            border-color:rgba(139,92,246,.28);
+            background:rgba(255,255,255,.055);
+            box-shadow:0 20px 48px rgba(0,0,0,.27);
+        }
+
+        .action-card:after{
+            content:"";
+            position:absolute;
+            width:125px;
+            height:125px;
+            right:-55px;
+            bottom:-55px;
+            border-radius:50%;
+            background:rgba(139,92,246,.11);
+            filter:blur(14px);
+        }
+
+        .action-icon{
+            width:52px;
+            height:52px;
+            display:grid;
+            place-items:center;
+            border-radius:15px;
+            background:rgba(139,92,246,.09);
+            border:1px solid rgba(139,92,246,.17);
+            font-size:24px;
+            margin-bottom:21px;
+        }
+
+        .action-card h3{
+            font-size:16px;
+            margin-bottom:9px;
+        }
+
+        .action-card p{
+            color:#858ea7;
+            font-size:12px;
+            line-height:1.7;
+        }
+
+        .achievement-card .action-icon{
+            background:rgba(245,199,107,.08);
+            border-color:rgba(245,199,107,.18);
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:1050px){
+            .actions{
+                grid-template-columns:repeat(2,1fr);
+            }
+
+            .house-content{
+                align-items:flex-start;
+                flex-direction:column;
+            }
+
+            .house-stats{
+                width:100%;
+            }
+        }
+
+        @media(max-width:850px){
+            .navbar{
+                padding:12px 5%;
+                min-height:auto;
+                align-items:flex-start;
+                flex-direction:column;
+            }
+
+            .nav-links{
+                width:100%;
+                overflow-x:auto;
+                padding-bottom:3px;
+            }
+
+            .nav-links a{
+                white-space:nowrap;
+            }
+
+            .container{
+                width:90%;
+                padding-top:42px;
+            }
+        }
+
+        @media(max-width:650px){
+            .stats,
+            .actions{
+                grid-template-columns:1fr;
+            }
+
+            .house-card-inner{
+                padding:23px;
+            }
+
+            .house-left{
+                align-items:flex-start;
+            }
+
+            .house-emblem{
+                width:67px;
+                height:67px;
+                font-size:34px;
+                border-radius:19px;
+            }
+
+            .house-name{
+                font-size:25px;
+            }
+
+            .house-buttons{
+                flex-direction:column;
+            }
+
+            .house-buttons a{
+                text-align:center;
+            }
+
+            .leaderboard-top{
+                align-items:flex-start;
+            }
+
+            .welcome h1{
+                font-size:31px;
+            }
+        }
+
+        @media(max-width:420px){
+            .logo{
+                font-size:15px;
+            }
+
+            .logo-icon{
+                width:38px;
+                height:38px;
+            }
+
+            .house-stats{
+                grid-template-columns:1fr;
+            }
+
+            .leaderboard-card{
+                padding:21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        <div class="logo-icon">🧠</div>
+        <div class="logo-text">
+            Online Quiz <span>Application</span>
+        </div>
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+
+        <a href="{{ url_for('start_quiz') }}">Start Quiz</a>
+
+        <a href="{{ url_for('question_bank') }}">Question Bank</a>
+
+        <a href="{{ url_for('leaderboards') }}">Leaderboards</a>
+
+        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+    <!-- WELCOME -->
+
+    <section class="welcome">
+
+        <h1>
+            Welcome,
+            <span class="name">{{ session.get('user_name', 'Student') }}</span>! 👋
+        </h1>
+
+        <p>
+            Your knowledge journey continues here. Challenge yourself,
+            earn House Points and climb the rankings.
+        </p>
+
+    </section>
+
+
+    <!-- HOUSE -->
+
+    {% if house and house_info %}
+
+    <section class="house-card">
+
+        <div class="house-card-inner">
+
+            <div class="house-content">
+
+                <div>
+
+                    <div class="house-left">
+
+                        <div class="house-emblem">
+                            {{ house_info.symbol }}
+                        </div>
+
+                        <div>
+
+                            <div class="house-label">
+                                Your House
+                            </div>
+
+                            <h2 class="house-name">
+                                {{ house }}
+                            </h2>
+
+                            <div class="house-title">
+                                {{ house_info.title }}
+                            </div>
+
+                            <div class="house-motto">
+                                “{{ house_info.motto }}”
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="house-buttons">
+
+                        <a href="{{ url_for('select_house') }}" class="change-house">
+                            ⚙ Change House
+                        </a>
+
+                        <a href="{{ url_for('certificate') }}" class="certificate-button">
+                            🏆 View Certificate
+                        </a>
+
+                        <a href="{{ url_for('my_certificates') }}" class="certificate-button">
+                            📜 My Certificates
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <div class="house-stats">
+
+                    <div class="house-stat">
+
+                        <span class="house-stat-number">
+                            {{ house_points }}
+                        </span>
+
+                        <span class="house-stat-label">
+                            Current House Points
+                        </span>
+
+                    </div>
+
+
+                    <div class="house-stat">
+
+                        <span class="house-stat-number">
+                            {{ all_time_points }}
+                        </span>
+
+                        <span class="house-stat-label">
+                            All-Time Points
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- DASHBOARD STATS -->
+
+    <section class="stats">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">🎯</div>
+
+            <h2>{{ total_quizzes }}</h2>
+
+            <p>Quizzes Attempted</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">🏆</div>
+
+            <h2>{{ best_score }}%</h2>
+
+            <p>Best Score</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">🏅</div>
+
+            <h2>{{ achievements }}</h2>
+
+            <p>Achievements</p>
+
+        </div>
+
+    </section>
+
+
+    <!-- LEADERBOARD -->
+
+    <a href="{{ url_for('leaderboards') }}" class="leaderboard-card">
+
+        <div class="leaderboard-top">
+
+            <div class="leaderboard-icon">
+                🏆
+            </div>
+
+            <div>
+
+                <h2>
+                    House & Student Leaderboards
+                </h2>
+
+                <p>
+                    Explore Current Rankings, All-Time Rankings,
+                    House Champions and top-performing students.
+                </p>
+
+            </div>
+
+        </div>
+
+    </a>
+
+
+    <!-- QUICK ACTIONS -->
+
+    <h2 class="section-title">
+        Quick Actions
+    </h2>
+
+
+    <section class="actions">
+
+        <a href="{{ url_for('start_quiz') }}" class="action-card">
+
+            <div class="action-icon">🎯</div>
+
+            <h3>Start a Quiz</h3>
+
+            <p>
+                Choose a subject and difficulty level
+                and test your knowledge.
+            </p>
+
+        </a>
+
+
+        <a href="{{ url_for('question_bank') }}" class="action-card">
+
+            <div class="action-icon">📚</div>
+
+            <h3>Question Bank</h3>
+
+            <p>
+                Explore questions, options, correct answers
+                and explanations.
+            </p>
+
+        </a>
+
+
+        <a href="{{ url_for('quiz_history') }}" class="action-card">
+
+            <div class="action-icon">📊</div>
+
+            <h3>Quiz History</h3>
+
+            <p>
+                View your previous quiz attempts
+                and performance.
+            </p>
+
+        </a>
+
+
+        <a href="{{ url_for('achievements_page') }}" class="action-card achievement-card">
+
+            <div class="action-icon">🏅</div>
+
+            <h3>Achievements</h3>
+
+            <p>
+                Track your badges and achievements
+                earned through quizzes.
+            </p>
+
+        </a>
+
+    </section>
+
+</main>
+
+</body>
+</html>

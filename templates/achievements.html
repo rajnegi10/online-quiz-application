@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievements | Online Quiz Application</title>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        :root{
+            --bg:#070a13;--panel:#101526;--panel2:#151b2e;--text:#f7f9ff;--muted:#9da7c2;
+            --line:rgba(255,255,255,.09);--accent:#7c5cff;--gold:#f4c95d
+        }
+        body{
+            min-height:100vh;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);
+            background:
+                radial-gradient(circle at 15% 5%,rgba(124,92,255,.20),transparent 28%),
+                radial-gradient(circle at 85% 15%,rgba(38,198,218,.13),transparent 24%),
+                radial-gradient(circle at 50% 100%,rgba(244,201,93,.08),transparent 32%),var(--bg);
+        }
+        a{text-decoration:none;color:inherit}
+        .nav{height:72px;border-bottom:1px solid var(--line);background:rgba(7,10,19,.76);backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:space-between;padding:0 6%;position:sticky;top:0;z-index:10}
+        .brand{font-weight:900;letter-spacing:.4px;font-size:20px}.brand span{color:#9a83ff}.back{padding:10px 16px;border:1px solid var(--line);border-radius:12px;color:#cbd3ea;font-weight:700}.back:hover{border-color:#7c5cff;background:rgba(124,92,255,.1)}
+        .wrap{width:min(1180px,92%);margin:0 auto;padding:44px 0 70px}
+        .hero{display:grid;grid-template-columns:1.35fr .65fr;gap:24px;align-items:stretch;margin-bottom:28px}
+        .hero-main,.hero-stat{border:1px solid var(--line);background:linear-gradient(145deg,rgba(20,27,47,.94),rgba(12,16,30,.94));border-radius:26px;box-shadow:0 24px 70px rgba(0,0,0,.28)}
+        .hero-main{padding:36px}.eyebrow{display:inline-flex;padding:7px 12px;border-radius:999px;background:rgba(124,92,255,.13);border:1px solid rgba(124,92,255,.25);color:#bcaeff;font-size:12px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}.hero h1{font-size:clamp(34px,5vw,58px);line-height:1.02;margin:18px 0 12px}.hero h1 span{color:#a895ff}.hero p{color:var(--muted);font-size:16px;line-height:1.7;max-width:720px}.hero-stat{padding:30px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}.ring{width:148px;height:148px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#8b76ff calc(var(--pct)*1%),rgba(255,255,255,.07) 0);position:relative}.ring:after{content:"";position:absolute;inset:12px;border-radius:50%;background:#0c1120}.ring b{position:relative;z-index:1;font-size:30px}.hero-stat small{margin-top:16px;color:var(--muted);font-weight:700}.hero-stat strong{font-size:22px;margin-top:4px}
+        .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:36px}.summary-card{padding:20px;border:1px solid var(--line);border-radius:18px;background:rgba(16,21,38,.78)}.summary-card .num{font-size:30px;font-weight:900}.summary-card .label{color:var(--muted);font-size:13px;margin-top:4px}.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:18px}.section-head h2{font-size:27px}.section-head p{color:var(--muted);font-size:13px}
+        .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.badge{min-height:330px;position:relative;overflow:hidden;padding:24px 18px 20px;border:1px solid var(--line);background:linear-gradient(160deg,rgba(21,27,46,.97),rgba(11,15,28,.97));border-radius:24px;transition:.28s transform,.28s border-color,.28s box-shadow}.badge:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.2);box-shadow:0 22px 50px rgba(0,0,0,.3)}.badge.locked{filter:saturate(.35);opacity:.67}.badge.locked:hover{transform:none}.badge-top{display:flex;justify-content:space-between;align-items:center}.tier{font-size:10px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:#9ea8c3}.state{font-size:11px;font-weight:900;padding:6px 9px;border-radius:999px}.earned .state{background:rgba(81,217,145,.12);color:#75e7a7;border:1px solid rgba(81,217,145,.2)}.locked .state{background:rgba(255,255,255,.06);color:#858fa8}
+        .crest{width:128px;height:128px;margin:25px auto 20px;display:grid;place-items:center;font-size:40px;font-weight:1000;position:relative;isolation:isolate}.crest:before,.crest:after{content:"";position:absolute;inset:0;z-index:-1}.initiate .crest{border-radius:50% 50% 42% 42%;background:linear-gradient(145deg,#9b83ff,#4e3ca7);clip-path:polygon(50% 0,94% 22%,82% 82%,50% 100%,18% 82%,6% 22%)}.knight .crest{background:linear-gradient(145deg,#dfe7ff,#586887);clip-path:polygon(50% 0,86% 14%,100% 50%,82% 88%,50% 100%,18% 88%,0 50%,14% 14%);border-radius:16px}.elite .crest{background:linear-gradient(145deg,#55d4e8,#176b83);clip-path:polygon(50% 0,100% 28%,86% 82%,50% 100%,14% 82%,0 28%)}.champion .crest{background:linear-gradient(145deg,#ffe79a,#b07a17);clip-path:polygon(50% 0,90% 18%,100% 62%,72% 100%,28% 100%,0 62%,10% 18%)}.grandmaster .crest{background:linear-gradient(145deg,#ff8f70,#7c2d61);clip-path:polygon(50% 0,91% 20%,100% 70%,72% 100%,28% 100%,0 70%,9% 20%)}.perfect .crest{background:linear-gradient(145deg,#ffd76a,#d47a20);border-radius:50%;box-shadow:inset 0 0 0 7px rgba(255,255,255,.2)}.expert .crest{background:linear-gradient(145deg,#79e6b0,#197a63);clip-path:polygon(50% 0,93% 25%,82% 84%,50% 100%,18% 84%,7% 25%)}.explorer .crest{background:linear-gradient(145deg,#8fd1ff,#32549a);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+        .badge h3{text-align:center;font-size:22px}.desc{text-align:center;color:var(--muted);font-size:13px;line-height:1.5;min-height:40px;margin:7px 0 13px}.req{text-align:center;font-size:12px;color:#d9dff0;font-weight:800}.progress{height:7px;background:rgba(255,255,255,.07);border-radius:99px;margin:14px 4px 6px;overflow:hidden}.bar{height:100%;border-radius:99px;background:linear-gradient(90deg,#8b76ff,#c6baff);width:var(--width)}.progress-text{text-align:right;color:#7f89a4;font-size:10px}.earned-date{text-align:center;color:#6f7a95;font-size:10px;margin-top:10px}.locked .crest:after{content:"🔒";inset:auto 8px 7px auto;background:rgba(0,0,0,.55);width:31px;height:31px;border-radius:50%;display:grid;place-items:center;font-size:15px}
+        .next{margin-top:34px;border:1px solid rgba(124,92,255,.25);background:linear-gradient(100deg,rgba(124,92,255,.13),rgba(38,198,218,.06));border-radius:20px;padding:20px 22px;display:flex;justify-content:space-between;align-items:center;gap:20px}.next strong{font-size:17px}.next p{color:var(--muted);font-size:13px;margin-top:4px}.next .pill{padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.07);font-weight:900;font-size:12px;white-space:nowrap}
+        @media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}.hero-stat{min-height:230px}}
+        @media(max-width:620px){.nav{padding:0 4%;height:64px}.brand{font-size:16px}.wrap{padding-top:28px}.hero-main{padding:25px}.hero h1{font-size:38px}.summary{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.badge{min-height:315px}.next{align-items:flex-start;flex-direction:column}.next .pill{width:100%;text-align:center}}
+    </style>
+</head>
+<body>
+<nav class="nav">
+    <a class="brand" href="{{ url_for('dashboard') }}">Online <span>Quiz</span></a>
+    <a class="back" href="{{ url_for('dashboard') }}">← Dashboard</a>
+</nav>
+<main class="wrap">
+    <section class="hero">
+        <div class="hero-main">
+            <span class="eyebrow">Achievement Vault</span>
+            <h1>Your <span>Badges</span> &amp; Milestones</h1>
+            <p>Every completed quiz moves your profile forward. Unlock different badge designs as you build consistency, accuracy and subject mastery.</p>
+        </div>
+        <div class="hero-stat">
+            {% set pct = ((unlocked_count / total_badges) * 100) if total_badges else 0 %}
+            <div class="ring" style="--pct: {{ pct|round(0) }}"><b>{{ unlocked_count }}/{{ total_badges }}</b></div>
+            <small>Collection Progress</small>
+            <strong>{{ pct|round(0) }}% Unlocked</strong>
+        </div>
+    </section>
+
+    <section class="summary">
+        <div class="summary-card"><div class="num">{{ total_attempts }}</div><div class="label">Quizzes Completed</div></div>
+        <div class="summary-card"><div class="num">{{ perfect_count }}</div><div class="label">Perfect Scores</div></div>
+        <div class="summary-card"><div class="num">{{ subjects_played }}/4</div><div class="label">Subjects Explored</div></div>
+    </section>
+
+    <div class="section-head">
+        <div><h2>Badge Collection</h2><p>Core progression + special achievements</p></div>
+    </div>
+
+    <section class="grid">
+    {% for badge in badge_catalog %}
+        {% set earned = badge.name in earned_names %}
+        {% set width = ((badge.progress / badge.target) * 100) if badge.target else 0 %}
+        <article class="badge {{ badge.class }} {{ 'earned' if earned else 'locked' }}">
+            <div class="badge-top"><span class="tier">{{ badge.tier }}</span><span class="state">{{ 'UNLOCKED' if earned else 'LOCKED' }}</span></div>
+            <div class="crest">{{ badge.icon }}</div>
+            <h3>{{ badge.name }}</h3>
+            <div class="desc">{{ badge.description }}</div>
+            <div class="req">{{ badge.requirement }}</div>
+            <div class="progress"><div class="bar" style="--width: {{ [width, 100]|min }}%"></div></div>
+            <div class="progress-text">{{ badge.progress }}/{{ badge.target }}{% if badge.unit %} {{ badge.unit }}{% endif %}</div>
+            {% if earned %}
+                {% for item in achievements if item.name == badge.name %}
+                    <div class="earned-date">Earned {{ item.earned_at }}</div>
+                {% endfor %}
+            {% endif %}
+        </article>
+    {% endfor %}
+    </section>
+
+    {% if next_level %}
+    <section class="next">
+        <div><strong>Next core milestone: {{ next_level.name }}</strong><p>{{ next_level.requirement }} · Keep going to unlock the next crest.</p></div>
+        <div class="pill">{{ next_level.progress }}/{{ next_level.target }} progress</div>
+    </section>
+    {% else %}
+    <section class="next"><div><strong>Core progression complete 🏆</strong><p>You have unlocked every core level. Keep chasing the special badges.</p></div><div class="pill">Grandmaster reached</div></section>
+    {% endif %}
+</main>
+</body>
+</html>

@@ -1,0 +1,2321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Hall of Champions | Online Quiz
+    </title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+            min-height: 100vh;
+
+            color: #f5f1e8;
+
+            font-family: "Inter", sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 15% 10%,
+                    rgba(255,255,255,.08),
+                    transparent 25%
+                ),
+                radial-gradient(
+                    circle at 85% 15%,
+                    rgba(255,255,255,.06),
+                    transparent 25%
+                ),
+                linear-gradient(
+                    135deg,
+                    #07080c,
+                    #11151d 48%,
+                    #07080b
+                );
+
+            overflow-x: hidden;
+        }
+
+
+        body::before {
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            opacity: .055;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,.5) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.5) 1px,
+                    transparent 1px
+                );
+
+            background-size: 70px 70px;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        nav {
+            height: 76px;
+
+            padding: 0 6%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 50;
+
+            background: rgba(6,7,11,.82);
+
+            backdrop-filter: blur(20px);
+
+            border-bottom:
+                1px solid rgba(255,255,255,.08);
+        }
+
+
+        .brand {
+            font-family: "Cinzel", serif;
+
+            font-size: 21px;
+
+            font-weight: 800;
+
+            letter-spacing: 2px;
+        }
+
+
+        .brand span {
+            opacity: .42;
+        }
+
+
+        .nav-links {
+            display: flex;
+
+            gap: 10px;
+        }
+
+
+        .nav-links a {
+            text-decoration: none;
+
+            color: #cbc6bb;
+
+            padding: 10px 15px;
+
+            border-radius: 12px;
+
+            font-size: 14px;
+
+            transition: .25s;
+        }
+
+
+        .nav-links a:hover {
+            color: white;
+
+            background:
+                rgba(255,255,255,.08);
+        }
+
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 70px 24px 30px;
+
+            text-align: center;
+        }
+
+
+        .eyebrow {
+            text-transform: uppercase;
+
+            letter-spacing: 5px;
+
+            font-size: 11px;
+
+            color: #99958c;
+
+            margin-bottom: 17px;
+        }
+
+
+        h1 {
+            font-family: "Cinzel", serif;
+
+            font-size:
+                clamp(38px, 6vw, 70px);
+
+            line-height: 1.05;
+
+            letter-spacing: 2px;
+        }
+
+
+        .hero p {
+            max-width: 720px;
+
+            margin: 18px auto 0;
+
+            color: #9d9a94;
+
+            line-height: 1.7;
+        }
+
+
+        .current-house {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            margin-top: 22px;
+
+            padding: 9px 15px;
+
+            border-radius: 999px;
+
+            color: #ddd8ce;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            background:
+                rgba(255,255,255,.065);
+
+            border:
+                1px solid rgba(255,255,255,.09);
+        }
+
+
+        /* =========================
+           TABS
+        ========================= */
+
+        .tabs {
+            max-width: 650px;
+
+            margin: 35px auto 0;
+
+            padding: 6px;
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 5px;
+
+            background:
+                rgba(255,255,255,.045);
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            border-radius: 17px;
+        }
+
+
+        .tab {
+            border: 0;
+
+            padding: 14px;
+
+            border-radius: 12px;
+
+            background: transparent;
+
+            color: #88857f;
+
+            cursor: pointer;
+
+            font-weight: 800;
+
+            letter-spacing: .5px;
+
+            transition: .25s;
+        }
+
+
+        .tab:hover {
+            color: #ddd;
+        }
+
+
+        .tab.active {
+            color: white;
+
+            background:
+                rgba(255,255,255,.11);
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,.2);
+        }
+
+
+        /* =========================
+           CONTENT
+        ========================= */
+
+        .content {
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 20px 24px 90px;
+        }
+
+
+        .panel {
+            display: none;
+        }
+
+
+        .panel.active {
+            display: block;
+
+            animation:
+                fadeUp .4s ease;
+        }
+
+
+        .section-title {
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: end;
+
+            margin: 42px 0 18px;
+        }
+
+
+        .section-title h2 {
+            font-family: "Cinzel", serif;
+
+            font-size: 25px;
+        }
+
+
+        .section-title span {
+            color: #77746d;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           HOUSE CARDS
+        ========================= */
+
+        .house-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 16px;
+        }
+
+
+        .house-card {
+            position: relative;
+
+            min-height: 205px;
+
+            padding: 25px;
+
+            border-radius: 23px;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.105),
+                    rgba(255,255,255,.025)
+                );
+
+            border:
+                1px solid rgba(255,255,255,.095);
+
+            box-shadow:
+                0 20px 55px rgba(0,0,0,.27);
+
+            transition: .3s;
+        }
+
+
+        .house-card:hover {
+            transform:
+                translateY(-7px);
+
+            border-color:
+                rgba(255,255,255,.2);
+
+            box-shadow:
+                0 28px 70px rgba(0,0,0,.42);
+        }
+
+
+        .house-card::after {
+            content: "";
+
+            position: absolute;
+
+            width: 130px;
+
+            height: 130px;
+
+            right: -55px;
+
+            bottom: -65px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,.035);
+        }
+
+
+        .house-icon {
+            font-size: 44px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .house-name {
+            font-family: "Cinzel", serif;
+
+            font-size: 20px;
+
+            font-weight: 800;
+        }
+
+
+        .house-title {
+            margin-top: 5px;
+
+            color: #8f8b83;
+
+            font-size: 11px;
+
+            letter-spacing: 1px;
+
+            text-transform: uppercase;
+        }
+
+
+        .house-motto {
+            max-width: 175px;
+
+            margin-top: 16px;
+
+            color: #aaa69e;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+
+        .house-points {
+            position: absolute;
+
+            top: 23px;
+
+            right: 20px;
+
+            text-align: right;
+
+            z-index: 5;
+        }
+
+
+        .house-points strong {
+            display: block;
+
+            font-size: 25px;
+
+            font-weight: 800;
+        }
+
+
+        .house-points small {
+            color: #77746e;
+
+            font-size: 9px;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =========================
+           LEADERBOARD
+        ========================= */
+
+        .leaderboard-box {
+            overflow: hidden;
+
+            border-radius: 22px;
+
+            background:
+                rgba(255,255,255,.028);
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            box-shadow:
+                0 20px 55px rgba(0,0,0,.25);
+        }
+
+
+        .leader-row {
+            display: grid;
+
+            grid-template-columns:
+                70px 1fr 160px 170px;
+
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 18px 22px;
+
+            border-bottom:
+                1px solid rgba(255,255,255,.06);
+
+            transition: .25s;
+        }
+
+
+        .leader-row:last-child {
+            border-bottom: 0;
+        }
+
+
+        .leader-row:hover {
+            background:
+                rgba(255,255,255,.04);
+        }
+
+
+        .rank {
+            width: 43px;
+
+            height: 43px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            font-weight: 800;
+
+            background:
+                rgba(255,255,255,.055);
+
+            border:
+                1px solid rgba(255,255,255,.08);
+        }
+
+
+        .rank.first {
+            background:
+                rgba(255,255,255,.14);
+
+            box-shadow:
+                0 0 28px rgba(255,255,255,.1);
+        }
+
+
+        .student-name {
+            font-size: 15px;
+
+            font-weight: 800;
+        }
+
+
+        .student-house {
+            margin-top: 4px;
+
+            color: #77746e;
+
+            font-size: 11px;
+        }
+
+
+        .points {
+            text-align: right;
+
+            font-size: 16px;
+
+            font-weight: 800;
+        }
+
+
+        .points small {
+            display: block;
+
+            margin-top: 3px;
+
+            color: #68655f;
+
+            font-size: 9px;
+
+            font-weight: 500;
+
+            letter-spacing: .6px;
+        }
+
+
+        .rank-title {
+            text-align: right;
+
+            color: #aaa69d;
+
+            font-family: "Cinzel", serif;
+
+            font-size: 11px;
+        }
+
+
+        /* =========================
+           HOUSE CHAMPIONS
+        ========================= */
+
+        .house-section {
+            margin-top: 38px;
+        }
+
+
+        .house-section-header {
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .house-section-header .symbol {
+            font-size: 31px;
+        }
+
+
+        .house-section-header h3 {
+            font-family: "Cinzel", serif;
+
+            font-size: 21px;
+        }
+
+
+        .house-section-header p {
+            margin-top: 4px;
+
+            color: #727069;
+
+            font-size: 11px;
+        }
+
+
+        .mini-table {
+            overflow: hidden;
+
+            border-radius: 20px;
+
+            background:
+                rgba(255,255,255,.023);
+
+            border:
+                1px solid rgba(255,255,255,.07);
+        }
+
+
+        .mini-row {
+            display: grid;
+
+            grid-template-columns:
+                65px 1fr 150px 180px;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 16px 20px;
+
+            border-bottom:
+                1px solid rgba(255,255,255,.055);
+        }
+
+
+        .mini-row:last-child {
+            border-bottom: 0;
+        }
+
+
+        .mini-rank {
+            color: #89857d;
+
+            font-weight: 800;
+        }
+
+
+        .mini-name {
+            font-weight: 700;
+        }
+
+
+        .mini-points {
+            text-align: right;
+
+            font-weight: 800;
+        }
+
+
+        .mini-title {
+            text-align: right;
+
+            color: #8d8981;
+
+            font-family: "Cinzel", serif;
+
+            font-size: 11px;
+        }
+
+
+        /* =========================
+           STATS
+        ========================= */
+
+        .stats-strip {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+
+            margin-top: 22px;
+        }
+
+
+        .stat {
+            padding: 22px;
+
+            border-radius: 19px;
+
+            background:
+                rgba(255,255,255,.035);
+
+            border:
+                1px solid rgba(255,255,255,.07);
+        }
+
+
+        .stat span {
+            display: block;
+
+            color: #77746d;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.2px;
+        }
+
+
+        .stat strong {
+            display: block;
+
+            margin-top: 8px;
+
+            font-family: "Cinzel", serif;
+
+            font-size: 23px;
+        }
+
+
+        .empty {
+            padding: 38px;
+
+            text-align: center;
+
+            color: #77746e;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           LEGACY BANNER
+        ========================= */
+
+        .legacy-banner {
+            margin-top: 25px;
+
+            padding: 20px 22px;
+
+            border-radius: 19px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,.07),
+                    rgba(255,255,255,.025)
+                );
+
+            border:
+                1px solid rgba(255,255,255,.07);
+        }
+
+
+        .legacy-banner strong {
+            font-family: "Cinzel", serif;
+
+            font-size: 17px;
+        }
+
+
+        .legacy-banner p {
+            margin-top: 6px;
+
+            color: #77746e;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           ANIMATION
+        ========================= */
+
+        @keyframes fadeUp {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+
+        }
+
+
+        /* =========================
+           TABLET
+        ========================= */
+
+        @media (max-width: 950px) {
+
+            .house-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .leader-row {
+                grid-template-columns:
+                    55px 1fr 120px;
+            }
+
+
+            .rank-title {
+                display: none;
+            }
+
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 650px) {
+
+            nav {
+                padding: 0 18px;
+            }
+
+
+            .nav-links a:not(:last-child) {
+                display: none;
+            }
+
+
+            .hero {
+                padding-top: 45px;
+            }
+
+
+            .house-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .leader-row {
+                grid-template-columns:
+                    48px 1fr 90px;
+
+                padding: 15px;
+            }
+
+
+            .stats-strip {
+                grid-template-columns: 1fr;
+            }
+
+
+            .mini-row {
+                grid-template-columns:
+                    45px 1fr 90px;
+
+                padding: 15px;
+            }
+
+
+            .mini-title {
+                display: none;
+            }
+
+
+            .section-title {
+                align-items: start;
+
+                flex-direction: column;
+
+                gap: 5px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         NAVBAR
+    ========================= -->
+
+    <nav>
+
+        <div class="brand">
+
+            ONLINE
+
+            <span>
+                QUIZ
+            </span>
+
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('dashboard') }}">
+                Dashboard
+            </a>
+
+
+            <a href="{{ url_for('leaderboards') }}">
+                Leaderboards
+            </a>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =========================
+         HERO
+    ========================= -->
+
+    <section class="hero">
+
+
+        <div class="eyebrow">
+
+            The Hall of Champions
+
+        </div>
+
+
+        <h1>
+
+            House & Student Leaderboards
+
+        </h1>
+
+
+        <p>
+
+            Rise through the ranks, earn House Points and build your legacy
+            among the finest minds of the Online Quiz.
+
+        </p>
+
+
+        {% if house and house_info %}
+
+            <div class="current-house">
+
+                {{ house_info.symbol }}
+
+                {{ house }}
+
+                ·
+
+                {{ house_info.short }}
+
+            </div>
+
+        {% endif %}
+
+
+
+        <div class="tabs">
+
+
+            <button
+                class="tab active"
+                onclick="showPanel('current', this)"
+            >
+
+                CURRENT RANKINGS
+
+            </button>
+
+
+            <button
+                class="tab"
+                onclick="showPanel('alltime', this)"
+            >
+
+                ALL-TIME LEGACY
+
+            </button>
+
+
+        </div>
+
+    </section>
+
+
+
+    <main class="content">
+
+
+
+        <!-- =================================================
+             CURRENT RANKINGS
+        ================================================= -->
+
+        <section
+            id="current"
+            class="panel active"
+        >
+
+
+            <!-- HOUSE STANDINGS -->
+
+            <div class="section-title">
+
+
+                <h2>
+
+                    House Standings
+
+                </h2>
+
+
+                <span>
+
+                    Current House Power
+
+                </span>
+
+
+            </div>
+
+
+
+            <div class="house-grid">
+
+
+                {% for house_name, info in houses.items() %}
+
+
+                    <div class="house-card">
+
+
+                        <div class="house-icon">
+
+                            {{ info.symbol }}
+
+                        </div>
+
+
+                        <div class="house-name">
+
+                            {{ house_name }}
+
+                        </div>
+
+
+                        <div class="house-title">
+
+                            {{ info.title }}
+
+                        </div>
+
+
+                        <div class="house-motto">
+
+                            “{{ info.motto }}”
+
+                        </div>
+
+
+
+                        <!-- =========================
+                             HOUSE POWER
+                             DIRECT AGGREGATE
+                        ========================= -->
+
+                        <div class="house-points">
+
+
+                            {% set house_total = namespace(
+                                points=0
+                            ) %}
+
+
+                            {% if all_time_house_totals is mapping %}
+
+
+                                {% set value =
+                                    all_time_house_totals.get(
+                                        house_name,
+                                        0
+                                    )
+                                %}
+
+
+                                {% if value is mapping %}
+
+
+                                    {% set house_total.points =
+                                        value.get(
+                                            "points",
+                                            value.get(
+                                                "total_points",
+                                                0
+                                            )
+                                        )
+                                    %}
+
+
+                                {% else %}
+
+
+                                    {% set house_total.points =
+                                        value or 0
+                                    %}
+
+
+                                {% endif %}
+
+
+                            {% else %}
+
+
+                                {% for item in all_time_house_totals %}
+
+
+                                    {% if item is mapping %}
+
+
+                                        {% set item_house =
+                                            item.get(
+                                                "house",
+                                                item.get(
+                                                    "house_name",
+                                                    ""
+                                                )
+                                            )
+                                        %}
+
+
+                                        {% if item_house == house_name %}
+
+
+                                            {% set house_total.points =
+                                                item.get(
+                                                    "points",
+                                                    item.get(
+                                                        "total_points",
+                                                        0
+                                                    )
+                                                )
+                                            %}
+
+
+                                        {% endif %}
+
+
+                                    {% endif %}
+
+
+                                {% endfor %}
+
+
+                            {% endif %}
+
+
+                            <strong>
+
+                                {{ house_total.points | int }}
+
+                            </strong>
+
+
+                            <small>
+
+                                HOUSE POWER
+
+                            </small>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+
+            <!-- CURRENT STUDENTS -->
+
+            <div class="section-title">
+
+
+                <h2>
+
+                    Student Rankings
+
+                </h2>
+
+
+                <span>
+
+                    Current House Points
+
+                </span>
+
+
+            </div>
+
+
+
+            <div class="leaderboard-box">
+
+
+                {% if current_students %}
+
+
+                    {% for student in current_students %}
+
+
+                        <div class="leader-row">
+
+
+                            <div
+                                class="rank
+                                {% if loop.index == 1 %}
+                                    first
+                                {% endif %}"
+                            >
+
+
+                                {% if loop.index == 1 %}
+
+                                    👑
+
+                                {% elif loop.index == 2 %}
+
+                                    ②
+
+                                {% elif loop.index == 3 %}
+
+                                    ③
+
+                                {% else %}
+
+                                    {{ loop.index }}
+
+                                {% endif %}
+
+
+                            </div>
+
+
+
+                            <div>
+
+
+                                <div class="student-name">
+
+                                    {{ student.name }}
+
+                                </div>
+
+
+                                <div class="student-house">
+
+                                    {{ student.house }}
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <div class="points">
+
+                                {{ student.points }}
+
+                                <small>
+
+                                    HOUSE POINTS
+
+                                </small>
+
+                            </div>
+
+
+
+                            <div class="rank-title">
+
+
+                                {% if loop.index == 1 %}
+
+                                    House Sovereign
+
+                                {% elif loop.index == 2 %}
+
+                                    High Vanguard
+
+                                {% elif loop.index == 3 %}
+
+                                    Elite Vanguard
+
+                                {% else %}
+
+                                    Ranked Scholar
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                {% else %}
+
+
+                    <div class="empty">
+
+                        No student rankings available yet.
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+
+            <!-- CURRENT HOUSE CHAMPIONS -->
+
+            {% if house and house_info %}
+
+
+                <div class="section-title">
+
+
+                    <h2>
+
+                        House Champions
+
+                    </h2>
+
+
+                    <span>
+
+                        Top three within your House
+
+                    </span>
+
+
+                </div>
+
+
+
+                <div class="house-section">
+
+
+                    <div class="house-section-header">
+
+
+                        <div class="symbol">
+
+                            {{ house_info.symbol }}
+
+                        </div>
+
+
+                        <div>
+
+
+                            <h3>
+
+                                {{ house }}
+
+                            </h3>
+
+
+                            <p>
+
+                                {{ house_info.motto }}
+
+                            </p>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="mini-table">
+
+
+                        {% if house_students %}
+
+
+                            {% for student in house_students[:3] %}
+
+
+                                <div class="mini-row">
+
+
+                                    <div class="mini-rank">
+
+
+                                        {% if loop.index == 1 %}
+
+                                            👑
+
+                                        {% elif loop.index == 2 %}
+
+                                            ②
+
+                                        {% else %}
+
+                                            ③
+
+                                        {% endif %}
+
+
+                                    </div>
+
+
+                                    <div class="mini-name">
+
+                                        {{ student.name }}
+
+                                    </div>
+
+
+                                    <div class="mini-points">
+
+                                        {{ student.points }} pts
+
+                                    </div>
+
+
+                                    <div class="mini-title">
+
+
+                                        {% if loop.index == 1 %}
+
+                                            House Sovereign
+
+                                        {% elif loop.index == 2 %}
+
+                                            High Vanguard
+
+                                        {% else %}
+
+                                            Elite Vanguard
+
+                                        {% endif %}
+
+
+                                    </div>
+
+
+                                </div>
+
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+
+                            <div class="empty">
+
+                                No ranked students in your House yet.
+
+                            </div>
+
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             ALL-TIME LEGACY
+        ================================================= -->
+
+        <section
+            id="alltime"
+            class="panel"
+        >
+
+
+            <div class="section-title">
+
+
+                <h2>
+
+                    All-Time House Legacy
+
+                </h2>
+
+
+                <span>
+
+                    Historical House Power
+
+                </span>
+
+
+            </div>
+
+
+
+            <!-- ALL-TIME HOUSE CARDS -->
+
+            <div class="house-grid">
+
+
+                {% for house_name, info in houses.items() %}
+
+
+                    <div class="house-card">
+
+
+                        <div class="house-icon">
+
+                            {{ info.symbol }}
+
+                        </div>
+
+
+                        <div class="house-name">
+
+                            {{ house_name }}
+
+                        </div>
+
+
+                        <div class="house-title">
+
+                            {{ info.title }}
+
+                        </div>
+
+
+                        <div class="house-motto">
+
+                            “{{ info.motto }}”
+
+                        </div>
+
+
+
+                        <div class="house-points">
+
+
+                            {% set house_total = namespace(
+                                points=0
+                            ) %}
+
+
+                            {% if all_time_house_totals is mapping %}
+
+
+                                {% set value =
+                                    all_time_house_totals.get(
+                                        house_name,
+                                        0
+                                    )
+                                %}
+
+
+                                {% if value is mapping %}
+
+
+                                    {% set house_total.points =
+                                        value.get(
+                                            "points",
+                                            value.get(
+                                                "total_points",
+                                                0
+                                            )
+                                        )
+                                    %}
+
+
+                                {% else %}
+
+
+                                    {% set house_total.points =
+                                        value or 0
+                                    %}
+
+
+                                {% endif %}
+
+
+                            {% else %}
+
+
+                                {% for item in all_time_house_totals %}
+
+
+                                    {% if item is mapping %}
+
+
+                                        {% set item_house =
+                                            item.get(
+                                                "house",
+                                                item.get(
+                                                    "house_name",
+                                                    ""
+                                                )
+                                            )
+                                        %}
+
+
+                                        {% if item_house == house_name %}
+
+
+                                            {% set house_total.points =
+                                                item.get(
+                                                    "points",
+                                                    item.get(
+                                                        "total_points",
+                                                        0
+                                                    )
+                                                )
+                                            %}
+
+
+                                        {% endif %}
+
+
+                                    {% endif %}
+
+
+                                {% endfor %}
+
+
+                            {% endif %}
+
+
+                            <strong>
+
+                                {{ house_total.points | int }}
+
+                            </strong>
+
+
+                            <small>
+
+                                ALL-TIME
+
+                            </small>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+
+            <!-- LEGACY STATS -->
+
+            <div class="stats-strip">
+
+
+                <div class="stat">
+
+
+                    <span>
+
+                        Top House
+
+                    </span>
+
+
+                    <strong>
+
+
+                        {% set top_house =
+                            namespace(
+                                name="—",
+                                points=0
+                            )
+                        %}
+
+
+                        {% if all_time_house_totals is mapping %}
+
+
+                            {% for name, value in
+                                all_time_house_totals.items()
+                            %}
+
+
+                                {% if value is mapping %}
+
+
+                                    {% set points =
+                                        value.get(
+                                            "points",
+                                            value.get(
+                                                "total_points",
+                                                0
+                                            )
+                                        )
+                                    %}
+
+
+                                {% else %}
+
+
+                                    {% set points =
+                                        value or 0
+                                    %}
+
+
+                                {% endif %}
+
+
+                                {% if points | int >
+                                    top_house.points
+                                %}
+
+
+                                    {% set top_house.name =
+                                        name
+                                    %}
+
+
+                                    {% set top_house.points =
+                                        points | int
+                                    %}
+
+
+                                {% endif %}
+
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+
+                            {% for item in
+                                all_time_house_totals
+                            %}
+
+
+                                {% if item is mapping %}
+
+
+                                    {% set item_house =
+                                        item.get(
+                                            "house",
+                                            item.get(
+                                                "house_name",
+                                                ""
+                                            )
+                                        )
+                                    %}
+
+
+                                    {% set item_points =
+                                        item.get(
+                                            "points",
+                                            item.get(
+                                                "total_points",
+                                                0
+                                            )
+                                        )
+                                    %}
+
+
+                                    {% if item_points | int >
+                                        top_house.points
+                                    %}
+
+
+                                        {% set top_house.name =
+                                            item_house
+                                        %}
+
+
+                                        {% set top_house.points =
+                                            item_points | int
+                                        %}
+
+
+                                    {% endif %}
+
+
+                                {% endif %}
+
+
+                            {% endfor %}
+
+
+                        {% endif %}
+
+
+                        {{ top_house.name }}
+
+
+                    </strong>
+
+
+                </div>
+
+
+
+                <div class="stat">
+
+
+                    <span>
+
+                        Highest Points
+
+                    </span>
+
+
+                    <strong>
+
+
+                        {% set highest =
+                            namespace(
+                                points=0
+                            )
+                        %}
+
+
+                        {% if all_time_house_totals is mapping %}
+
+
+                            {% for name, value in
+                                all_time_house_totals.items()
+                            %}
+
+
+                                {% if value is mapping %}
+
+
+                                    {% set points =
+                                        value.get(
+                                            "points",
+                                            value.get(
+                                                "total_points",
+                                                0
+                                            )
+                                        )
+                                    %}
+
+
+                                {% else %}
+
+
+                                    {% set points =
+                                        value or 0
+                                    %}
+
+
+                                {% endif %}
+
+
+                                {% if points | int >
+                                    highest.points
+                                %}
+
+
+                                    {% set highest.points =
+                                        points | int
+                                    %}
+
+
+                                {% endif %}
+
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+
+                            {% for item in
+                                all_time_house_totals
+                            %}
+
+
+                                {% if item is mapping %}
+
+
+                                    {% set points =
+                                        item.get(
+                                            "points",
+                                            item.get(
+                                                "total_points",
+                                                0
+                                            )
+                                        )
+                                    %}
+
+
+                                    {% if points | int >
+                                        highest.points
+                                    %}
+
+
+                                        {% set highest.points =
+                                            points | int
+                                        %}
+
+
+                                    {% endif %}
+
+
+                                {% endif %}
+
+
+                            {% endfor %}
+
+
+                        {% endif %}
+
+
+                        {{ highest.points }}
+
+
+                    </strong>
+
+
+                </div>
+
+
+
+                <div class="stat">
+
+
+                    <span>
+
+                        Legacy Status
+
+                    </span>
+
+
+                    <strong>
+
+                        ETERNAL
+
+                    </strong>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- LEGACY BANNER -->
+
+            <div class="legacy-banner">
+
+
+                <strong>
+
+                    The Legacy Never Ends
+
+                </strong>
+
+
+                <p>
+
+                    Every quiz completed, every correct answer and every
+                    earned House Point contributes to the history of your
+                    House and your personal legacy.
+
+                </p>
+
+
+            </div>
+
+
+
+            <!-- ALL-TIME STUDENTS -->
+
+            <div class="section-title">
+
+
+                <h2>
+
+                    All-Time Student Leaderboard
+
+                </h2>
+
+
+                <span>
+
+                    Lifetime achievement
+
+                </span>
+
+
+            </div>
+
+
+
+            <div class="leaderboard-box">
+
+
+                {% if all_time_students %}
+
+
+                    {% for student in all_time_students %}
+
+
+                        <div class="leader-row">
+
+
+                            <div
+                                class="rank
+                                {% if loop.index == 1 %}
+                                    first
+                                {% endif %}"
+                            >
+
+
+                                {% if loop.index == 1 %}
+
+                                    👑
+
+                                {% elif loop.index == 2 %}
+
+                                    ②
+
+                                {% elif loop.index == 3 %}
+
+                                    ③
+
+                                {% else %}
+
+                                    {{ loop.index }}
+
+                                {% endif %}
+
+
+                            </div>
+
+
+
+                            <div>
+
+
+                                <div class="student-name">
+
+                                    {{ student.name }}
+
+                                </div>
+
+
+                                <div class="student-house">
+
+                                    {{ student.house }}
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <div class="points">
+
+                                {{ student.points }}
+
+                                <small>
+
+                                    LIFETIME POINTS
+
+                                </small>
+
+                            </div>
+
+
+
+                            <div class="rank-title">
+
+
+                                {% if loop.index == 1 %}
+
+                                    House Sovereign
+
+                                {% elif loop.index == 2 %}
+
+                                    High Vanguard
+
+                                {% elif loop.index == 3 %}
+
+                                    Elite Vanguard
+
+                                {% else %}
+
+                                    Legacy Scholar
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                {% else %}
+
+
+                    <div class="empty">
+
+                        No all-time rankings available yet.
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        function showPanel(panelId, button) {
+
+            document
+                .querySelectorAll(".panel")
+                .forEach(function(panel) {
+
+                    panel.classList.remove("active");
+
+                });
+
+
+            document
+                .querySelectorAll(".tab")
+                .forEach(function(tab) {
+
+                    tab.classList.remove("active");
+
+                });
+
+
+            const selectedPanel =
+                document.getElementById(panelId);
+
+
+            if (selectedPanel) {
+
+                selectedPanel.classList.add("active");
+
+            }
+
+
+            if (button) {
+
+                button.classList.add("active");
+
+            }
+
+
+            window.scrollTo({
+
+                top: 0,
+
+                behavior: "smooth"
+
+            });
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

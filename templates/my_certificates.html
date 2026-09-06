@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Certificates | Online Quiz Application</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #f5f2e8;
+
+            background:
+                radial-gradient(circle at 15% 15%, rgba(126, 87, 194, 0.18), transparent 30%),
+                radial-gradient(circle at 85% 80%, rgba(201, 168, 78, 0.12), transparent 30%),
+                linear-gradient(135deg, #07080c, #111018 50%, #08090d);
+        }
+
+        .page {
+            width: min(1200px, 94%);
+            margin: 0 auto;
+            padding: 45px 0 70px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 42px;
+        }
+
+        .eyebrow {
+            color: #c9a84e;
+            font-size: 12px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(38px, 6vw, 64px);
+            color: #f3d77b;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            margin-top: 12px;
+            color: #aaa69b;
+            font-size: 15px;
+        }
+
+        .certificate-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 24px;
+        }
+
+        .certificate-card {
+            position: relative;
+            padding: 28px;
+            min-height: 285px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.055),
+                    rgba(255,255,255,0.018)
+                );
+
+            border: 1px solid rgba(201, 168, 78, 0.38);
+
+            box-shadow:
+                0 18px 50px rgba(0,0,0,0.35),
+                inset 0 0 30px rgba(255,255,255,0.015);
+
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .certificate-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(243, 215, 123, 0.8);
+
+            box-shadow:
+                0 25px 65px rgba(0,0,0,0.5),
+                0 0 25px rgba(201,168,78,0.08);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .certificate-icon {
+            width: 58px;
+            height: 58px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            border: 1px solid rgba(201,168,78,0.65);
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(201,168,78,0.18),
+                    rgba(201,168,78,0.03)
+                );
+
+            font-size: 28px;
+        }
+
+        .certificate-type {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #b7ad92;
+            text-transform: uppercase;
+            text-align: right;
+        }
+
+        .certificate-title {
+            margin: 24px 0 10px;
+
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 25px;
+
+            color: #f3d77b;
+        }
+
+        .house-name {
+            color: #ddd6c5;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .certificate-id {
+            font-family: monospace;
+            font-size: 11px;
+            color: #858176;
+            word-break: break-all;
+        }
+
+        .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin-top: 20px;
+        }
+
+        .meta span {
+            padding: 7px 10px;
+
+            border: 1px solid rgba(201,168,78,0.22);
+
+            background: rgba(0,0,0,0.16);
+
+            color: #cfc8b7;
+
+            font-size: 12px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .action-btn {
+            display: inline-block;
+
+            padding: 11px 17px;
+
+            border: 1px solid #c9a84e;
+
+            color: #f3d77b;
+
+            background: #17131e;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            transition: 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: #2a2135;
+            color: #fff1b8;
+        }
+
+        .action-btn.secondary {
+            border-color: rgba(255,255,255,0.18);
+            color: #bdb8ad;
+        }
+
+        .action-btn.secondary:hover {
+            border-color: rgba(255,255,255,0.35);
+            color: #ffffff;
+        }
+
+        .empty {
+            max-width: 650px;
+            margin: 60px auto;
+            padding: 55px 30px;
+
+            text-align: center;
+
+            border: 1px solid rgba(201,168,78,0.35);
+
+            background: rgba(255,255,255,0.025);
+        }
+
+        .empty-icon {
+            font-size: 55px;
+            margin-bottom: 20px;
+        }
+
+        .empty h2 {
+            margin: 0 0 10px;
+            font-family: Georgia, "Times New Roman", serif;
+            color: #f3d77b;
+        }
+
+        .empty p {
+            color: #9d998f;
+            line-height: 1.6;
+        }
+
+        .bottom-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 45px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 600px) {
+            .page {
+                padding-top: 28px;
+            }
+
+            .certificate-card {
+                padding: 22px;
+            }
+
+            .certificate-type {
+                font-size: 9px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="header">
+
+        <div class="eyebrow">
+            Online Quiz Application
+        </div>
+
+        <h1>My Certificates</h1>
+
+        <div class="subtitle">
+            Your earned achievements, honours and rankings
+        </div>
+
+    </div>
+
+
+    {% if certificates %}
+
+        <div class="certificate-grid">
+
+            {% for certificate in certificates %}
+
+                <div class="certificate-card">
+
+                    <div class="card-top">
+
+                        <div class="certificate-icon">
+
+                            {% if certificate.certificate_type == "house_excellence" %}
+                                🏆
+
+                            {% elif certificate.certificate_type == "house_champion" %}
+                                👑
+
+                            {% elif certificate.certificate_type == "student_rank_1" %}
+                                🥇
+
+                            {% elif certificate.certificate_type == "student_rank_2" %}
+                                🥈
+
+                            {% elif certificate.certificate_type == "student_rank_3" %}
+                                🥉
+
+                            {% else %}
+                                🎖️
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="certificate-type">
+
+                            {% if certificate.certificate_type == "house_excellence" %}
+
+                                House Excellence
+
+                            {% elif certificate.certificate_type == "house_champion" %}
+
+                                House Champion
+
+                            {% elif certificate.certificate_type == "student_rank_1" %}
+
+                                Global Ranking • #1
+
+                            {% elif certificate.certificate_type == "student_rank_2" %}
+
+                                Global Ranking • #2
+
+                            {% elif certificate.certificate_type == "student_rank_3" %}
+
+                                Global Ranking • #3
+
+                            {% else %}
+
+                                Achievement
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="certificate-title">
+                        {{ certificate.title }}
+                    </div>
+
+
+                    {% if certificate.house_name %}
+
+                        <div class="house-name">
+                            House:
+                            <strong>{{ certificate.house_name }}</strong>
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="certificate-id">
+                        ID: {{ certificate.certificate_id }}
+                    </div>
+
+
+                    <div class="meta">
+
+                        {% if certificate.rank %}
+                            <span>Rank #{{ certificate.rank }}</span>
+                        {% endif %}
+
+                        {% if certificate.points is not none %}
+                            <span>{{ certificate.points }} Points</span>
+                        {% endif %}
+
+                        {% if certificate.issued_at %}
+                            <span>
+                                {{ certificate.issued_at.strftime("%d %b %Y") }}
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="actions">
+
+                        {% if certificate.certificate_type == "house_excellence" %}
+
+                            <a
+                                href="{{ url_for('certificate') }}"
+                                class="action-btn"
+                            >
+                                View Certificate
+                            </a>
+
+
+                        {% elif certificate.certificate_type == "house_champion" %}
+
+                            <a
+                                href="{{ url_for('house_champion_certificate') }}"
+                                class="action-btn"
+                            >
+                                View Certificate
+                            </a>
+
+
+                        {% elif certificate.certificate_type in [
+                            "student_rank_1",
+                            "student_rank_2",
+                            "student_rank_3"
+                        ] %}
+
+                            <a
+                                href="{{ url_for(
+                                    'student_rank_certificate',
+                                    certificate_id=certificate.certificate_id
+                                ) }}"
+                                class="action-btn"
+                            >
+                                View Certificate
+                            </a>
+
+
+                        {% endif %}
+
+
+                        <button
+                            type="button"
+                            class="action-btn secondary"
+                            onclick="window.print()"
+                        >
+                            Print / Save PDF
+                        </button>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                📜
+            </div>
+
+            <h2>No Certificates Yet</h2>
+
+            <p>
+                Complete quizzes, earn House points and climb the
+                rankings to unlock your certificates.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+    <div class="bottom-actions">
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="action-btn"
+        >
+            ← Back to Dashboard
+        </a>
+
+        <a
+            href="{{ url_for('leaderboards') }}"
+            class="action-btn secondary"
+        >
+            View Leaderboards
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

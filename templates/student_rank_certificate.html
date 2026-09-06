@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ certificate.title }}</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Georgia, "Times New Roman", serif;
+            background:
+                radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 35%),
+                linear-gradient(135deg, #08090d, #17131f, #08090d);
+            color: #f5f0df;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+
+        .certificate {
+            width: min(1100px, 100%);
+            min-height: 720px;
+            position: relative;
+            padding: 55px;
+            overflow: hidden;
+
+            background:
+                linear-gradient(rgba(12,10,18,0.88), rgba(12,10,18,0.95)),
+                radial-gradient(circle at center, #3a3150, #09090d);
+
+            border: 3px solid #c9a84e;
+            box-shadow:
+                0 0 0 8px rgba(201,168,78,0.10),
+                0 25px 80px rgba(0,0,0,0.65);
+
+            text-align: center;
+        }
+
+        .certificate::before {
+            content: "";
+            position: absolute;
+            inset: 16px;
+            border: 1px solid rgba(201,168,78,0.65);
+            pointer-events: none;
+        }
+
+        .corner {
+            position: absolute;
+            width: 75px;
+            height: 75px;
+            border-color: #c9a84e;
+            border-style: solid;
+        }
+
+        .top-left {
+            top: 25px;
+            left: 25px;
+            border-width: 3px 0 0 3px;
+        }
+
+        .top-right {
+            top: 25px;
+            right: 25px;
+            border-width: 3px 3px 0 0;
+        }
+
+        .bottom-left {
+            bottom: 25px;
+            left: 25px;
+            border-width: 0 0 3px 3px;
+        }
+
+        .bottom-right {
+            bottom: 25px;
+            right: 25px;
+            border-width: 0 3px 3px 0;
+        }
+
+        .eyebrow {
+            letter-spacing: 5px;
+            font-size: 14px;
+            color: #d8c17a;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+
+        .title {
+            margin: 18px 0 8px;
+            font-size: clamp(38px, 6vw, 68px);
+            letter-spacing: 3px;
+            color: #f3d77b;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 17px;
+            color: #d6d0c0;
+            letter-spacing: 2px;
+        }
+
+        .rank-badge {
+            width: 125px;
+            height: 125px;
+            margin: 28px auto 20px;
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            border: 4px solid #c9a84e;
+            background: radial-gradient(circle, #3c304f, #111017);
+
+            box-shadow:
+                0 0 35px rgba(201,168,78,0.25),
+                inset 0 0 25px rgba(201,168,78,0.12);
+        }
+
+        .rank-number {
+            font-size: 42px;
+            font-weight: bold;
+            color: #f3d77b;
+        }
+
+        .rank-label {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #d8c17a;
+            text-transform: uppercase;
+        }
+
+        .presented {
+            margin-top: 20px;
+            font-size: 15px;
+            letter-spacing: 2px;
+            color: #c9c3b5;
+        }
+
+        .student-name {
+            margin: 12px 0;
+            font-size: clamp(32px, 5vw, 52px);
+            color: #fff8df;
+            font-weight: bold;
+        }
+
+        .achievement {
+            max-width: 720px;
+            margin: 0 auto;
+            font-size: 18px;
+            line-height: 1.7;
+            color: #ddd7c8;
+        }
+
+        .details {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin: 30px auto;
+            max-width: 850px;
+        }
+
+        .detail-card {
+            min-width: 180px;
+            padding: 17px 22px;
+
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(201,168,78,0.38);
+        }
+
+        .detail-label {
+            display: block;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #bca968;
+            text-transform: uppercase;
+            margin-bottom: 7px;
+        }
+
+        .detail-value {
+            font-size: 19px;
+            color: #fff3c7;
+            font-weight: bold;
+        }
+
+        .house-symbol {
+            font-size: 28px;
+            margin-right: 5px;
+        }
+
+        .certificate-id {
+            margin-top: 20px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: #9e988c;
+        }
+
+        .footer {
+            margin-top: 38px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 30px;
+            padding: 0 45px;
+        }
+
+        .signature {
+            text-align: center;
+            min-width: 220px;
+        }
+
+        .signature-line {
+            width: 220px;
+            border-top: 1px solid #c9a84e;
+            margin-bottom: 9px;
+        }
+
+        .signature-name {
+            font-size: 18px;
+            color: #f4e5ae;
+        }
+
+        .signature-role {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: #aaa395;
+            margin-top: 4px;
+        }
+
+        .seal {
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            border: 3px double #c9a84e;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            color: #f3d77b;
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 1px;
+
+            box-shadow: 0 0 18px rgba(201,168,78,0.18);
+        }
+
+        .seal strong {
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .actions {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        button,
+        a {
+            border: 1px solid #c9a84e;
+            background: #17131e;
+            color: #f3d77b;
+            padding: 11px 22px;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover,
+        a:hover {
+            background: #2b2237;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 12px;
+            }
+
+            .certificate {
+                padding: 35px 20px;
+            }
+
+            .footer {
+                flex-direction: column;
+                align-items: center;
+                padding: 0;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .certificate {
+                width: 100%;
+                min-height: 100vh;
+                box-shadow: none;
+            }
+
+            .actions {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="certificate">
+
+    <div class="corner top-left"></div>
+    <div class="corner top-right"></div>
+    <div class="corner bottom-left"></div>
+    <div class="corner bottom-right"></div>
+
+    <div class="eyebrow">
+        Online Quiz Application
+    </div>
+
+    <div class="title">
+        {{ certificate.title }}
+    </div>
+
+    <div class="subtitle">
+        Global Student Leaderboard
+    </div>
+
+    <div class="rank-badge">
+        <div class="rank-number">
+            #{{ certificate.rank }}
+        </div>
+
+        <div class="rank-label">
+            {{ certificate.rank_title }}
+        </div>
+    </div>
+
+    <div class="presented">
+        THIS CERTIFICATE IS PROUDLY PRESENTED TO
+    </div>
+
+    <div class="student-name">
+        {{ certificate.student_name }}
+    </div>
+
+    <div class="achievement">
+        In recognition of achieving
+        <strong>Global Student Rank #{{ certificate.rank }}</strong>
+        on the All-Time Student Leaderboard,
+        demonstrating outstanding knowledge, consistency,
+        dedication and competitive excellence.
+    </div>
+
+    <div class="details">
+
+        <div class="detail-card">
+            <span class="detail-label">House</span>
+
+            <div class="detail-value">
+                <span class="house-symbol">
+                    {{ certificate.house_symbol }}
+                </span>
+
+                {{ certificate.house_name }}
+            </div>
+        </div>
+
+        <div class="detail-card">
+            <span class="detail-label">Points</span>
+
+            <div class="detail-value">
+                {{ certificate.points }}
+            </div>
+        </div>
+
+        <div class="detail-card">
+            <span class="detail-label">Rank Title</span>
+
+            <div class="detail-value">
+                {{ certificate.rank_title }}
+            </div>
+        </div>
+
+        <div class="detail-card">
+            <span class="detail-label">Issued</span>
+
+            <div class="detail-value">
+                {{ certificate.issued_at.strftime("%d %B %Y") if certificate.issued_at else "" }}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="certificate-id">
+        CERTIFICATE ID:
+        {{ certificate.certificate_id }}
+    </div>
+
+    <div class="footer">
+
+        <div class="signature">
+            <div class="signature-line"></div>
+
+            <div class="signature-name">
+                Raj Negi
+            </div>
+
+            <div class="signature-role">
+                Founder &amp; Quiz Master
+            </div>
+        </div>
+
+        <div class="seal">
+            <strong>VERIFIED</strong>
+            EXCELLENCE
+            <br>
+            ONLINE QUIZ
+        </div>
+
+    </div>
+
+    <div class="actions">
+        <button onclick="window.print()">
+            Print / Save PDF
+        </button>
+
+        <a href="{{ url_for('my_certificates') }}">
+            Back to My Certificates
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>
