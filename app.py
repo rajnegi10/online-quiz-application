@@ -7,25 +7,45 @@ import psycopg2
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY", "online-quiz-development-secret-key")
+
+# Keep secrets outside source control. A random fallback keeps local development working.
+app.secret_key = os.getenv("FLASK_SECRET_KEY") or secrets.token_hex(32)
+
+# Session/cookie settings: secure cookies can be enabled on the deployed HTTPS site
+# while local http://127.0.0.1 development continues to work.
+COOKIE_SECURE = os.getenv("COOKIE_SECURE", "0") == "1"
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+    SESSION_COOKIE_SECURE=COOKIE_SECURE,
+)
+
 REMEMBER_COOKIE_NAME = "quiz_remember_token"
 REMEMBER_DAYS = 30
 
 # =========================================================
 # POSTGRESQL CONFIGURATION
 # =========================================================
-# Set your PostgreSQL password in the environment variable
-# POSTGRES_PASSWORD before running the application.
+# LOCAL: if DATABASE_URL is not set, the app uses PostgreSQL on localhost.
+# RENDER: set DATABASE_URL to the Render PostgreSQL Internal Database URL.
+DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
+
 DB_CONFIG = {
-    "host": "localhost",
-    "port": "5432",
-    "database": "online_quiz",
-    "user": "postgres",
+    "host": os.getenv("POSTGRES_HOST", "localhost"),
+    "port": os.getenv("POSTGRES_PORT", "5432"),
+    "database": os.getenv("POSTGRES_DB", "online_quiz"),
+    "user": os.getenv("POSTGRES_USER", "postgres"),
     "password": os.getenv("POSTGRES_PASSWORD", "")
 }
 
 
 def get_db_connection():
+    if DATABASE_URL:
+        # Render/cloud PostgreSQL connection.
+        # The connection URL itself contains the required host/database/user credentials.
+        return psycopg2.connect(DATABASE_URL)
+
+    # Local PostgreSQL connection.
     return psycopg2.connect(**DB_CONFIG)
 
 
@@ -1819,7 +1839,7 @@ ensure_house_system()
 
 # This is the ONLY email allowed to authenticate through the
 # Admin Login. Student authentication remains completely separate.
-OWNER_ADMIN_EMAIL = "raj792negi@gmail.com"
+OWNER_ADMIN_EMAIL = os.getenv("OWNER_ADMIN_EMAIL", "raj792negi@gmail.com").strip()
 
 
 def admin_required():
@@ -4316,4 +4336,8 @@ if __name__ == "__main__":
     # PostgreSQL is the source of truth for questions.
     # If the table is empty, the original built-in bank remains as fallback.
     sync_quizzes_from_db()
-    app.run(debug=True)
+    app.run(
+        host=os.getenv("HOST", "127.0.0.1"),
+        port=int(os.getenv("PORT", "5000")),
+        debug=os.getenv("FLASK_DEBUG", "1") == "1"
+    )
