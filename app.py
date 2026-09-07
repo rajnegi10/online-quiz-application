@@ -49,6 +49,78 @@ def get_db_connection():
     return psycopg2.connect(**DB_CONFIG)
 
 
+def ensure_base_tables():
+    """Create the core PostgreSQL tables before any dependent tables."""
+    connection = None
+    cursor = None
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(100) NOT NULL,
+                email VARCHAR(150) UNIQUE NOT NULL,
+                password VARCHAR(255) NOT NULL,
+                house VARCHAR(50),
+                is_active BOOLEAN NOT NULL DEFAULT TRUE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS questions (
+                id SERIAL PRIMARY KEY,
+                subject VARCHAR(100) NOT NULL,
+                difficulty VARCHAR(20) NOT NULL,
+                question_text TEXT NOT NULL,
+                option_a TEXT NOT NULL,
+                option_b TEXT NOT NULL,
+                option_c TEXT NOT NULL,
+                option_d TEXT NOT NULL,
+                correct_answer TEXT NOT NULL,
+                explanation TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS quiz_results (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                subject VARCHAR(100) NOT NULL,
+                difficulty VARCHAR(20) NOT NULL,
+                score INTEGER NOT NULL DEFAULT 0,
+                total_questions INTEGER NOT NULL DEFAULT 0,
+                percentage NUMERIC(6,2) NOT NULL DEFAULT 0,
+                completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        cursor.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS house VARCHAR(50)")
+        cursor.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE")
+        cursor.execute("ALTER TABLE questions ADD COLUMN IF NOT EXISTS explanation TEXT")
+
+        connection.commit()
+        print("Base database tables are ready.")
+
+    except Exception as e:
+        if connection:
+            connection.rollback()
+        print("Base database setup error:", e)
+        raise
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+
+# Create core tables BEFORE any table that references users.
+ensure_base_tables()
+
+
 def ensure_remember_tokens_table():
     connection = None
     cursor = None
