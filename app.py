@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for, make_response
+from flask import Flask, render_template, render_template_string, request, session, redirect, url_for, make_response
 import os
 import hashlib
 import secrets
@@ -632,6 +632,13 @@ def ensure_certificates_table():
                 issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
+        cursor.execute("ALTER TABLE certificates ADD COLUMN IF NOT EXISTS certificate_type VARCHAR(100)")
+        cursor.execute("ALTER TABLE certificates ADD COLUMN IF NOT EXISTS certificate_id VARCHAR(100)")
+        cursor.execute("ALTER TABLE certificates ADD COLUMN IF NOT EXISTS title VARCHAR(200)")
+        cursor.execute("ALTER TABLE certificates ADD COLUMN IF NOT EXISTS house_name VARCHAR(50)")
+        cursor.execute("ALTER TABLE certificates ADD COLUMN IF NOT EXISTS rank INTEGER")
+        cursor.execute("ALTER TABLE certificates ADD COLUMN IF NOT EXISTS points INTEGER DEFAULT 0")
+        cursor.execute("ALTER TABLE certificates ADD COLUMN IF NOT EXISTS issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
         connection.commit()
     except Exception as e:
         if connection:
@@ -1423,6 +1430,13 @@ def ensure_house_system():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
+        cursor.execute("ALTER TABLE house_point_events ADD COLUMN IF NOT EXISTS house_name VARCHAR(50)")
+        cursor.execute("ALTER TABLE house_point_events ADD COLUMN IF NOT EXISTS points INTEGER NOT NULL DEFAULT 0")
+        cursor.execute("ALTER TABLE house_point_events ADD COLUMN IF NOT EXISTS subject VARCHAR(100)")
+        cursor.execute("ALTER TABLE house_point_events ADD COLUMN IF NOT EXISTS difficulty VARCHAR(20)")
+        cursor.execute("ALTER TABLE house_point_events ADD COLUMN IF NOT EXISTS score INTEGER")
+        cursor.execute("ALTER TABLE house_point_events ADD COLUMN IF NOT EXISTS total_questions INTEGER")
+        cursor.execute("ALTER TABLE house_point_events ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_house_point_events_house
@@ -1552,7 +1566,12 @@ def award_house_points(user_id, house_name, subject, difficulty, score, total_qu
 
 
 def get_user_house_points(user_id):
-    """Current House Power: total points of every student currently in the user's House."""
+    """Return the all-time points of the student's currently assigned House.
+
+    House points belong to the House that earned them. They are not copied to
+    another student and are not removed from a House when a student changes
+    House later.
+    """
     house_name = get_user_house(user_id)
     if not house_name:
         return 0
@@ -1563,15 +1582,13 @@ def get_user_house_points(user_id):
         connection = get_db_connection()
         cursor = connection.cursor()
         cursor.execute("""
-            SELECT COALESCE(SUM(hpe.points), 0)
-            FROM house_point_events hpe
-            JOIN users u ON u.id = hpe.user_id
-            WHERE u.house = %s
-              AND hpe.house_name = %s
-        """, (house_name, house_name))
+            SELECT COALESCE(SUM(points), 0)
+            FROM house_point_events
+            WHERE house_name = %s
+        """, (house_name,))
         return int(cursor.fetchone()[0] or 0)
     except Exception as e:
-        print("Current House points error:", e)
+        print("House points error:", e)
         return 0
     finally:
         if cursor:
@@ -1745,109 +1762,74 @@ class HouseTotalsCollection(list):
 
 
 def get_current_house_totals():
-    """
-    Calculate live House Power from the students' current House membership.
+    """Return live House standings for all four Houses.
 
-    Every completed quiz creates an immutable row in house_point_events.
-    For the CURRENT House Standings, only events earned while the student
-    was assigned to that same House are counted. This means every student's
-    points are included in their House card, not just the first student.
-    Houses without points remain visible with 0 points.
+    Each quiz point event belongs to exactly one House. Every student's points
+    contribute to that House total, while each student's personal total remains
+    separate in the student leaderboard.
     """
     connection = None
     cursor = None
-
     try:
         connection = get_db_connection()
         cursor = connection.cursor()
-
-        # One aggregate query for all Houses.  No ANY(array) filter is used,
-        # which keeps the query simple and reliable with psycopg2/PostgreSQL.
         cursor.execute("""
-            SELECT
-                h.house_name,
-                COALESCE(SUM(hpe.points), 0) AS total_points,
-                COUNT(DISTINCT u.id) AS members
+            SELECT h.house_name,
+                   COALESCE(SUM(hpe.points), 0) AS total_points,
+                   COUNT(DISTINCT u.id) AS members
             FROM (
                 SELECT UNNEST(%s::varchar[]) AS house_name
             ) h
-            LEFT JOIN users u
-                ON u.house = h.house_name
             LEFT JOIN house_point_events hpe
-                ON hpe.user_id = u.id
-                AND hpe.house_name = h.house_name
+                ON hpe.house_name = h.house_name
+            LEFT JOIN users u
+                ON u.id = hpe.user_id
+               AND u.house = h.house_name
             GROUP BY h.house_name
             ORDER BY total_points DESC, h.house_name ASC
         """, (HOUSE_NAMES,))
-
         rows = cursor.fetchall()
 
-        result = HouseTotalsCollection()
-
-        for row in rows:
-            result.append({
+        result = HouseTotalsCollection([
+            {
                 "house": row[0],
                 "points": int(row[1] or 0),
                 "members": int(row[2] or 0)
-            })
+            }
+            for row in rows
+        ])
 
-        # Safety net: guarantee all four Houses are present even if the
-        # database returns an unexpected/missing row.
         existing = {item["house"] for item in result}
-
         for house_name in HOUSE_NAMES:
             if house_name not in existing:
-                result.append({
-                    "house": house_name,
-                    "points": 0,
-                    "members": 0
-                })
+                result.append({"house": house_name, "points": 0, "members": 0})
 
-        result.sort(
-            key=lambda item: (-int(item.get("points", 0)), item.get("house", ""))
-        )
-
-        print("CURRENT HOUSE POWER:", result)
+        result.sort(key=lambda item: (-int(item.get("points", 0)), item.get("house", "")))
         return result
 
     except Exception as e:
         print("Current House totals error:", e)
-
         return HouseTotalsCollection([
-            {
-                "house": name,
-                "points": 0,
-                "members": 0
-            }
+            {"house": name, "points": 0, "members": 0}
             for name in HOUSE_NAMES
         ])
-
     finally:
         if cursor:
             cursor.close()
-
         if connection:
             connection.close()
 
 
 def get_all_time_house_totals():
-    """
-    Calculate lifetime House Power directly from every House point event.
-
-    Historical points remain attached to the House that originally received
-    them, even if a student later changes House.
-    """
+    """Return lifetime points for every House, including Houses at zero."""
     connection = None
     cursor = None
-
     try:
         connection = get_db_connection()
         cursor = connection.cursor()
-
         cursor.execute("""
-            SELECT
-                h.house_name,
-                COALESCE(SUM(hpe.points), 0) AS total_points
+            SELECT h.house_name,
+                   COALESCE(SUM(hpe.points), 0) AS total_points
             FROM (
                 SELECT UNNEST(%s::varchar[]) AS house_name
             ) h
@@ -1856,48 +1838,26 @@ def get_all_time_house_totals():
             GROUP BY h.house_name
             ORDER BY total_points DESC, h.house_name ASC
         """, (HOUSE_NAMES,))
-
         rows = cursor.fetchall()
 
-        result = HouseTotalsCollection()
-
-        for row in rows:
-            result.append({
-                "house": row[0],
-                "points": int(row[1] or 0)
-            })
-
-        existing = {item["house"] for item in result}
-
-        for house_name in HOUSE_NAMES:
-            if house_name not in existing:
-                result.append({
-                    "house": house_name,
-                    "points": 0
-                })
-
-        result.sort(
-            key=lambda item: (-int(item.get("points", 0)), item.get("house", ""))
-        )
-
-        print("ALL-TIME HOUSE POWER:", result)
-        return result
-
-    except Exception as e:
-        print("All-time House totals error:", e)
-
-        return HouseTotalsCollection([
-            {
-                "house": name,
-                "points": 0
-            }
-            for name in HOUSE_NAMES
+        result = HouseTotalsCollection([
+            {"house": row[0], "points": int(row[1] or 0)}
+            for row in rows
         ])
 
+        existing = {item["house"] for item in result}
+        for house_name in HOUSE_NAMES:
+            if house_name not in existing:
+                result.append({"house": house_name, "points": 0})
+
+        result.sort(key=lambda item: (-int(item.get("points", 0)), item.get("house", "")))
+        return result
+    except Exception as e:
+        print("All-time House totals error:", e)
+        return HouseTotalsCollection([{"house": name, "points": 0} for name in HOUSE_NAMES])
     finally:
         if cursor:
             cursor.close()
-
         if connection:
             connection.close()
 
@@ -4168,8 +4128,9 @@ def certificate():
     )
 
     rank_title = HOUSE_RANK_TITLES.get(current_rank, "House Contender")
-    points = get_user_house_points(user_id)
-    all_time_points = get_all_time_student_points(user_id)
+    # Certificate points are the student's own lifetime points, not the whole House total.
+    points = get_all_time_student_points(user_id)
+    all_time_points = points
 
     certificate_record = save_house_certificate(
         user_id=user_id,
@@ -4213,11 +4174,43 @@ def certificate_record(certificate_id):
             "title":r[4],"type":r[5],"house":r[6],"rank":r[7],
             "points":r[8],"issued_at":r[9]}
     house = cert.get("house") if cert.get("house") in HOUSE_NAMES else HOUSE_NAMES[0]
-    return render_template(
-        "certificate_record.html", certificate=cert,
-        student_name=cert["name"], house=house, house_info=HOUSES[house],
-        back_url=url_for("my_certificates"), admin_print=False
-    )
+    try:
+        return render_template(
+            "certificate_record.html", certificate=cert,
+            student_name=cert["name"], house=house, house_info=HOUSES[house],
+            back_url=url_for("my_certificates"), admin_print=False
+        )
+    except Exception as e:
+        # Keep the certificate route usable even when an older local template
+        # set does not contain certificate_record.html.
+        print("Certificate template fallback:", e)
+        return render_template_string("""
+        <!doctype html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width,initial-scale=1">
+          <title>{{ certificate.title }}</title>
+          <style>
+            body{font-family:Arial,sans-serif;background:#111;color:#fff;margin:0;padding:30px}
+            .card{max-width:850px;margin:30px auto;padding:45px;border:1px solid #777;border-radius:18px;background:#1b1b1b;text-align:center}
+            .symbol{font-size:64px}.muted{color:#bbb}.points{font-size:34px;font-weight:700;margin:18px 0}
+            a{display:inline-block;margin-top:20px;padding:12px 20px;border-radius:10px;background:#fff;color:#111;text-decoration:none}
+          </style>
+        </head>
+        <body><div class="card">
+          <div class="symbol">{{ house_info.symbol }}</div>
+          <h1>{{ certificate.title }}</h1>
+          <h2>{{ student_name }}</h2>
+          <p class="muted">{{ house_info.title }} · {{ house }}</p>
+          <div class="points">{{ certificate.points }} Points</div>
+          <p>Certificate ID: {{ certificate.certificate_id }}</p>
+          <p>Issued: {{ certificate.issued_at.strftime("%d %B %Y") if certificate.issued_at else "" }}</p>
+          <a href="{{ back_url }}">Back to My Certificates</a>
+        </div></body>
+        </html>
+        """, certificate=cert, student_name=cert["name"], house=house,
+        house_info=HOUSES[house], back_url=url_for("my_certificates"))
 
 
 @app.route("/student-rank-certificate/<certificate_id>")
